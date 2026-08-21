@@ -195,6 +195,22 @@ const NORMALIZE = {
   "ڒ":"ر","ړ":"ر","ڔ":"ر","ڕ":"ر","ږ":"ر","ڗ":"ر","ژ":"ز","ښ":"ش","ڛ":"س"
 };
 
+/* Ligatures: single code points that stand for several letters. Without these
+   they score 0 — the on-screen keyboard's own ﷲ key was silently worth nothing
+   instead of 66, and لا pasted from many sources was worth 0 instead of 31. */
+const LIGATURES = {
+  "ﷲ":"الله",                                   // U+FDF2 Allah = 66
+  "ﻻ":"لا","ﻼ":"لا",                            // U+FEFB/FEFC lam-alef = 31
+  "ﻵ":"لآ","ﻶ":"لآ",                            // U+FEF5/FEF6 with madda
+  "ﻷ":"لأ","ﻸ":"لأ",                            // U+FEF7/FEF8 with hamza above
+  "ﻹ":"لإ","ﻺ":"لإ"                             // U+FEF9/FEFA with hamza below
+};
+function expandLigatures(s){
+  let out = "";
+  for(const ch of s){ out += (LIGATURES[ch] !== undefined ? LIGATURES[ch] : ch); }
+  return out;
+}
+
 /* Characters that are explicitly IGNORED (diacritics, tatweel, joiners, hamza) */
 function isIgnorable(ch){
   const c = ch.codePointAt(0);
@@ -217,7 +233,7 @@ function baseLetter(ch){
 
 /* ---------- Core computation ---------- */
 function analyze(text){
-  const words = text.split(/\s+/).filter(w=>w.length);
+  const words = expandLigatures(text).split(/\s+/).filter(w=>w.length);
   const result = {words:[], letters:[], grand:0};
   for(const w of words){
     const wordObj = {raw:w, letters:[], sum:0};
@@ -388,7 +404,8 @@ $("copyQr").addEventListener("click",async()=>{
 $("foot").innerHTML =
   "Eastern Abjad (ḥisāb al-jumal, Mashriqī order). Urdu/Persian letters map to their base Arabic letter for scoring "+
   "(پ→ب=2, چ→ج=3, گ/ک→ك=20, ٹ→ت=400, ڈ→د=4, ڑ→ر=200, ی/ے→ي=10, ں→ن=50, ہ/ھ/ة→ه=5). "+
-  "Diacritics, tatweel and standalone hamza (ء) are ignored, as is the space. Verify against your own tradition where conventions differ.";
+  "Ligature characters are expanded before scoring (ﷲ→الله=66, ﻻ→لا=31), so a single-code-point ligature counts the same as its letters typed separately. "+
+  "Diacritics, tatweel and standalone hamza (ء) are ignored, as is the space. Honorific ligatures (ﷺ, ﷻ) carry no value. Verify against your own tradition where conventions differ.";
 
 /* initial paint */
 render();
