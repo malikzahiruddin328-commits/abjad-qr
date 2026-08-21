@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "generated": "2026-08-21",
+  "source": "library/categories-for-hafiz.xlsx (sheet 'Categories')",
+  "categories": [
+    {
+      "id": "C01",
+      "name_en": "Protection from evil eye, magic & jinn",
+      "name_ur": null,
+      "description": "Texts read to remove or block the evil eye (nazar), magic (sihr) and harm from jinn.",
+      "status": "proposed"
+    },
+    {
+      "id": "C02",
+      "name_en": "Daily protection & safety",
+      "name_ur": null,
+      "description": "General refuge and safety texts for everyday protection of self, home and family.",
+      "status": "proposed"
+    },
+    {
+      "id": "C03",
+      "name_en": "Health & healing",
+      "name_ur": null,
+      "description": "Texts read for cure and relief from physical illness, pain and weakness.",
+      "status": "proposed"
+    },
+    {
+      "id": "C04",
+      "name_en": "Forgiveness & repentance",
+      "name_ur": null,
+      "description": "Asking Allah to pardon sins, wipe away mistakes and accept repentance.",
+      "status": "proposed"
+    },
+    {
+      "id": "C05",
+      "name_en": "Safety from Hellfire & entry to Paradise",
+      "name_ur": null,
+      "description": "Asking to be saved from punishment in the Hereafter and granted Paradise.",
+      "status": "proposed"
+    },
+    {
+      "id": "C06",
+      "name_en": "Guidance & steadfastness in faith",
+      "name_ur": null,
+      "description": "Asking to be kept firm on the right path and to live and die as a believer.",
+      "status": "proposed"
+    },
+    {
+      "id": "C07",
+      "name_en": "Patience & victory in hardship",
+      "name_ur": null,
+      "description": "Asking for patience, firmness and success when facing difficulty or enemies.",
+      "status": "proposed"
+    },
+    {
+      "id": "C08",
+      "name_en": "Relief from distress & trust in Allah",
+      "name_ur": null,
+      "description": "Read when anxious, afraid or overwhelmed; placing one’s affairs in Allah’s hands.",
+      "status": "proposed"
+    },
+    {
+      "id": "C09",
+      "name_en": "Family, marriage & children",
+      "name_ur": null,
+      "description": "For spouse, children, parents and a righteous household.",
+      "status": "proposed"
+    },
+    {
+      "id": "C10",
+      "name_en": "Sustenance, provision & livelihood",
+      "name_ur": null,
+      "description": "For food, wealth, halal earnings, useful knowledge and blessed work.",
+      "status": "proposed"
+    },
+    {
+      "id": "C11",
+      "name_en": "Acceptance of deeds & supplications",
+      "name_ur": null,
+      "description": "Asking Allah to accept one’s worship, good deeds and duas.",
+      "status": "proposed"
+    },
+    {
+      "id": "C12",
+      "name_en": "Gratitude & praise of Allah",
+      "name_ur": null,
+      "description": "Thanking and glorifying Allah; His names of majesty, power and perfection.",
+      "status": "proposed"
+    },
+    {
+      "id": "C13",
+      "name_en": "Justice & relief from oppression",
+      "name_ur": null,
+      "description": "Protection from wrongdoers, fair judgement, and relief for the oppressed.",
+      "status": "proposed"
+    },
+    {
+      "id": "C14",
+      "name_en": "Honour, status & success",
+      "name_ur": null,
+      "description": "Asking Allah for respect, high standing and success in one’s efforts.",
+      "status": "proposed"
+    }
+  ]
+}

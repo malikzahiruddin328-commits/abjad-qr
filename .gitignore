@@ -1,0 +1,7 @@
+# Python build/test artifacts — never belongs in a repo that publishes to GitHub Pages
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Excel lock files (created when Hafiz has the workbook open)
+~$*.xlsx
