@@ -324,7 +324,11 @@ const NORMALIZE = {
    and 102 and silently pre-empt a scholarly ruling. Whether they carry a value
    is an open question with the scholar — when he rules, this set is the only
    thing that changes. Keep this in lockstep with library/tools/abjad.py. */
-const HONORIFICS_NO_VALUE = new Set(["ﷺ","ﷻ"]);
+const HONORIFICS_NO_VALUE = new Set(["ﷺ","ﷻ","﵀","﵏","﵁","﵂","﵃","﵄","﵅","﵆","﵌","﵇","﵈","﵉","﵊","﵍","﵋","﵎","﷏","﷾","﷿"]);
+/* Presentation forms NFKC does not decompose but which stand for real text.
+   Pasting ﷽ scored 0 while typing the same words scored 786 — two ways of
+   writing the same thing must give the same number. */
+const EXPLICIT_EXPANSIONS = { "﷽":"بسم الله الرحمن الرحيم" };
 function isPresentationForm(cp){
   return (cp>=0xFB50 && cp<=0xFDFF) || (cp>=0xFE70 && cp<=0xFEFF);
 }
@@ -332,6 +336,7 @@ function expandLigatures(s){
   let out = "";
   for(const ch of s){
     if(HONORIFICS_NO_VALUE.has(ch)){ out += ch; continue; }
+    if(EXPLICIT_EXPANSIONS[ch] !== undefined){ out += EXPLICIT_EXPANSIONS[ch]; continue; }
     out += (isPresentationForm(ch.codePointAt(0)) ? ch.normalize("NFKC") : ch);
   }
   return out;
@@ -347,8 +352,9 @@ function isIgnorable(ch){
   if(c>=0x06D6 && c<=0x06ED) return true;      // Quranic annotation marks
   if(c===0x0640) return true;                  // tatweel ـ
   if(c>=0x200B && c<=0x200F) return true;      // zero-width / bidi marks
+  if(c===0xFEFF) return true;                  // zero-width no-break space / BOM (invisible)
   if(c===0x0621) return true;                  // standalone hamza ء (not counted)
-  if(c===0xFE70 && c<=0xFE74) return true;
+  if(c>=0xFE70 && c<=0xFE74) return true;      // presentation-form diacritics (was === , a real typo)
   return false;
 }
 
@@ -516,6 +522,10 @@ $("scriptSwitch").addEventListener("click",e=>{
 $("rtlBtn").addEventListener("click",()=>{
   const rtl = ta.getAttribute("dir")!=="ltr";
   ta.setAttribute("dir", rtl?"ltr":"rtl");
+  // The stylesheet sets `textarea{direction:rtl}`, which outranks the dir
+  // attribute — so setting the attribute alone moved the alignment but never
+  // the actual text direction. Set it inline too, or the button is half dead.
+  ta.style.direction = rtl?"ltr":"rtl";
   ta.style.textAlign = rtl?"left":"right";
 });
 $("clearBtn").addEventListener("click",()=>{ ta.value=""; render(); ta.focus(); });
