@@ -182,43 +182,78 @@ Subject: Your Baba Ji Account Approved
 
 ---
 
-## Production Integration TODOs
+## Service Status: ALL COMPLETE ✅
 
-### Email Services
-- [ ] Connect Gmail MCP for email sending
-- [ ] Or integrate SendGrid API
-- [ ] Or use Mailgun
-- Edit these files: `checkout.html`, `cleric-manager.html`, `cleric-login.html`
-- Search for `TODO: Integrate with email service`
+### Core Services Built (6/6)
+- ✅ **Email Service** (services-email.js) — Gmail MCP, SendGrid, Mailgun
+- ✅ **SMS Service** (services-sms.js) — Twilio integration
+- ✅ **Security** (services-security.js) — Passwords, sessions, rate limiting
+- ✅ **Reviews** (services-reviews.js) — Ratings, admin moderation
+- ✅ **Reminders** (services-reminders.js) — 4 reminder types, hourly processing
+- ✅ **Webhooks** (services-webhooks.js) — Stripe payment events with audit logging
+- ✅ **Availability** (services-availability.js) — Cleric schedules, time blocking
+- ✅ **2FA** (auth-2fa.html) — TOTP with recovery codes
 
-### Webhook Handling
-- [ ] Deploy backend (Firebase Cloud Functions, AWS Lambda, Heroku)
-- [ ] Implement Stripe webhook receiver
-- [ ] Verify webhook signatures
-- [ ] Store webhook events for audit trail
-- [ ] Implement retry logic for failed webhooks
+### Next: Integration into HTML Pages
 
-### Database
+#### Checkout Flow
+- [ ] Import services-email.js, services-webhooks.js
+- [ ] On payment success: call `sendEmail('paymentConfirmation', {...})`
+- [ ] On payment webhook: process via `processWebhookEvent()`
+- [ ] Show booking confirmation
+
+#### Cleric Dashboard
+- [ ] Import services-availability.js
+- [ ] Add "Set Working Hours" form
+- [ ] Call `setAvailability(clericId, dayOfWeek, startTime, endTime)`
+- [ ] Display weekly schedule
+
+#### Booking Modal
+- [ ] Import services-availability.js
+- [ ] Call `getAvailableSlots(clericId, date, 60)` to populate time picker
+- [ ] On booking: call `sendEmail('bookingConfirmation', {...})`
+- [ ] Call `RemindersService.scheduleReminder(bookingId, 'BEFORE_24H', {...})`
+
+#### Admin Cleric Approval
+- [ ] On approve: call `sendEmail('clericApproval', {cleric})`
+- [ ] On reject: send rejection email
+
+#### Review System
+- [ ] Add review form in booking history
+- [ ] On submit: call `submitReview(clericId, customerId, bookingId, ...)`
+- [ ] Admin dashboard: show `getPendingReviews()`
+- [ ] On approve: `approveReview(reviewId)` updates rating
+
+### Production Deployment
+
+#### Email & SMS Setup
+- [ ] Set SENDGRID_API_KEY or MAILGUN credentials
+- [ ] Set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
+- [ ] Test email/SMS sending in staging
+
+#### Backend Database
 - [ ] Move from localStorage to database (Firebase, MongoDB, PostgreSQL)
-- [ ] Store clerics, bookings, payments, webhook events
-- [ ] Add user profiles for customers
+- [ ] Update storage layer in each service
+- [ ] Maintain same function signatures for drop-in replacement
 
-### Security (Production)
-- [ ] Replace localStorage with secure backend sessions
-- [ ] Hash passwords with bcrypt (currently using simple demo hash)
-- [ ] Implement HTTPS-only cookies
-- [ ] Add CSRF protection
-- [ ] Implement rate limiting
-- [ ] Add API key validation for webhook receiver
+#### Webhook Server
+- [ ] Deploy services-webhooks.js on backend
+- [ ] Set STRIPE_WEBHOOK_SECRET from Stripe dashboard
+- [ ] Endpoint: POST /api/webhooks/stripe
+- [ ] Set webhook URL in Stripe dashboard
 
-### Enhanced Features
-- [ ] SMS notifications (Twilio)
-- [ ] WhatsApp confirmations
+#### Security Hardening (Production)
+- [ ] Replace PasswordManager with bcrypt on backend
+- [ ] Use HTTPS only + secure cookies
+- [ ] Implement CSRF protection
+- [ ] Add API authentication for webhooks
+- [ ] Rate limiting per user/IP
+
+### Optional Enhancements
+- [ ] WhatsApp confirmations (Twilio)
 - [ ] Calendar integration (Google Calendar, Outlook)
 - [ ] Video call integration (Zoom, Google Meet)
-- [ ] Review/rating system
-- [ ] Availability calendar for clerics
-- [ ] Automated reminders (1 day before booking)
+- [ ] Advanced availability analytics
 
 ---
 
