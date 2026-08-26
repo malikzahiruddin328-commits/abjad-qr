@@ -56,7 +56,8 @@ services-security.js
 services-reviews.js
 services-reminders.js
 services-webhooks.js
-services-availability.js'
+services-availability.js
+tools/pre-push-guard.sh'
 
 fail() {
     printf '\n*** PUSH BLOCKED by tools/pre-push-guard.sh ***\n\n%s\n\n' "$1" >&2
