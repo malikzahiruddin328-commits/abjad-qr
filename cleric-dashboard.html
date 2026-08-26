@@ -334,10 +334,24 @@
         </div>
     </div>
 
+    <script src="services-availability.js"></script>
+    <script src="services-database.js"></script>
+
     <script>
         const CLERIC_SESSION_KEY = 'babaJiClericSession';
         const CLERICS_KEY = 'babaJiClerics';
         const BOOKINGS_KEY = 'babaJiBookings';
+
+        // Map day names to day of week (0=Sunday, 1=Monday, etc.)
+        const DAY_MAP = {
+            'Sunday': 0,
+            'Monday': 1,
+            'Tuesday': 2,
+            'Wednesday': 3,
+            'Thursday': 4,
+            'Friday': 5,
+            'Saturday': 6
+        };
 
         // Try localStorage first, fall back to sessionStorage
         const storage = (() => {
@@ -434,41 +448,66 @@
                 return;
             }
 
-            const newSlot = {
-                day,
-                startTime,
-                endTime
-            };
+            try {
+                // Save to availability service (supports database)
+                const dayOfWeek = DAY_MAP[day];
+                setAvailability(currentCleric.id, dayOfWeek, startTime, endTime);
 
-            const clerics = JSON.parse(storage.getItem(CLERICS_KEY)) || [];
-            const clericIdx = clerics.findIndex(c => c.id === currentCleric.id);
+                // Also save to local cleric profile for backward compatibility
+                const clerics = JSON.parse(storage.getItem(CLERICS_KEY)) || [];
+                const clericIdx = clerics.findIndex(c => c.id === currentCleric.id);
 
-            if (clericIdx !== -1) {
-                if (!clerics[clericIdx].availability) {
-                    clerics[clericIdx].availability = [];
+                if (clericIdx !== -1) {
+                    if (!clerics[clericIdx].availability) {
+                        clerics[clericIdx].availability = [];
+                    }
+                    clerics[clericIdx].availability.push({ day, startTime, endTime });
+                    storage.setItem(CLERICS_KEY, JSON.stringify(clerics));
+                    currentCleric = clerics[clericIdx];
                 }
-                clerics[clericIdx].availability.push(newSlot);
-                storage.setItem(CLERICS_KEY, JSON.stringify(clerics));
 
-                currentCleric = clerics[clericIdx];
                 displayAvailability();
-                showMessage('Availability slot added!', 'success');
+                showMessage('✓ Availability slot added!', 'success');
 
                 document.getElementById('availDay').value = '';
                 document.getElementById('availStartTime').value = '';
                 document.getElementById('availEndTime').value = '';
+            } catch (error) {
+                console.error('Failed to add availability:', error);
+                showMessage('Error saving availability', 'error');
             }
         }
 
         function removeAvailability(idx) {
-            const clerics = JSON.parse(storage.getItem(CLERICS_KEY)) || [];
-            const clericIdx = clerics.findIndex(c => c.id === currentCleric.id);
+            try {
+                const clerics = JSON.parse(storage.getItem(CLERICS_KEY)) || [];
+                const clericIdx = clerics.findIndex(c => c.id === currentCleric.id);
 
-            if (clericIdx !== -1) {
-                clerics[clericIdx].availability.splice(idx, 1);
-                storage.setItem(CLERICS_KEY, JSON.stringify(clerics));
-                currentCleric = clerics[clericIdx];
-                displayAvailability();
+                if (clericIdx !== -1 && clerics[clericIdx].availability) {
+                    const removed = clerics[clericIdx].availability.splice(idx, 1)[0];
+                    storage.setItem(CLERICS_KEY, JSON.stringify(clerics));
+                    currentCleric = clerics[clericIdx];
+
+                    // Also remove from availability service
+                    if (removed) {
+                        const dayOfWeek = DAY_MAP[removed.day];
+                        // Find and remove from availability storage
+                        const availability = JSON.parse(localStorage.getItem('babaJiAvailability') || '[]');
+                        const newAvailability = availability.filter(a =>
+                            !(a.clericId === currentCleric.id &&
+                              a.dayOfWeek === dayOfWeek &&
+                              a.startTime === removed.startTime &&
+                              a.endTime === removed.endTime)
+                        );
+                        localStorage.setItem('babaJiAvailability', JSON.stringify(newAvailability));
+                    }
+
+                    displayAvailability();
+                    showMessage('✓ Availability slot removed', 'success');
+                }
+            } catch (error) {
+                console.error('Failed to remove availability:', error);
+                showMessage('Error removing availability', 'error');
             }
         }
 
