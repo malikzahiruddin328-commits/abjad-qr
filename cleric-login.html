@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleric Login — Baba Ji</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+            color: #2c2c2c;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0d8d0;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a3a52;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #2c2c2c;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        button {
+            width: 100%;
+            background: #c85a3a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #a84628;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: #d32f2f;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .toggle-form a {
+            color: #c85a3a;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .toggle-form a:hover {
+            color: #a84628;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #1a3a52;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">🔐 Baba Ji</div>
+        <div class="subtitle">Cleric Dashboard</div>
+
+        <!-- Login Form -->
+        <div class="form-section active" id="loginForm">
+            <form id="loginFormEl">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" placeholder="your@email.com" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit">Login</button>
+                <div class="error" id="loginError"></div>
+            </form>
+
+            <div class="toggle-form">
+                Don't have an account? <a onclick="toggleForm()">Sign up</a>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="form-section" id="signupForm">
+            <form id="signupFormEl">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" name="name" placeholder="e.g., Shaikh Ahmad" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupSpecialty">Specialty</label>
+                    <select id="signupSpecialty" name="specialty" style="width: 100%; padding: 12px; border: 1px solid #e0d8d0; border-radius: 6px; font-family: inherit; font-size: 1rem; color: #2c2c2c;">
+                        <option value="">Select your specialty</option>
+                        <option value="Quranic Studies">Quranic Studies</option>
+                        <option value="Personal Counsel">Personal Counsel</option>
+                        <option value="Family & Marriage">Family & Marriage</option>
+                        <option value="Youth Mentorship">Youth Mentorship</option>
+                        <option value="Islamic Law">Islamic Law</option>
+                        <option value="Islamic Finance">Islamic Finance</option>
+                        <option value="Charity & Welfare">Charity & Welfare</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" placeholder="Create password (8+ chars)" required minlength="8">
+                </div>
+
+                <div class="form-group">
+                    <label for="signupRate">Hourly Rate ($)</label>
+                    <input type="number" id="signupRate" name="rate" placeholder="e.g., 50" min="30" max="200" required>
+                </div>
+
+                <button type="submit">Create Account</button>
+                <div class="error" id="signupError"></div>
+            </form>
+
+            <div class="toggle-form">
+                Already have an account? <a onclick="toggleForm()">Log in</a>
+            </div>
+        </div>
+
+        <a href="baba-ji-lobby-mockups.html" class="back-link">← Back to Lobby</a>
+    </div>
+
+    <script>
+        const CLERICS_KEY = 'babaJiClerics';
+        const CLERIC_SESSION_KEY = 'babaJiClericSession';
+        const SESSION_EXPIRY = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+        // Try localStorage first, fall back to sessionStorage
+        const storage = (() => {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return localStorage;
+            } catch (e) {
+                return sessionStorage;
+            }
+        })();
+
+        function toggleForm() {
+            document.getElementById('loginForm').classList.toggle('active');
+            document.getElementById('signupForm').classList.toggle('active');
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('signupError').classList.remove('show');
+        }
+
+        function hashPassword(password) {
+            // Simple hash for demonstration (NOT cryptographically secure)
+            // In production, use proper password hashing on the backend
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return Math.abs(hash).toString(16);
+        }
+
+        function getClerics() {
+            try {
+                return JSON.parse(storage.getItem(CLERICS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveClerics(clerics) {
+            try {
+                storage.setItem(CLERICS_KEY, JSON.stringify(clerics));
+            } catch (e) {
+                console.error('Failed to save clerics:', e);
+            }
+        }
+
+        function createSession(cleric) {
+            try {
+                storage.setItem(CLERIC_SESSION_KEY, JSON.stringify({
+                    id: cleric.id,
+                    email: cleric.email,
+                    name: cleric.name,
+                    loggedIn: true,
+                    expiry: Date.now() + SESSION_EXPIRY
+                }));
+                window.location.href = 'cleric-dashboard.html';
+            } catch (e) {
+                console.error('Failed to create session:', e);
+            }
+        }
+
+        function checkSession() {
+            try {
+                const session = storage.getItem(CLERIC_SESSION_KEY);
+                if (session) {
+                    const { expiry } = JSON.parse(session);
+                    if (Date.now() < expiry) {
+                        window.location.href = 'cleric-dashboard.html';
+                        return;
+                    } else {
+                        storage.removeItem(CLERIC_SESSION_KEY);
+                    }
+                }
+            } catch (e) {
+                console.error('Session check failed:', e);
+            }
+        }
+
+        // Login form
+        document.getElementById('loginFormEl')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            const clerics = getClerics();
+            const cleric = clerics.find(c => c.email === email && c.passwordHash === hashPassword(password));
+
+            if (cleric) {
+                createSession(cleric);
+            } else {
+                errorEl.textContent = 'Invalid email or password.';
+                errorEl.classList.add('show');
+                document.getElementById('loginPassword').value = '';
+            }
+        });
+
+        // Signup form
+        document.getElementById('signupFormEl')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const specialty = document.getElementById('signupSpecialty').value;
+            const password = document.getElementById('signupPassword').value;
+            const rate = parseInt(document.getElementById('signupRate').value);
+            const errorEl = document.getElementById('signupError');
+
+            const clerics = getClerics();
+
+            // Check if email already exists
+            if (clerics.some(c => c.email === email)) {
+                errorEl.textContent = 'Email already registered.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Validate specialty
+            if (!specialty) {
+                errorEl.textContent = 'Please select a specialty.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Create new cleric account
+            const newCleric = {
+                id: Date.now(),
+                name,
+                email,
+                specialty,
+                rate,
+                passwordHash: hashPassword(password),
+                createdAt: new Date().toISOString(),
+                availability: [],
+                rating: 0,
+                reviews: 0
+            };
+
+            clerics.push(newCleric);
+            saveClerics(clerics);
+            createSession(newCleric);
+        });
+
+        // Check if already logged in
+        checkSession();
+    </script>
+</body>
+</html>

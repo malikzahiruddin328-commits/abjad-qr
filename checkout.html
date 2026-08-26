@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout — Baba Ji</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+            color: #2c2c2c;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3a52;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            color: #1a3a52;
+            margin-bottom: 8px;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        .payment-section {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            border: 1px solid #e0d8d0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .order-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid #e0d8d0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            color: #1a3a52;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0d8d0;
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a3a52;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #2c2c2c;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        #card-element {
+            padding: 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .StripeElement--focus {
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        button {
+            width: 100%;
+            background: #c85a3a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        button:hover {
+            background: #a84628;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 3px solid #4caf50;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 3px solid #f44336;
+            display: block;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-item label {
+            margin: 0;
+            font-weight: 400;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .summary-item strong {
+            color: #1a3a52;
+            font-weight: 600;
+        }
+
+        .summary-total {
+            padding-top: 12px;
+            margin-top: 12px;
+            border-top: 2px solid #e0d8d0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a3a52;
+        }
+
+        .test-card-info {
+            background: #f9f7f5;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #c85a3a;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="header">
+            <div class="logo">Baba Ji</div>
+            <h1>Secure Payment</h1>
+        </div>
+
+        <a href="baba-ji-lobby-mockups.html" class="back-link">← Back to Lobby</a>
+
+        <div class="checkout-container">
+            <div class="payment-section">
+                <h2>Payment Details</h2>
+
+                <div id="message" class="message"></div>
+
+                <div class="test-card-info">
+                    <strong>Test Mode:</strong> Use card <code>4242 4242 4242 4242</code>, any expiry date (future), and any 3-digit CVC for testing.
+                </div>
+
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="customer@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Card Details</label>
+                        <div id="card-element"></div>
+                    </div>
+
+                    <button id="submit" disabled>Pay <span id="amount-display">$0</span></button>
+                </form>
+
+                <p style="font-size: 0.8rem; color: #999; margin-top: 16px; text-align: center;">
+                    Your payment is secure and processed by Stripe.
+                </p>
+            </div>
+
+            <div class="order-summary">
+                <h2>Booking Summary</h2>
+
+                <div class="summary-item">
+                    <label>Cleric:</label>
+                    <strong id="summary-cleric">—</strong>
+                </div>
+
+                <div class="summary-item">
+                    <label>Date:</label>
+                    <strong id="summary-date">—</strong>
+                </div>
+
+                <div class="summary-item">
+                    <label>Time:</label>
+                    <strong id="summary-time">—</strong>
+                </div>
+
+                <div class="summary-item">
+                    <label>Duration:</label>
+                    <strong id="summary-duration">—</strong>
+                </div>
+
+                <div class="summary-item">
+                    <label>Hourly Rate:</label>
+                    <strong id="summary-rate">—</strong>
+                </div>
+
+                <div class="summary-item">
+                    <label>Topic:</label>
+                    <strong id="summary-topic">—</strong>
+                </div>
+
+                <div class="summary-total">
+                    <span>Total:</span>
+                    <span id="summary-total">$0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // For demonstration, use Stripe's test publishable key
+        // In production, replace with your actual publishable key
+        const stripe = Stripe('pk_test_51234567890abcdefghijklmnop');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        let bookingData = null;
+        const BOOKINGS_KEY = 'babaJiBookings';
+        const PENDING_CHECKOUT_KEY = 'babaJiPendingCheckout';
+
+        // Load booking from URL or storage
+        function loadBookingData() {
+            const params = new URLSearchParams(window.location.search);
+            const bookingId = params.get('booking');
+
+            if (bookingId) {
+                const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY)) || [];
+                bookingData = bookings.find(b => b.id == bookingId);
+            } else {
+                // Try to load from pending checkout storage
+                bookingData = JSON.parse(localStorage.getItem(PENDING_CHECKOUT_KEY));
+            }
+
+            if (!bookingData) {
+                // Create from URL params for testing
+                bookingData = {
+                    cleric: params.get('cleric') || 'Shaikh Ahmad',
+                    rate: parseInt(params.get('rate') || '50'),
+                    date: params.get('date') || new Date().toISOString().split('T')[0],
+                    time: params.get('time') || '14:00',
+                    duration: parseInt(params.get('duration') || '60'),
+                    topic: params.get('topic') || 'General Consultation'
+                };
+            }
+
+            displayBookingSummary();
+            calculateTotal();
+        }
+
+        function displayBookingSummary() {
+            if (!bookingData) return;
+
+            document.getElementById('summary-cleric').textContent = bookingData.cleric;
+            document.getElementById('summary-date').textContent = bookingData.date;
+            document.getElementById('summary-time').textContent = bookingData.time;
+            document.getElementById('summary-duration').textContent = `${bookingData.duration} minutes`;
+            document.getElementById('summary-rate').textContent = `$${bookingData.rate}/hour`;
+            document.getElementById('summary-topic').textContent = bookingData.topic;
+        }
+
+        function calculateTotal() {
+            if (!bookingData) return;
+
+            // Calculate cost based on duration
+            const hours = bookingData.duration / 60;
+            const total = Math.round(bookingData.rate * hours * 100); // in cents
+
+            document.getElementById('summary-total').textContent = `$${(total / 100).toFixed(2)}`;
+            document.getElementById('amount-display').textContent = `$${(total / 100).toFixed(2)}`;
+
+            // Store total for payment processing
+            document.getElementById('payment-form').dataset.amount = total;
+        }
+
+        // Handle form submission
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit');
+            submitBtn.disabled = true;
+
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const amount = parseInt(document.getElementById('payment-form').dataset.amount);
+
+            // For demonstration: simulate payment processing
+            // In production, create a payment intent on your backend
+            try {
+                const { token } = await stripe.createToken(cardElement);
+
+                if (token) {
+                    // Simulate successful payment
+                    showMessage(`Payment of $${(amount / 100).toFixed(2)} processed successfully! ✓`, 'success');
+
+                    // Save payment record
+                    const payment = {
+                        id: Date.now(),
+                        bookingId: bookingData.id,
+                        cleric: bookingData.cleric,
+                        amount: amount / 100,
+                        currency: 'USD',
+                        status: 'completed',
+                        email: email,
+                        name: name,
+                        date: new Date().toISOString(),
+                        stripeTokenId: token.id
+                    };
+
+                    const payments = JSON.parse(localStorage.getItem('babaJiPayments')) || [];
+                    payments.push(payment);
+                    localStorage.setItem('babaJiPayments', JSON.stringify(payments));
+
+                    // Clear pending checkout
+                    localStorage.removeItem(PENDING_CHECKOUT_KEY);
+
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'baba-ji-lobby-mockups.html';
+                    }, 2000);
+                } else if (token.error) {
+                    showMessage(`Payment failed: ${token.error.message}`, 'error');
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                showMessage(`Error processing payment: ${error.message}`, 'error');
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showMessage(text, type) {
+            const msgEl = document.getElementById('message');
+            msgEl.textContent = text;
+            msgEl.className = `message ${type}`;
+        }
+
+        // Handle real-time validation
+        cardElement.on('change', (event) => {
+            const displayError = document.getElementById('card-error');
+            if (event.error) {
+                if (displayError) displayError.textContent = event.error.message;
+            } else {
+                if (displayError) displayError.textContent = '';
+            }
+        });
+
+        // Enable submit button when form is ready
+        document.getElementById('email').addEventListener('change', () => {
+            const submitBtn = document.getElementById('submit');
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            submitBtn.disabled = !email || !name;
+        });
+
+        document.getElementById('name').addEventListener('change', () => {
+            const submitBtn = document.getElementById('submit');
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            submitBtn.disabled = !email || !name;
+        });
+
+        // Initialize
+        loadBookingData();
+    </script>
+</body>
+</html>

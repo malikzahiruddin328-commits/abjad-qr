@@ -1,0 +1,39 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Tafsir al-Kahf with Shaikh Abdullah",
+      "speaker": "Shaikh Abdullah",
+      "specialty": "Quranic Studies",
+      "location": "Egypt",
+      "time": "20:00",
+      "description": "In-depth interpretation of Surah al-Kahf with contemporary application.",
+      "isLive": true,
+      "viewers": 45
+    },
+    {
+      "id": 2,
+      "title": "Youth Mentorship Hour",
+      "speaker": "Dr. Amina",
+      "specialty": "Youth Mentorship",
+      "location": "Malaysia",
+      "time": "19:30",
+      "description": "Guidance and mentorship for young Muslims seeking direction.",
+      "isLive": true,
+      "viewers": 120
+    },
+    {
+      "id": 3,
+      "title": "Evening Reflection",
+      "speaker": "Shaikh Rashid",
+      "specialty": "Islamic Law",
+      "location": "UK",
+      "time": "18:00",
+      "description": "Short discourse on Islamic teachings and contemporary issues.",
+      "isLive": true,
+      "viewers": 78
+    }
+  ],
+  "lastUpdated": "2026-08-26T00:00:00Z",
+  "version": "1.0"
+}
