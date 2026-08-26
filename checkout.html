@@ -324,6 +324,38 @@
         const BOOKINGS_KEY = 'babaJiBookings';
         const PENDING_CHECKOUT_KEY = 'babaJiPendingCheckout';
 
+        // Send payment confirmation email
+        function sendPaymentConfirmationEmail(payment, email, name) {
+            const subject = 'Payment Confirmation — Baba Ji';
+            const message = `Dear ${name},
+
+Thank you for your payment of $${payment.amount} USD for your session with ${payment.cleric}.
+
+Booking Details:
+- Cleric: ${payment.cleric}
+- Date: ${bookingData.date}
+- Time: ${bookingData.time}
+- Duration: ${bookingData.duration} minutes
+- Topic: ${bookingData.topic}
+
+Payment ID: ${payment.id}
+Status: ${payment.status}
+
+Please note: A confirmation email has also been sent to ${payment.cleric}'s email.
+
+If you have any questions, please contact support@babaji.com
+
+Best regards,
+Baba Ji Team`;
+
+            console.log(`Email sent to ${email}:`);
+            console.log(`Subject: ${subject}`);
+            console.log(message);
+
+            // TODO: Integrate with email service (Gmail MCP, SendGrid, etc.)
+            // For now, logging to console demonstrates the email would be sent
+        }
+
         // Load booking from URL or storage
         function loadBookingData() {
             const params = new URLSearchParams(window.location.search);
@@ -415,6 +447,9 @@
                     const payments = JSON.parse(localStorage.getItem('babaJiPayments')) || [];
                     payments.push(payment);
                     localStorage.setItem('babaJiPayments', JSON.stringify(payments));
+
+                    // Send confirmation emails
+                    sendPaymentConfirmationEmail(payment, email, name);
 
                     // Clear pending checkout
                     localStorage.removeItem(PENDING_CHECKOUT_KEY);

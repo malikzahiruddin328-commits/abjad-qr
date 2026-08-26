@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleric Manager — Baba Ji Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f3f0;
+            color: #1a3a52;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+        }
+        header {
+            background: white;
+            padding: 24px 40px;
+            border-bottom: 2px solid #d4a574;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -24px -24px 24px -24px;
+        }
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3a52;
+        }
+        nav {
+            display: flex;
+            gap: 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        nav a {
+            color: #666;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: #1a3a52; }
+        .wrap { max-width: 1200px; margin: 0 auto; }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid #e0d5c7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #888;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+        }
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #e0d5c7;
+            background: white;
+            color: #1a3a52;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: #1a3a52;
+            color: white;
+            border-color: #1a3a52;
+        }
+        .filter-btn:hover {
+            border-color: #d4a574;
+        }
+        .cleric-card {
+            background: #fafaf8;
+            border: 1px solid #e0d5c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+        }
+        .cleric-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #1a3a52;
+        }
+        .cleric-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .meta-label {
+            font-weight: 600;
+            color: #1a3a52;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-rejected {
+            background: #fee2e2;
+            color: #7f1d1d;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-approve {
+            background: #10b981;
+            color: white;
+        }
+        .btn-approve:hover { background: #059669; }
+        .btn-reject {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-reject:hover { background: #dc2626; }
+        .btn-secondary {
+            background: white;
+            color: #1a3a52;
+            border: 1px solid #e0d5c7;
+        }
+        .btn-secondary:hover { border-color: #d4a574; }
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-style: italic;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid #e0d5c7;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4a574;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .cleric-card { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr; }
+            .cleric-meta { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Baba Ji Admin</div>
+        <nav>
+            <a href="admin.html">Events</a>
+            <a href="cleric-manager.html">Clerics</a>
+            <a href="baba-ji-lobby-mockups.html">Lobby</a>
+            <a onclick="logout()" style="cursor: pointer;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <div class="container">
+            <h1>📋 Cleric Management</h1>
+            <p class="subtitle">Approve, reject, and manage registered clerics</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCount">0</div>
+                    <div class="stat-label">Total Clerics</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingCount">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="approvedCount">0</div>
+                    <div class="stat-label">Approved</div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterClerics('all')">All</button>
+                <button class="filter-btn" onclick="filterClerics('pending')">Pending Review</button>
+                <button class="filter-btn" onclick="filterClerics('approved')">Approved</button>
+                <button class="filter-btn" onclick="filterClerics('rejected')">Rejected</button>
+            </div>
+
+            <div id="clericsList"></div>
+        </div>
+    </div>
+
+    <script>
+        const CLERICS_KEY = 'babaJiClerics';
+        const SESSION_KEY = 'babaJiAdminSession';
+        let currentFilter = 'all';
+
+        const storage = (() => {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return localStorage;
+            } catch (e) {
+                return sessionStorage;
+            }
+        })();
+
+        function checkSession() {
+            try {
+                const session = storage.getItem(SESSION_KEY);
+                if (!session) {
+                    window.location.href = 'admin-login.html';
+                    return false;
+                }
+                const { expiry } = JSON.parse(session);
+                if (Date.now() >= expiry) {
+                    storage.removeItem(SESSION_KEY);
+                    window.location.href = 'admin-login.html';
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+        }
+
+        function logout() {
+            storage.removeItem(SESSION_KEY);
+            window.location.href = 'admin-login.html';
+        }
+
+        function getClerics() {
+            try {
+                return JSON.parse(storage.getItem(CLERICS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveClerics(clerics) {
+            try {
+                storage.setItem(CLERICS_KEY, JSON.stringify(clerics));
+            } catch (e) {
+                console.error('Failed to save clerics:', e);
+            }
+        }
+
+        function approvecleric(id) {
+            const clerics = getClerics();
+            const cleric = clerics.find(c => c.id === id);
+            if (cleric) {
+                cleric.status = 'approved';
+                cleric.approvedAt = new Date().toISOString();
+                saveClerics(clerics);
+                sendNotificationEmail(cleric, 'approved');
+                renderClerics();
+            }
+        }
+
+        function rejectCleric(id) {
+            const clerics = getClerics();
+            const cleric = clerics.find(c => c.id === id);
+            if (cleric) {
+                cleric.status = 'rejected';
+                cleric.rejectedAt = new Date().toISOString();
+                saveClerics(clerics);
+                sendNotificationEmail(cleric, 'rejected');
+                renderClerics();
+            }
+        }
+
+        function sendNotificationEmail(cleric, status) {
+            // TODO: Integrate with email service (Gmail, SendGrid, etc)
+            const subject = status === 'approved' ? 'Your Baba Ji Account Approved' : 'Your Baba Ji Account Application';
+            const message = status === 'approved'
+                ? `Welcome ${cleric.name}! Your account has been approved. You can now start accepting bookings.`
+                : `Thank you for applying to Baba Ji. We will review your application and get back to you soon.`;
+
+            console.log(`Email sent to ${cleric.email}: ${subject}`);
+            console.log(message);
+
+            // This would call an email service in production
+            // For now, just log it
+        }
+
+        function filterClerics(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderClerics();
+        }
+
+        function getStatusBadge(cleric) {
+            const status = cleric.status || 'pending';
+            const badgeClass = status === 'approved' ? 'status-approved' : status === 'rejected' ? 'status-rejected' : 'status-pending';
+            return `<span class="status-badge ${badgeClass}">${status}</span>`;
+        }
+
+        function updateStats() {
+            const clerics = getClerics();
+            const total = clerics.length;
+            const pending = clerics.filter(c => (c.status || 'pending') === 'pending').length;
+            const approved = clerics.filter(c => c.status === 'approved').length;
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('approvedCount').textContent = approved;
+        }
+
+        function renderClerics() {
+            const clerics = getClerics();
+            const filtered = currentFilter === 'all'
+                ? clerics
+                : clerics.filter(c => (c.status || 'pending') === currentFilter);
+
+            updateStats();
+
+            if (filtered.length === 0) {
+                document.getElementById('clericsList').innerHTML = '<div class="empty">No clerics found.</div>';
+                return;
+            }
+
+            const html = filtered.map(cleric => `
+                <div class="cleric-card">
+                    <div class="cleric-info">
+                        <h3>${cleric.name || 'Unknown'}</h3>
+                        <div class="cleric-meta">
+                            <div class="meta-item">
+                                <div class="meta-label">Email</div>
+                                <div>${cleric.email}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Specialty</div>
+                                <div>${cleric.specialty || 'Not specified'}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Hourly Rate</div>
+                                <div>$${cleric.rate || 'TBD'}/hour</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Status</div>
+                                ${getStatusBadge(cleric)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        ${(cleric.status || 'pending') === 'pending' ? `
+                            <button class="btn-approve" onclick="approvecleric('${cleric.id}')">Approve</button>
+                            <button class="btn-reject" onclick="rejectCleric('${cleric.id}')">Reject</button>
+                        ` : ''}
+                        <button class="btn-secondary" onclick="viewClericDetails('${cleric.id}')">Details</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('clericsList').innerHTML = html;
+        }
+
+        function viewClericDetails(id) {
+            const clerics = getClerics();
+            const cleric = clerics.find(c => c.id === id);
+            if (cleric) {
+                alert(`Cleric: ${cleric.name}\nEmail: ${cleric.email}\nSpecialty: ${cleric.specialty}\nRate: $${cleric.rate}/hr\nStatus: ${cleric.status || 'pending'}`);
+            }
+        }
+
+        if (checkSession()) {
+            renderClerics();
+        }
+    </script>
+</body>
+</html>
