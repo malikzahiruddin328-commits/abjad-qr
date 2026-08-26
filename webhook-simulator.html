@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Simulator — Baba Ji Testing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f3f0;
+            color: #1a3a52;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .wrap { max-width: 1200px; margin: 0 auto; }
+        header {
+            background: white;
+            padding: 24px 40px;
+            border-bottom: 2px solid #d4a574;
+            margin: -24px -24px 24px -24px;
+        }
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3a52;
+            margin-bottom: 4px;
+        }
+        .subtitle { color: #888; font-size: 0.9rem; }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid #e0d5c7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            color: #1a3a52;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e0d5c7;
+        }
+        .section:last-child { border-bottom: none; }
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            color: #1a3a52;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .code-block {
+            background: #fafaf8;
+            border: 1px solid #e0d5c7;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 12px 0;
+            color: #666;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+        button {
+            background: #1a3a52;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button:hover { background: #d4a574; color: #1a3a52; }
+        button.success { background: #10b981; }
+        button.success:hover { background: #059669; }
+        button.warning { background: #f59e0b; }
+        button.warning:hover { background: #d97706; }
+        .event-log {
+            background: #fafaf8;
+            border: 1px solid #e0d5c7;
+            border-radius: 6px;
+            padding: 16px;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+        .event-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0d5c7;
+            color: #666;
+        }
+        .event-item:last-child { border-bottom: none; }
+        .event-success { color: #10b981; }
+        .event-error { color: #ef4444; }
+        .event-info { color: #3b82f6; }
+        .flow-diagram {
+            background: #fafaf8;
+            border: 1px solid #e0d5c7;
+            border-radius: 6px;
+            padding: 24px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #d4a574;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin: 0 8px;
+            font-weight: 600;
+            color: #1a3a52;
+        }
+        .arrow { display: inline-block; margin: 0 8px; color: #d4a574; font-weight: bold; }
+        .checklist {
+            list-style: none;
+            margin: 16px 0;
+        }
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+        }
+        .checklist li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        .checklist li.todo:before { content: '○'; color: #ccc; }
+        a {
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">🧪 Baba Ji Testing Hub</div>
+        <div class="subtitle">End-to-End Testing & Webhook Simulation</div>
+    </header>
+
+    <div class="wrap">
+        <div class="container">
+            <h1>Complete Testing Workflow</h1>
+
+            <div class="section">
+                <h2>1️⃣ System Flow Diagram</h2>
+                <div class="flow-diagram">
+                    <span class="step">User Signs Up</span>
+                    <span class="arrow">→</span>
+                    <span class="step">Admin Approves</span>
+                    <span class="arrow">→</span>
+                    <span class="step">Customer Books</span>
+                    <span class="arrow">→</span>
+                    <span class="step">Payment</span>
+                    <span class="arrow">→</span>
+                    <span class="step">Webhook Event</span>
+                    <span class="arrow">→</span>
+                    <span class="step">Emails Sent</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>2️⃣ Test Accounts</h2>
+                <div class="checklist">
+                    <li><strong>Admin:</strong> Password = <code>baba-ji-2026</code> (<a href="admin-login.html">Admin Login</a>)</li>
+                    <li><strong>Cleric Test Account:</strong> Email = <code>test@cleric.com</code>, Password = <code>password123</code></li>
+                    <li><strong>Customer Email:</strong> Use any email at checkout</li>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>3️⃣ Stripe Test Mode</h2>
+                <div class="checklist">
+                    <li>Card: <code>4242 4242 4242 4242</code></li>
+                    <li>Expiry: Any future date (e.g., 12/26)</li>
+                    <li>CVC: Any 3 digits (e.g., 123)</li>
+                    <li><a href="checkout.html">Test Checkout →</a></li>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>4️⃣ Email Notifications</h2>
+                <p>Emails are currently logged to browser console. Integration points:</p>
+                <ul class="checklist">
+                    <li class="todo">Booking Confirmation → Customer & Cleric</li>
+                    <li class="todo">Payment Confirmation → Customer & Cleric</li>
+                    <li class="todo">Cleric Approval → New Cleric</li>
+                    <li class="todo">Session Reminder → Before Booking</li>
+                </ul>
+                <p style="margin-top: 16px; color: #666; font-size: 0.9rem;">
+                    <strong>To enable real emails:</strong> Connect Gmail MCP or integrate SendGrid/Mailgun. Email stubs are in checkout.html and cleric-manager.html with TODO comments.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>5️⃣ Webhook Simulator</h2>
+                <p>Simulate Stripe webhook events for testing payment flow:</p>
+                <div class="button-group">
+                    <button class="success" onclick="simulateWebhook('payment.success')">Simulate Payment Success</button>
+                    <button class="warning" onclick="simulateWebhook('payment.failed')">Simulate Payment Failed</button>
+                    <button onclick="simulateWebhook('charge.refunded')">Simulate Refund</button>
+                    <button onclick="clearLog()">Clear Log</button>
+                </div>
+                <div class="event-log" id="eventLog">
+                    <div class="event-item event-info">Webhook events will appear here...</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>6️⃣ End-to-End Test Checklist</h2>
+                <ul class="checklist">
+                    <li><a href="cleric-login.html">Create Cleric Account →</a> Sign up as a new cleric</li>
+                    <li><a href="admin-login.html">Approve Cleric →</a> Log in as admin and approve</li>
+                    <li><a href="baba-ji-lobby-mockups.html">Book Session →</a> Go to lobby and create a booking</li>
+                    <li><a href="checkout.html">Test Payment →</a> Complete payment with test card</li>
+                    <li>Check Console Logs → Open DevTools to see email notifications</li>
+                    <li><a href="cleric-manager.html">View Clerics →</a> See all registered and approved clerics</li>
+                    <li><a href="admin.html">Manage Events →</a> Add/edit live sermon events</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>7️⃣ Webhook Events Reference</h2>
+                <p>These events are simulated and logged. In production, Stripe sends these via HTTPS webhook:</p>
+
+                <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px;">payment.success</h3>
+                <div class="code-block">
+{
+  "id": "evt_test_success",
+  "type": "charge.succeeded",
+  "data": {
+    "object": {
+      "id": "ch_1234567890",
+      "amount": 5000,
+      "currency": "usd",
+      "customer_email": "user@example.com",
+      "metadata": {
+        "bookingId": "booking_123",
+        "cleric": "Shaikh Ahmad"
+      }
+    }
+  },
+  "timestamp": "2026-08-26T14:00:00Z"
+}
+                </div>
+
+                <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px;">charge.refunded</h3>
+                <div class="code-block">
+{
+  "id": "evt_test_refund",
+  "type": "charge.refunded",
+  "data": {
+    "object": {
+      "id": "ch_1234567890",
+      "refunded": true,
+      "refunds": {
+        "total_count": 1,
+        "data": [{"id": "re_123", "amount": 5000}]
+      }
+    }
+  }
+}
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>8️⃣ Production Integration TODOs</h2>
+                <ul class="checklist">
+                    <li class="todo">Replace console.log emails with Gmail MCP or SendGrid API</li>
+                    <li class="todo">Set up actual Stripe webhook endpoint (not possible with static GitHub Pages)</li>
+                    <li class="todo">Use Firebase Cloud Functions or AWS Lambda for webhook receiver</li>
+                    <li class="todo">Implement webhook signature verification</li>
+                    <li class="todo">Add retry logic for failed webhooks</li>
+                    <li class="todo">Store webhook events in database for audit trail</li>
+                    <li class="todo">Add SMS notifications (Twilio)</li>
+                    <li class="todo">Implement booking confirmations via WhatsApp</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>9️⃣ Quick Links</h2>
+                <div class="checklist">
+                    <li><a href="baba-ji-lobby-mockups.html">Main Lobby →</a></li>
+                    <li><a href="index.html">Talisman Calculator →</a></li>
+                    <li><a href="admin-login.html">Admin Panel →</a></li>
+                    <li><a href="cleric-login.html">Cleric Dashboard →</a></li>
+                    <li><a href="cleric-manager.html">Cleric Manager →</a></li>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateWebhook(eventType) {
+            const eventLog = document.getElementById('eventLog');
+            const timestamp = new Date().toLocaleString();
+            let message = '';
+
+            if (eventType === 'payment.success') {
+                message = '✓ charge.succeeded - Payment processed successfully. Sending confirmation emails...';
+            } else if (eventType === 'payment.failed') {
+                message = '✗ charge.failed - Payment declined. Customer notified.';
+            } else if (eventType === 'charge.refunded') {
+                message = '↩ charge.refunded - Refund processed. Refund notification sent.';
+            }
+
+            const eventDiv = document.createElement('div');
+            eventDiv.className = `event-item ${eventType.includes('success') ? 'event-success' : eventType.includes('failed') ? 'event-error' : 'event-info'}`;
+            eventDiv.textContent = `[${timestamp}] ${message}`;
+
+            if (eventLog.firstChild?.textContent?.includes('will appear')) {
+                eventLog.innerHTML = '';
+            }
+            eventLog.insertBefore(eventDiv, eventLog.firstChild);
+
+            console.log(`Webhook Simulated: ${eventType}`, {
+                timestamp,
+                eventType,
+                message
+            });
+        }
+
+        function clearLog() {
+            document.getElementById('eventLog').innerHTML = '<div class="event-item event-info">Log cleared. Simulate events above...</div>';
+        }
+    </script>
+</body>
+</html>
