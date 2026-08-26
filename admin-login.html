@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Baba Ji</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+            color: #2c2c2c;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0d8d0;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a3a52;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #2c2c2c;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        button {
+            width: 100%;
+            background: #c85a3a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #a84628;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: #d32f2f;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #1a3a52;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🔐 Baba Ji</div>
+        <div class="subtitle">Admin Access</div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter admin password" required autofocus>
+            </div>
+
+            <button type="submit">Login</button>
+
+            <div class="error" id="error"></div>
+        </form>
+
+        <a href="baba-ji-lobby-mockups.html" class="back-link">← Back to Lobby</a>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'baba-ji-2026'; // Default password - should be changed
+        const SESSION_KEY = 'babaJiAdminSession';
+        const SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
+
+        // Try localStorage first, fall back to sessionStorage
+        const storage = (() => {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return localStorage;
+            } catch (e) {
+                return sessionStorage;
+            }
+        })();
+
+        // Check if already logged in
+        function checkSession() {
+            try {
+                const session = storage.getItem(SESSION_KEY);
+                if (session) {
+                    const { expiry } = JSON.parse(session);
+                    if (Date.now() < expiry) {
+                        window.location.href = 'admin.html';
+                    } else {
+                        storage.removeItem(SESSION_KEY);
+                    }
+                }
+            } catch (e) {
+                console.error('Session check failed:', e);
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('error');
+
+            if (password === ADMIN_PASSWORD) {
+                try {
+                    storage.setItem(SESSION_KEY, JSON.stringify({
+                        loggedIn: true,
+                        expiry: Date.now() + SESSION_EXPIRY
+                    }));
+                    window.location.href = 'admin.html';
+                } catch (e) {
+                    errorEl.textContent = 'Session storage error. Please try again.';
+                    errorEl.classList.add('show');
+                    console.error('Session creation failed:', e);
+                }
+            } else {
+                errorEl.textContent = 'Incorrect password. Please try again.';
+                errorEl.classList.add('show');
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Check session on page load
+        checkSession();
+    </script>
+</body>
+</html>

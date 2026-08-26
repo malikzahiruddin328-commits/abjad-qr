@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baba Ji Admin — Event Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+            color: #2c2c2c;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        header {
+            background: white;
+            padding: 16px 40px;
+            border-bottom: 1px solid #e0d8d0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -24px -24px 24px -24px;
+        }
+
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3a52;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav a {
+            color: #555;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #1a3a52;
+        }
+
+        .wrap {
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid #e0d8d0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+        }
+
+        .note {
+            background: #f9f7f5;
+            border-left: 3px solid #c85a3a;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 32px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .note strong {
+            color: #c85a3a;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            color: #1a3a52;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0d8d0;
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1a3a52;
+            font-size: 0.9rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: #2c2c2c;
+            background: white;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: #c85a3a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #a84628;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .event-item {
+            background: #f9f7f5;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .event-details h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #1a3a52;
+        }
+
+        .event-details p {
+            font-size: 0.85rem;
+            color: #888;
+            margin: 2px 0;
+        }
+
+        .btn-remove {
+            background: #d32f2f;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-remove:hover {
+            background: #b71c1c;
+        }
+
+        .empty {
+            color: #888;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #d4a574;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Baba Ji</div>
+        <nav>
+            <a href="baba-ji-lobby-mockups.html">Back to Lobby</a>
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <div class="container">
+            <h1>🔐 Admin Panel</h1>
+            <p class="subtitle">Event Management & Settings</p>
+
+            <div class="note">
+                <strong>Features:</strong> Password-protected access • Add/remove events • Export/import as JSON • Events persist across sessions
+            </div>
+
+            <div class="section">
+                <h2>Add Live Sermon/Event</h2>
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="title">Sermon Title</label>
+                        <input type="text" id="title" name="title" placeholder="e.g., Tafsir al-Kahf with Shaikh Abdullah" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="speaker">Speaker Name</label>
+                        <input type="text" id="speaker" name="speaker" placeholder="e.g., Shaikh Ahmad" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialty">Specialty</label>
+                        <select id="specialty" name="specialty" required>
+                            <option value="">Select a specialty</option>
+                            <option value="Quranic Studies">Quranic Studies</option>
+                            <option value="Personal Counsel">Personal Counsel</option>
+                            <option value="Family & Marriage">Family & Marriage</option>
+                            <option value="Youth Mentorship">Youth Mentorship</option>
+                            <option value="Islamic Law">Islamic Law</option>
+                            <option value="Islamic Finance">Islamic Finance</option>
+                            <option value="Charity & Welfare">Charity & Welfare</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" placeholder="e.g., Egypt" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time">Time (24h format)</label>
+                        <input type="time" id="time" name="time" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Brief description of the sermon/event..."></textarea>
+                    </div>
+
+                    <button type="submit">✨ Add Event</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Live Events</h2>
+                <div id="eventsList"></div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Data Management</h2>
+                <p style="font-size: 0.9rem; color: #888; margin-bottom: 16px;">Export or import events as JSON</p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button id="exportBtn" style="background: #1a3a52;">📥 Export Events</button>
+                    <button id="importBtn" style="background: #1a3a52;">📤 Import Events</button>
+                </div>
+                <input type="file" id="fileInput" accept=".json" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Session management
+        const SESSION_KEY = 'babaJiAdminSession';
+
+        // Try localStorage first, fall back to sessionStorage
+        const storage = (() => {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return localStorage;
+            } catch (e) {
+                return sessionStorage;
+            }
+        })();
+
+        // Check if user is logged in
+        function checkSession() {
+            try {
+                const session = storage.getItem(SESSION_KEY);
+                if (!session) {
+                    window.location.href = 'admin-login.html';
+                    return false;
+                }
+
+                const { expiry } = JSON.parse(session);
+                if (Date.now() >= expiry) {
+                    storage.removeItem(SESSION_KEY);
+                    window.location.href = 'admin-login.html';
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+        }
+
+        // Add logout button functionality
+        function addLogoutButton() {
+            const headerRight = document.querySelector('.logo').parentElement;
+            const logoutBtn = document.createElement('button');
+            logoutBtn.textContent = 'Logout';
+            logoutBtn.style.cssText = 'background: #d32f2f; padding: 8px 16px; font-size: 0.85rem; margin-left: auto;';
+            logoutBtn.onclick = () => {
+                storage.removeItem(SESSION_KEY);
+                window.location.href = 'baba-ji-lobby-mockups.html';
+            };
+            headerRight.appendChild(logoutBtn);
+        }
+
+        // Local storage for events
+        const STORAGE_KEY = 'babaJiEvents';
+
+        function loadEvents() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                return stored ? JSON.parse(stored) : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveEvents(events) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+            } catch {
+                console.error('Failed to save events');
+            }
+        }
+
+        function renderEvents() {
+            const events = loadEvents();
+            const list = document.getElementById('eventsList');
+
+            if (events.length === 0) {
+                list.innerHTML = '<div class="empty">No events scheduled yet.</div>';
+                return;
+            }
+
+            list.innerHTML = events.map((event, idx) => `
+                <div class="event-item">
+                    <div class="event-details">
+                        <h3>${event.title}</h3>
+                        <p><strong>${event.speaker}</strong> • ${event.location} • ${event.time}</p>
+                        <p><span class="status-badge">${event.specialty}</span></p>
+                        <p>${event.description || ''}</p>
+                    </div>
+                    <button class="btn-remove" onclick="removeEvent(${idx})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removeEvent(idx) {
+            const events = loadEvents();
+            events.splice(idx, 1);
+            saveEvents(events);
+            renderEvents();
+        }
+
+        document.getElementById('eventForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const event = {
+                title: document.getElementById('title').value,
+                speaker: document.getElementById('speaker').value,
+                specialty: document.getElementById('specialty').value,
+                location: document.getElementById('location').value,
+                time: document.getElementById('time').value,
+                description: document.getElementById('description').value
+            };
+
+            const events = loadEvents();
+            events.push(event);
+            saveEvents(events);
+            renderEvents();
+
+            document.getElementById('eventForm').reset();
+        });
+
+        // Export events as JSON
+        function exportEvents() {
+            const events = loadEvents();
+            const dataStr = JSON.stringify({ events, lastUpdated: new Date().toISOString(), version: '1.0' }, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `baba-ji-events-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Import events from JSON
+        function importEvents(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    const importedEvents = data.events || data;
+                    const currentEvents = loadEvents();
+                    const mergedEvents = [...currentEvents];
+
+                    for (const event of importedEvents) {
+                        const exists = mergedEvents.some(e => e.title === event.title && e.speaker === event.speaker);
+                        if (!exists) {
+                            event.id = Math.max(...mergedEvents.map(e => e.id || 0)) + 1;
+                            mergedEvents.push(event);
+                        }
+                    }
+
+                    saveEvents(mergedEvents);
+                    renderEvents();
+                    alert(`Successfully imported ${importedEvents.length} events!`);
+                } catch (error) {
+                    alert('Failed to import events. Please check the file format.');
+                    console.error('Import error:', error);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Event listeners for export/import
+        document.getElementById('exportBtn')?.addEventListener('click', exportEvents);
+        document.getElementById('importBtn')?.addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+        document.getElementById('fileInput')?.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                importEvents(e.target.files[0]);
+                e.target.value = '';
+            }
+        });
+
+        // Check session and initialize
+        if (checkSession()) {
+            addLogoutButton();
+            renderEvents();
+        }
+    </script>
+</body>
+</html>

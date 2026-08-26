@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baba Ji Lobby Design</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fff;
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .concept {
+            min-height: 100vh;
+            padding: 0;
+            scroll-margin-top: 100px;
+            display: none;
+        }
+
+        .concept.active {
+            display: block;
+        }
+
+        .mockup {
+            background: white;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== CONCEPT 1: Academic Trust ===== */
+        .c1-header {
+            background: white;
+            padding: 16px 40px;
+            border-bottom: 1px solid #e0d8d0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .c1-logo {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3a52;
+        }
+
+        .c1-nav {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .c1-nav a {
+            color: #555;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .c1-nav a:hover {
+            color: #1a3a52;
+        }
+
+        .c1-header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .c1-hero {
+            background: linear-gradient(135deg, #1a3a52 0%, #2d4e6f 100%);
+            color: white;
+            padding: 50px 40px;
+            border-bottom: 4px solid #d4a574;
+        }
+
+        .c1-hero h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .c1-hero p {
+            font-size: 1rem;
+            opacity: 0.95;
+            max-width: 500px;
+        }
+
+        .c1-content {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 500px;
+        }
+
+        .c1-sidebar {
+            background: #f5f3f0;
+            padding: 30px;
+            border-right: 1px solid #e0d8d0;
+        }
+
+        .c1-sidebar h4 {
+            font-family: 'Lora', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1a3a52;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .c1-filter-item {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            padding-left: 8px;
+            transition: all 0.2s;
+        }
+
+        .c1-filter-item.active {
+            border-left-color: #c85a3a;
+            color: #c85a3a;
+            font-weight: 500;
+        }
+
+        .c1-main {
+            padding: 40px;
+        }
+
+        .c1-section-title {
+            font-family: 'Lora', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a3a52;
+        }
+
+        .c1-sermon-carousel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 50px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+        }
+
+        .c1-sermon {
+            flex: 0 0 320px;
+            background: linear-gradient(135deg, #4a6fa5 0%, #c85a3a 100%);
+            border-radius: 4px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .c1-sermon::before {
+            content: '● LIVE';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .c1-sermon h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .c1-sermon-meta {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .c1-cleric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .c1-cleric {
+            background: #f5f3f0;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #e0d8d0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .c1-cleric:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .c1-avatar {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #7a9fd0 0%, #a67c52 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .c1-cleric-info {
+            padding: 16px;
+        }
+
+        .c1-cleric-name {
+            font-family: 'Lora', serif;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .c1-cleric-spec {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .c1-rate-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .c1-rate {
+            font-weight: 600;
+            color: #c85a3a;
+        }
+
+        .c1-status {
+            background: #ddeaea;
+            color: #2d6e6e;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        /* ===== CONCEPT 2: Modern Community ===== */
+        .c2-top-bar {
+            background: white;
+            padding: 16px 40px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .c2-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #0f6db0;
+        }
+
+        .c2-search {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 40px;
+            padding: 10px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .c2-hero {
+            background: linear-gradient(135deg, #0f6db0 0%, #155a8a 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .c2-hero h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .c2-hero p {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .c2-carousel-section {
+            padding: 50px 40px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .c2-section-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1f36;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .c2-sermons {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+        }
+
+        .c2-sermon {
+            flex: 0 0 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f0f4f9;
+            border: 1px solid #e0e8f0;
+        }
+
+        .c2-sermon-img {
+            height: 160px;
+            background: linear-gradient(135deg, #1d9d9d 0%, #0f6db0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            position: relative;
+        }
+
+        .c2-sermon-img::after {
+            content: '● LIVE NOW';
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .c2-sermon-content {
+            padding: 12px;
+        }
+
+        .c2-sermon-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            color: #1a1f36;
+        }
+
+        .c2-sermon-meta {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .c2-clerics-section {
+            padding: 50px 40px;
+            background: #f0f4f9;
+        }
+
+        .c2-filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .c2-filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .c2-filter-btn.active {
+            background: #1d9d9d;
+            color: white;
+            border-color: #1d9d9d;
+        }
+
+        .c2-cleric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .c2-cleric {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        .c2-cleric:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .c2-avatar {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #0f6db0 0%, #1d9d9d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .c2-cleric-details {
+            padding: 16px;
+        }
+
+        .c2-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: #1a1f36;
+        }
+
+        .c2-spec {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .c2-rating {
+            font-size: 0.8rem;
+            color: #ff8c42;
+            margin-bottom: 10px;
+        }
+
+        .c2-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .c2-price {
+            font-weight: 600;
+            color: #1d9d9d;
+        }
+
+        .c2-btn {
+            background: #1d9d9d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .c2-btn:hover {
+            background: #1a7c7c;
+        }
+
+        /* ===== CONCEPT 3: Minimal Elegance ===== */
+        .c3-header {
+            background: #fafaf8;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .c3-title {
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: #0d0d0d;
+        }
+
+        .c3-nav {
+            display: flex;
+            gap: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .c3-nav-item {
+            color: #7a7a7a;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .c3-nav-item.active {
+            color: #1a6b5b;
+        }
+
+        .c3-hero {
+            background: #fafaf8;
+            padding: 60px 40px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .c3-hero h1 {
+            font-family: 'Lora', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+            color: #0d0d0d;
+        }
+
+        .c3-hero-sub {
+            font-size: 1rem;
+            color: #7a7a7a;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .c3-content {
+            padding: 50px 40px;
+            background: #fafaf8;
+        }
+
+        .c3-section {
+            margin-bottom: 60px;
+        }
+
+        .c3-section-title {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 28px;
+            color: #0d0d0d;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .c3-sermon-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        .c3-sermon-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .c3-sermon-card:hover {
+            border-color: #1a6b5b;
+        }
+
+        .c3-sermon-thumb {
+            height: 180px;
+            background: linear-gradient(135deg, #2d5a4e 0%, #1a6b5b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+        }
+
+        .c3-live-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            border-radius: 1px;
+        }
+
+        .c3-sermon-info {
+            padding: 16px;
+        }
+
+        .c3-sermon-title {
+            font-family: 'Lora', serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: #0d0d0d;
+        }
+
+        .c3-sermon-details {
+            font-size: 0.8rem;
+            color: #7a7a7a;
+        }
+
+        .c3-cleric-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .c3-cleric-item {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            transition: border-color 0.2s;
+        }
+
+        .c3-cleric-item:hover {
+            border-color: #1a6b5b;
+            background: #fafaf8;
+        }
+
+        .c3-cleric-avatar {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #2d5a4e 0%, #1a6b5b 100%);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .c3-cleric-profile {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .c3-cleric-info h3 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #0d0d0d;
+        }
+
+        .c3-cleric-spec {
+            font-size: 0.85rem;
+            color: #7a7a7a;
+            margin-bottom: 8px;
+        }
+
+        .c3-cleric-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: #7a7a7a;
+        }
+
+        .c3-cleric-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .c3-price {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            color: #1a6b5b;
+            font-size: 1rem;
+        }
+
+        .c3-cta {
+            background: #1a6b5b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 1px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .c3-cta:hover {
+            background: #155247;
+        }
+
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            .c1-content {
+                grid-template-columns: 1fr;
+            }
+            .c1-sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e0d8d0;
+                padding: 20px;
+            }
+        }
+
+        /* Booking Modal */
+        .booking-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .booking-modal.active {
+            display: flex;
+        }
+
+        .booking-modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e0d8d0;
+        }
+
+        .booking-modal h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            color: #1a3a52;
+            margin-bottom: 8px;
+        }
+
+        .booking-cleric-name {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        .booking-form-group {
+            margin-bottom: 16px;
+        }
+
+        .booking-form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1a3a52;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .booking-form-group input, .booking-form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: #2c2c2c;
+        }
+
+        .booking-form-group input:focus, .booking-form-group select:focus {
+            outline: none;
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        .booking-modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .booking-modal-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .booking-modal-actions .btn-book {
+            background: #c85a3a;
+            color: white;
+        }
+
+        .booking-modal-actions .btn-book:hover {
+            background: #a84628;
+        }
+
+        .booking-modal-actions .btn-cancel {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .booking-modal-actions .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .booking-success-message {
+            display: none;
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+            color: #2e7d32;
+            font-size: 0.9rem;
+        }
+
+        .booking-success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONCEPT 1: Academic Trust -->
+    <section class="concept active" id="concept-1">
+        <div class="mockup">
+            <div class="c1-header">
+                <div class="c1-logo">Baba Ji</div>
+                <div class="c1-nav">
+                    <a href="#clerics">Clerics</a>
+                    <a href="#sermons">Live Sermons</a>
+                </div>
+                <div class="c1-header-right">
+                    <a href="cleric-login.html" style="font-size: 0.8rem; color: #888;">Cleric Login</a>
+                    <a href="admin-login.html" style="font-size: 0.8rem; color: #888;">Admin</a>
+                    <a href="#account">Account</a>
+                    <select class="lang-select" onchange="changeLanguage(this.value)" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; cursor: pointer; background: white;">
+                        <option value="en">EN</option>
+                        <option value="ur">اردو</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ms">Melayu</option>
+                        <option value="id">Indonesia</option>
+                    </select>
+                </div>
+            </div>
+            <div class="c1-hero">
+                <h2>Global Clerics, Local Guidance</h2>
+                <p>Connect with vetted Islamic scholars for personal counsel, live Q&A, and spiritual guidance.</p>
+            </div>
+
+            <div class="c1-content">
+                <div class="c1-sidebar">
+                    <h4>Filter</h4>
+                    <div class="c1-filter-item active" onclick="filterClerics('all')">All Clerics</div>
+                    <div class="c1-filter-item" onclick="filterClerics('quran')">Quranic Studies</div>
+                    <div class="c1-filter-item" onclick="filterClerics('counsel')">Personal Counsel</div>
+                    <div class="c1-filter-item" onclick="filterClerics('family')">Family & Marriage</div>
+                    <div class="c1-filter-item" onclick="filterClerics('youth')">Youth Mentorship</div>
+                    <div class="c1-filter-item" onclick="filterClerics('zakat')">Zakat & Khayrat</div>
+                    <div style="border-top: 1px solid #e0d8d0; margin: 16px 0; padding-top: 16px;">
+                        <a href="index.html" style="display: block; padding: 12px 0; text-decoration: none; color: #c85a3a; font-weight: 600; font-size: 0.95rem; transition: all 0.2s;">
+                            ✨ Create Talisman
+                        </a>
+                    </div>
+                </div>
+
+                <div class="c1-main">
+                    <h3 class="c1-section-title">Live Sermons</h3>
+                    <div class="c1-sermon-carousel" id="c1-sermon-carousel"></div>
+
+                    <h3 class="c1-section-title">Available for 1-on-1</h3>
+                    <div class="c1-cleric-grid" id="cleric-grid">
+                        <div class="c1-cleric" data-category="quran">
+                            <div class="c1-avatar">👨‍🎓</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Shaikh Ahmad</div>
+                                <div class="c1-cleric-spec">Quranic Studies</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$40/hr</div>
+                                    <div class="c1-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="family">
+                            <div class="c1-avatar">👩‍🏫</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Dr. Amina Malik</div>
+                                <div class="c1-cleric-spec">Family Counseling</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$50/hr</div>
+                                    <div class="c1-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="counsel">
+                            <div class="c1-avatar">👨‍💼</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Shaikh Rashid</div>
+                                <div class="c1-cleric-spec">Islamic Law</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$60/hr</div>
+                                    <div class="c1-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="youth">
+                            <div class="c1-avatar">👨‍🏫</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Mufti Hassan</div>
+                                <div class="c1-cleric-spec">Youth Mentorship</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$35/hr</div>
+                                    <div class="c1-status">In 1hr</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="quran">
+                            <div class="c1-avatar">👩‍💼</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Dr. Fatima</div>
+                                <div class="c1-cleric-spec">Quranic Tafsir</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$45/hr</div>
+                                    <div class="c1-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="counsel">
+                            <div class="c1-avatar">👨‍🎓</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Shaikh Omar</div>
+                                <div class="c1-cleric-spec">Life Guidance</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$55/hr</div>
+                                    <div class="c1-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="zakat">
+                            <div class="c1-avatar">💰</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Dr. Abdullah</div>
+                                <div class="c1-cleric-spec">Islamic Finance & Zakat</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$65/hr</div>
+                                    <div class="c1-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1-cleric" data-category="zakat">
+                            <div class="c1-avatar">🤝</div>
+                            <div class="c1-cleric-info">
+                                <div class="c1-cleric-name">Ustadha Layla</div>
+                                <div class="c1-cleric-spec">Charity & Social Welfare</div>
+                                <div class="c1-rate-status">
+                                    <div class="c1-rate">$45/hr</div>
+                                    <div class="c1-status">In 30min</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONCEPT 2: Modern Community -->
+    <section class="concept" id="concept-2">
+        <div class="mockup">
+            <div class="c2-top-bar">
+                <div class="c2-logo">Baba Ji</div>
+                <input type="text" class="c2-search" placeholder="Search clerics or topics...">
+                <div style="color: #0f6db0; font-weight: 600; cursor: pointer;">Account</div>
+            </div>
+
+            <div class="c2-hero">
+                <h2>Learn. Connect. Grow.</h2>
+                <p>Access vetted Islamic scholars worldwide for one-on-one guidance and live spiritual sessions.</p>
+            </div>
+
+            <div class="c2-carousel-section">
+                <div class="c2-section-label">🔴 Live Now</div>
+                <div class="c2-sermons">
+                    <div class="c2-sermon">
+                        <div class="c2-sermon-img">📖</div>
+                        <div class="c2-sermon-content">
+                            <div class="c2-sermon-title">Tafsir Q&A Session</div>
+                            <div class="c2-sermon-meta">Shaikh Abdullah • 45 watching</div>
+                        </div>
+                    </div>
+                    <div class="c2-sermon">
+                        <div class="c2-sermon-img">💬</div>
+                        <div class="c2-sermon-content">
+                            <div class="c2-sermon-title">Youth Mentorship Hour</div>
+                            <div class="c2-sermon-meta">Dr. Amina • 120 watching</div>
+                        </div>
+                    </div>
+                    <div class="c2-sermon">
+                        <div class="c2-sermon-img">🕌</div>
+                        <div class="c2-sermon-content">
+                            <div class="c2-sermon-title">Evening Reflection</div>
+                            <div class="c2-sermon-meta">Shaikh Rashid • 78 watching</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="c2-clerics-section">
+                <div class="c2-section-label">Book a Session</div>
+
+                <div class="c2-filter-bar">
+                    <button class="c2-filter-btn active">All Specialties</button>
+                    <button class="c2-filter-btn">Quran & Tafsir</button>
+                    <button class="c2-filter-btn">Personal Advice</button>
+                    <button class="c2-filter-btn">Family Matters</button>
+                    <button class="c2-filter-btn">Available Now</button>
+                </div>
+
+                <div class="c2-cleric-grid">
+                    <div class="c2-cleric">
+                        <div class="c2-avatar">👨‍🎓</div>
+                        <div class="c2-cleric-details">
+                            <div class="c2-name">Shaikh Ahmad</div>
+                            <div class="c2-spec">Quranic Studies • Egypt</div>
+                            <div class="c2-rating">★★★★★ 48 reviews</div>
+                            <div class="c2-footer">
+                                <div class="c2-price">$40/hr</div>
+                                <button class="c2-btn" onclick="openBookingModal('Shaikh Ahmad', 40)">Book</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c2-cleric">
+                        <div class="c2-avatar">👩‍🏫</div>
+                        <div class="c2-cleric-details">
+                            <div class="c2-name">Dr. Amina</div>
+                            <div class="c2-spec">Family & Youth • Malaysia</div>
+                            <div class="c2-rating">★★★★★ 62 reviews</div>
+                            <div class="c2-footer">
+                                <div class="c2-price">$50/hr</div>
+                                <button class="c2-btn" onclick="openBookingModal('Dr. Amina', 50)">Book</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c2-cleric">
+                        <div class="c2-avatar">👨‍💼</div>
+                        <div class="c2-cleric-details">
+                            <div class="c2-name">Shaikh Rashid</div>
+                            <div class="c2-spec">Islamic Law • UK</div>
+                            <div class="c2-rating">★★★★★ 35 reviews</div>
+                            <div class="c2-footer">
+                                <div class="c2-price">$60/hr</div>
+                                <button class="c2-btn" onclick="openBookingModal('Shaikh Rashid', 60)">Book</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONCEPT 3: Minimal Elegance -->
+    <section class="concept" id="concept-3">
+        <div class="mockup">
+            <div class="c3-header">
+                <div class="c3-title">BABA JI</div>
+                <div class="c3-nav">
+                    <div class="c3-nav-item active">Sermons</div>
+                    <div class="c3-nav-item">Clerics</div>
+                    <div class="c3-nav-item">How It Works</div>
+                    <div class="c3-nav-item">Account</div>
+                </div>
+            </div>
+
+            <div class="c3-hero">
+                <h1>Spiritual Guidance from the World's Leading Scholars</h1>
+                <p class="c3-hero-sub">Direct access to vetted Islamic scholars for personalized counsel and live teachings. Every conversation is confidential, every scholar verified.</p>
+            </div>
+
+            <div class="c3-content">
+                <div class="c3-section">
+                    <div class="c3-section-title">Featured Sermons</div>
+                    <div class="c3-sermon-list">
+                        <div class="c3-sermon-card">
+                            <div class="c3-sermon-thumb">
+                                📖
+                                <div class="c3-live-badge">LIVE</div>
+                            </div>
+                            <div class="c3-sermon-info">
+                                <div class="c3-sermon-title">Tafsir: Surah al-Mulk</div>
+                                <div class="c3-sermon-details">Shaikh Ahmad • Today 8:00 PM</div>
+                            </div>
+                        </div>
+                        <div class="c3-sermon-card">
+                            <div class="c3-sermon-thumb">
+                                💬
+                                <div class="c3-live-badge">LIVE</div>
+                            </div>
+                            <div class="c3-sermon-info">
+                                <div class="c3-sermon-title">Q&A on Islamic Ethics</div>
+                                <div class="c3-sermon-details">Dr. Amina • Today 9:30 PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c3-section">
+                    <div class="c3-section-title">Available Scholars</div>
+                    <div class="c3-cleric-list">
+                        <div class="c3-cleric-item">
+                            <div class="c3-cleric-avatar">👨‍🎓</div>
+                            <div class="c3-cleric-profile">
+                                <div class="c3-cleric-info">
+                                    <h3>Shaikh Ahmad Al-Azhari</h3>
+                                    <div class="c3-cleric-spec">Quranic Studies & Islamic Jurisprudence</div>
+                                    <div class="c3-cleric-meta">
+                                        <span>Egypt</span>
+                                        <span>20+ years</span>
+                                        <span>★★★★★</span>
+                                    </div>
+                                </div>
+                                <div class="c3-cleric-footer">
+                                    <div class="c3-price">$40 / hour</div>
+                                    <button class="c3-cta" onclick="openBookingModal('Shaikh Ahmad Al-Azhari', 40)">Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="c3-cleric-item">
+                            <div class="c3-cleric-avatar">👩‍🏫</div>
+                            <div class="c3-cleric-profile">
+                                <div class="c3-cleric-info">
+                                    <h3>Dr. Amina Malik</h3>
+                                    <div class="c3-cleric-spec">Family Counseling & Youth Mentorship</div>
+                                    <div class="c3-cleric-meta">
+                                        <span>Malaysia</span>
+                                        <span>15+ years</span>
+                                        <span>★★★★★</span>
+                                    </div>
+                                </div>
+                                <div class="c3-cleric-footer">
+                                    <div class="c3-price">$50 / hour</div>
+                                    <button class="c3-cta" onclick="openBookingModal('Dr. Amina Malik', 50)">Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="c3-cleric-item">
+                            <div class="c3-cleric-avatar">👨‍💼</div>
+                            <div class="c3-cleric-profile">
+                                <div class="c3-cleric-info">
+                                    <h3>Shaikh Rashid Al-Maktoum</h3>
+                                    <div class="c3-cleric-spec">Islamic Law & Contemporary Issues</div>
+                                    <div class="c3-cleric-meta">
+                                        <span>UK</span>
+                                        <span>25+ years</span>
+                                        <span>★★★★★</span>
+                                    </div>
+                                </div>
+                                <div class="c3-cleric-footer">
+                                    <div class="c3-price">$60 / hour</div>
+                                    <button class="c3-cta" onclick="openBookingModal('Shaikh Rashid Al-Maktoum', 60)">Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="booking-modal-content">
+            <h2>Book a Session</h2>
+            <div class="booking-cleric-name" id="bookingClericName"></div>
+
+            <div class="booking-success-message" id="bookingSuccess">
+                ✓ Booking confirmed! You'll receive a confirmation email shortly.
+            </div>
+
+            <form id="bookingForm">
+                <div class="booking-form-group">
+                    <label for="bookingDate">Preferred Date</label>
+                    <input type="date" id="bookingDate" name="date" required>
+                </div>
+
+                <div class="booking-form-group">
+                    <label for="bookingTime">Preferred Time (24h)</label>
+                    <input type="time" id="bookingTime" name="time" required>
+                </div>
+
+                <div class="booking-form-group">
+                    <label for="bookingDuration">Duration</label>
+                    <select id="bookingDuration" name="duration" required>
+                        <option value="">Select duration</option>
+                        <option value="30">30 minutes</option>
+                        <option value="60">1 hour</option>
+                        <option value="90">1.5 hours</option>
+                        <option value="120">2 hours</option>
+                    </select>
+                </div>
+
+                <div class="booking-form-group">
+                    <label for="bookingTopic">Topic/Question</label>
+                    <input type="text" id="bookingTopic" name="topic" placeholder="What would you like to discuss?" required>
+                </div>
+
+                <div class="booking-modal-actions">
+                    <button type="submit" class="btn-book">Confirm Booking</button>
+                    <button type="button" class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function loadSermons() {
+            const carousel = document.getElementById('c1-sermon-carousel');
+            if (!carousel) return;
+
+            try {
+                let events = [];
+
+                // Try to fetch from events.json
+                try {
+                    const currentPath = window.location.pathname;
+                    const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                    const eventsPath = window.location.protocol === 'file:'
+                        ? 'file://' + basePath + 'events.json'
+                        : 'events.json';
+
+                    const response = await fetch(eventsPath);
+                    if (response.ok) {
+                        const data = await response.json();
+                        events = data.events || data;
+                    }
+                } catch (fetchError) {
+                    console.warn('Could not load events.json, using fallback data:', fetchError);
+                    // Fallback data for local file:// testing
+                    events = [
+                        {
+                            id: 1,
+                            title: "Tafsir al-Kahf with Shaikh Abdullah",
+                            speaker: "Shaikh Abdullah",
+                            location: "Egypt",
+                            time: "20:00",
+                            description: "In-depth interpretation of Surah al-Kahf with contemporary application.",
+                            viewers: 45
+                        },
+                        {
+                            id: 2,
+                            title: "Youth Mentorship Hour",
+                            speaker: "Dr. Amina",
+                            location: "Malaysia",
+                            time: "19:30",
+                            description: "Guidance and mentorship for young Muslims seeking direction.",
+                            viewers: 120
+                        },
+                        {
+                            id: 3,
+                            title: "Evening Reflection",
+                            speaker: "Shaikh Rashid",
+                            location: "UK",
+                            time: "18:00",
+                            description: "Short discourse on Islamic teachings and contemporary issues.",
+                            viewers: 78
+                        }
+                    ];
+                }
+
+                if (events.length === 0) {
+                    carousel.innerHTML = '<div class="c1-sermon"><h3>No live sermons at this time</h3><p>Check back soon for upcoming sessions</p></div>';
+                    return;
+                }
+
+                carousel.innerHTML = events.map(event => `
+                    <div class="c1-sermon">
+                        <h3>${event.title}</h3>
+                        <div class="c1-sermon-meta">📍 ${event.location} • ${event.time}</div>
+                        <div style="margin-top: 12px; font-size: 0.9rem;">${event.description || ''}</div>
+                        <div style="margin-top: 8px; font-size: 0.8rem; opacity: 0.8;">👁️ ${event.viewers || 0} watching</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load sermons:', error);
+                carousel.innerHTML = '<div class="c1-sermon"><h3>Unable to load sermons</h3><p>Please try again later</p></div>';
+            }
+        }
+
+        function filterClerics(category) {
+            const clerics = document.querySelectorAll('.c1-cleric');
+            const filters = document.querySelectorAll('.c1-filter-item');
+
+            filters.forEach(f => f.classList.remove('active'));
+            event.target.classList.add('active');
+
+            clerics.forEach(cleric => {
+                if (category === 'all' || cleric.dataset.category === category) {
+                    cleric.style.display = 'block';
+                } else {
+                    cleric.style.display = 'none';
+                }
+            });
+        }
+
+        function changeLanguage(lang) {
+            console.log('Language changed to: ' + lang);
+        }
+
+        // Booking system
+        const BOOKINGS_KEY = 'babaJiBookings';
+
+        function openBookingModal(clericName, clericRate) {
+            const modal = document.getElementById('bookingModal');
+            document.getElementById('bookingClericName').textContent = `${clericName} • $${clericRate}/hour`;
+            document.getElementById('bookingForm').reset();
+            document.getElementById('bookingSuccess').classList.remove('show');
+            modal.classList.add('active');
+            modal.dataset.cleric = clericName;
+            modal.dataset.rate = clericRate;
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = today;
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.remove('active');
+        }
+
+        function saveBooking(booking) {
+            try {
+                const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY)) || [];
+                booking.id = Date.now();
+                booking.status = 'confirmed';
+                booking.createdAt = new Date().toISOString();
+                bookings.push(booking);
+                localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+                return true;
+            } catch (e) {
+                console.error('Failed to save booking:', e);
+                return false;
+            }
+        }
+
+        function getBookings() {
+            try {
+                return JSON.parse(localStorage.getItem(BOOKINGS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        document.getElementById('bookingForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const modal = document.getElementById('bookingModal');
+            const booking = {
+                cleric: modal.dataset.cleric,
+                rate: modal.dataset.rate,
+                date: document.getElementById('bookingDate').value,
+                time: document.getElementById('bookingTime').value,
+                duration: document.getElementById('bookingDuration').value,
+                topic: document.getElementById('bookingTopic').value
+            };
+
+            if (saveBooking(booking)) {
+                document.getElementById('bookingSuccess').classList.add('show');
+                setTimeout(() => {
+                    // Store booking data for checkout page and redirect
+                    try {
+                        localStorage.setItem('babaJiPendingCheckout', JSON.stringify(booking));
+                    } catch (e) {
+                        console.error('Failed to save pending checkout:', e);
+                    }
+                    window.location.href = 'checkout.html';
+                }, 1500);
+            } else {
+                alert('Failed to save booking. Please try again.');
+            }
+        });
+
+        document.getElementById('bookingModal')?.addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeBookingModal();
+            }
+        });
+
+        // Load sermons on page load
+        document.addEventListener('DOMContentLoaded', loadSermons);
+    </script>
+</body>
+</html>
