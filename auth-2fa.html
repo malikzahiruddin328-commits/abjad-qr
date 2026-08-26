@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Factor Authentication Setup — Baba Ji</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+            color: #2c2c2c;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0d5c7;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .section {
+            margin-bottom: 32px;
+        }
+        .section h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            color: #1a3a52;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e0d5c7;
+            padding-bottom: 8px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a3a52;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d5c7;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #2c2c2c;
+        }
+        input:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+        button {
+            width: 100%;
+            background: #1a3a52;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover { background: #d4a574; color: #1a3a52; }
+        .qr-display {
+            background: #fafaf8;
+            border: 1px solid #e0d5c7;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            margin: 16px 0;
+        }
+        .qr-image { max-width: 200px; margin: 16px auto; }
+        .secret-key {
+            background: #fafaf8;
+            border: 1px solid #e0d5c7;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 12px 0;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border-left: 3px solid #3b82f6;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #1e40af;
+            margin: 12px 0;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #92400e;
+            margin: 12px 0;
+        }
+        .success-box {
+            background: #dcfce7;
+            border-left: 3px solid #10b981;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #166534;
+            margin: 12px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: #d4a574;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .step {
+            margin-bottom: 16px;
+        }
+        code {
+            background: #fafaf8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d4a574;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🔐 Two-Factor Authentication</div>
+        <div class="subtitle">Setup & Configuration Guide</div>
+
+        <div class="section">
+            <h2>How 2FA Works</h2>
+            <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px;">
+                Two-Factor Authentication (2FA) adds a second layer of security. After entering your password, you'll need to enter a 6-digit code from your authenticator app.
+            </p>
+            <div class="info-box">
+                Uses Time-based One-Time Password (TOTP) standard — compatible with Google Authenticator, Authy, Microsoft Authenticator, etc.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Setup Instructions</h2>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Generate Secret Key</strong>
+                <p style="margin-top: 8px; font-size: 0.9rem; color: #666;">Click the button below to create your unique 2FA secret:</p>
+                <button onclick="generateSecret()" style="margin-top: 12px;">Generate 2FA Secret Key</button>
+                <div id="secretDisplay" style="display: none; margin-top: 12px;">
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">Your Secret Key (save this safely):</p>
+                    <div class="secret-key" id="secretKey"></div>
+                    <div class="warning-box">
+                        ⚠️ Save this secret key in a safe place. You'll need it to recover access if you lose your authenticator app.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Scan QR Code</strong>
+                <p style="margin-top: 8px; font-size: 0.9rem; color: #666;">Open your authenticator app (Google Authenticator, Authy, etc.) and scan this QR code:</p>
+                <div class="qr-display" id="qrDisplay" style="display: none;">
+                    <div id="qrCode" class="qr-image"></div>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 8px;">Or manually enter the secret key above</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Verify 2FA Code</strong>
+                <p style="margin-top: 8px; font-size: 0.9rem; color: #666;">Enter the 6-digit code from your authenticator app:</p>
+                <div class="form-group" style="margin-top: 12px;">
+                    <input type="text" id="verifyCode" maxlength="6" placeholder="000000" inputmode="numeric" style="font-size: 1.5rem; letter-spacing: 0.5em; text-align: center;">
+                </div>
+                <button onclick="verifyCode()">Verify & Enable 2FA</button>
+                <div id="verifyResult" style="margin-top: 12px;"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Recovery Codes</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 12px;">
+                If you lose access to your authenticator app, you can use recovery codes to regain access:
+            </p>
+            <div class="warning-box">
+                Each recovery code can only be used once. Store them securely.
+            </div>
+            <div id="recoveryCodes" style="display: none;">
+                <div class="secret-key" id="recoveryCodeList" style="font-size: 0.85rem; line-height: 1.8;"></div>
+                <button onclick="downloadRecoveryCodes()" style="margin-top: 12px;">Download Recovery Codes (PDF)</button>
+                <button onclick="printRecoveryCodes()" style="margin-top: 8px; background: white; color: #1a3a52; border: 1px solid #e0d5c7;">Print Recovery Codes</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Testing</h2>
+            <div class="info-box">
+                After enabling 2FA, test it by logging out and logging back in. You'll be prompted for your 6-digit code.
+            </div>
+            <div id="testResult" style="display: none;">
+                <div class="form-group">
+                    <label>Test Current Code:</label>
+                    <input type="text" id="testCode" maxlength="6" placeholder="000000" inputmode="numeric">
+                </div>
+                <button onclick="testTOTP()">Test Code</button>
+            </div>
+        </div>
+
+        <div class="section" style="border-top: 1px solid #e0d5c7; padding-top: 24px;">
+            <h2>Authenticator Apps</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 12px;">Compatible apps:</p>
+            <ul style="font-size: 0.9rem; color: #666; margin-left: 20px;">
+                <li>Google Authenticator (iOS, Android)</li>
+                <li>Microsoft Authenticator (iOS, Android)</li>
+                <li>Authy (iOS, Android, Windows, Mac)</li>
+                <li>FreeOTP (iOS, Android)</li>
+                <li>LastPass Authenticator (iOS, Android)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.5.3/qrcode.min.js"></script>
+    <script>
+        let currentSecret = null;
+        let recoveryCodes = [];
+
+        // TOTP Implementation (RFC 6238)
+        function generateTOTP(secret, time = Math.floor(Date.now() / 1000)) {
+            const hmac = CryptoJS.HmacSHA1(base32decode(secret), CryptoJS.enc.Hex.parse(Math.floor(time / 30).toString(16).padStart(16, '0')));
+            const offset = hmac.words[hmac.words.length - 1] & 0xf;
+            const otp = (hmac.words[Math.floor(offset / 4)] >> (8 * (3 - (offset % 4)))) & 0x7fffffff;
+            return (otp % 1000000).toString().padStart(6, '0');
+        }
+
+        // Base32 Decode (for secret key)
+        function base32decode(str) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let bits = '';
+            for (let i = 0; i < str.length; i++) {
+                const val = alphabet.indexOf(str[i]);
+                if (val === -1) throw new Error('Invalid base32 character');
+                bits += val.toString(2).padStart(5, '0');
+            }
+            let hex = '';
+            for (let i = 0; i < bits.length; i += 8) {
+                const byte = bits.slice(i, i + 8).padEnd(8, '0');
+                hex += parseInt(byte, 2).toString(16).padStart(2, '0');
+            }
+            return hex;
+        }
+
+        // Generate random base32 secret
+        function generateSecret() {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let secret = '';
+            for (let i = 0; i < 32; i++) {
+                secret += alphabet.charAt(Math.floor(Math.random() * 32));
+            }
+            currentSecret = secret;
+
+            // Display secret
+            document.getElementById('secretKey').textContent = secret;
+            document.getElementById('secretDisplay').style.display = 'block';
+
+            // Generate QR code
+            const otpauthUrl = `otpauth://totp/BabaJi:user@babaji.com?secret=${secret}&issuer=BabaJi`;
+            document.getElementById('qrCode').innerHTML = '';
+            new QRCode(document.getElementById('qrCode'), {
+                text: otpauthUrl,
+                width: 200,
+                height: 200
+            });
+            document.getElementById('qrDisplay').style.display = 'block';
+
+            // Generate recovery codes
+            generateRecoveryCodes();
+            document.getElementById('recoveryCodes').style.display = 'block';
+            document.getElementById('testResult').style.display = 'block';
+        }
+
+        function generateRecoveryCodes() {
+            recoveryCodes = [];
+            for (let i = 0; i < 10; i++) {
+                const code = Math.random().toString(36).substring(2, 12).toUpperCase();
+                recoveryCodes.push(code);
+            }
+            document.getElementById('recoveryCodeList').innerHTML = recoveryCodes.join('<br>');
+        }
+
+        function verifyCode() {
+            const input = document.getElementById('verifyCode').value;
+            if (!currentSecret) {
+                showResult('Generate a secret key first', 'error');
+                return;
+            }
+            if (input.length !== 6) {
+                showResult('Code must be 6 digits', 'error');
+                return;
+            }
+
+            const validCode = generateTOTP(currentSecret);
+            if (input === validCode) {
+                // Save 2FA settings
+                localStorage.setItem('2faEnabled', JSON.stringify({
+                    enabled: true,
+                    secret: currentSecret,
+                    recoveryCodes: recoveryCodes,
+                    enabledAt: new Date().toISOString()
+                }));
+                showResult('✓ 2FA Successfully Enabled!', 'success');
+                document.getElementById('verifyCode').value = '';
+            } else {
+                showResult('Invalid code. Try again.', 'error');
+            }
+        }
+
+        function testTOTP() {
+            if (!currentSecret) return;
+            const input = document.getElementById('testCode').value;
+            const validCode = generateTOTP(currentSecret);
+            const isValid = input === validCode;
+            showResult(isValid ? '✓ Code is valid!' : '✗ Code is invalid', isValid ? 'success' : 'error');
+        }
+
+        function showResult(msg, type) {
+            const resultDiv = document.getElementById('verifyResult');
+            resultDiv.className = `${type}-box`;
+            resultDiv.textContent = msg;
+        }
+
+        function downloadRecoveryCodes() {
+            const text = 'RECOVERY CODES - SAVE SECURELY\n\n' + recoveryCodes.join('\n');
+            const blob = new Blob([text], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'baba-ji-recovery-codes.txt';
+            a.click();
+        }
+
+        function printRecoveryCodes() {
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write('<pre>' + recoveryCodes.join('\n') + '</pre>');
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
