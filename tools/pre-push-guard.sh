@@ -57,6 +57,9 @@ services-reviews.js
 services-reminders.js
 services-webhooks.js
 services-availability.js
+services-database.js
+services-email-db.js
+DATABASE-MIGRATION.md
 tools/pre-push-guard.sh'
 
 fail() {
