@@ -312,9 +312,19 @@
         </div>
     </div>
 
+    <script src="services-email-db.js"></script>
+    <script src="services-reminders.js"></script>
+    <script src="services-database.js"></script>
+
     <script>
-        // For demonstration, use Stripe's test publishable key
-        // In production, replace with your actual publishable key
+        // Initialize database (optional - defaults to localStorage)
+        // Uncomment to use Firebase:
+        // initializeDatabase(new FirebaseAdapter({
+        //   apiKey: 'your-key',
+        //   projectId: 'your-project',
+        //   databaseURL: 'https://your-db.firebaseio.com'
+        // }))
+
         const stripe = Stripe('pk_test_51234567890abcdefghijklmnop');
         const elements = stripe.elements();
         const cardElement = elements.create('card');
@@ -324,36 +334,33 @@
         const BOOKINGS_KEY = 'babaJiBookings';
         const PENDING_CHECKOUT_KEY = 'babaJiPendingCheckout';
 
-        // Send payment confirmation email
-        function sendPaymentConfirmationEmail(payment, email, name) {
-            const subject = 'Payment Confirmation — Baba Ji';
-            const message = `Dear ${name},
+        // Send payment confirmation email using email service
+        async function sendPaymentConfirmationEmail(payment, customer) {
+            try {
+                // Get cleric data
+                const clerics = JSON.parse(localStorage.getItem('babaJiClerics') || '[]');
+                const cleric = clerics.find(c => c.name === bookingData.cleric);
 
-Thank you for your payment of $${payment.amount} USD for your session with ${payment.cleric}.
+                // Send to customer
+                await sendEmail(customer.email, 'paymentConfirmation', {
+                    payment,
+                    booking: bookingData,
+                    customer
+                });
 
-Booking Details:
-- Cleric: ${payment.cleric}
-- Date: ${bookingData.date}
-- Time: ${bookingData.time}
-- Duration: ${bookingData.duration} minutes
-- Topic: ${bookingData.topic}
+                // Send to cleric
+                if (cleric && cleric.email) {
+                    await sendEmail(cleric.email, 'paymentConfirmation', {
+                        payment,
+                        booking: bookingData,
+                        customer
+                    });
+                }
 
-Payment ID: ${payment.id}
-Status: ${payment.status}
-
-Please note: A confirmation email has also been sent to ${payment.cleric}'s email.
-
-If you have any questions, please contact support@babaji.com
-
-Best regards,
-Baba Ji Team`;
-
-            console.log(`Email sent to ${email}:`);
-            console.log(`Subject: ${subject}`);
-            console.log(message);
-
-            // TODO: Integrate with email service (Gmail MCP, SendGrid, etc.)
-            // For now, logging to console demonstrates the email would be sent
+                console.log(`✓ Payment confirmation emails sent to ${customer.email} and cleric`);
+            } catch (error) {
+                console.error('Failed to send payment confirmation:', error);
+            }
         }
 
         // Load booking from URL or storage
@@ -432,7 +439,7 @@ Baba Ji Team`;
 
                     // Save payment record
                     const payment = {
-                        id: Date.now(),
+                        id: Date.now().toString(),
                         bookingId: bookingData.id,
                         cleric: bookingData.cleric,
                         amount: amount / 100,
@@ -448,8 +455,39 @@ Baba Ji Team`;
                     payments.push(payment);
                     localStorage.setItem('babaJiPayments', JSON.stringify(payments));
 
+                    // Create booking record if not exists
+                    const booking = {
+                        id: bookingData.id || Date.now().toString(),
+                        ...bookingData,
+                        paymentId: payment.id,
+                        paymentStatus: 'completed',
+                        createdAt: new Date().toISOString()
+                    };
+                    const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+                    if (!bookings.find(b => b.id === booking.id)) {
+                        bookings.push(booking);
+                        localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+                    }
+
                     // Send confirmation emails
-                    sendPaymentConfirmationEmail(payment, email, name);
+                    const customer = { name, email };
+                    sendPaymentConfirmationEmail(payment, customer);
+
+                    // Schedule reminders (if RemindersService available)
+                    if (typeof RemindersService !== 'undefined') {
+                        RemindersService.initialize();
+                        const reminderData = {
+                            bookingId: booking.id,
+                            bookingTime: new Date(`${booking.date}T${booking.time}`).toISOString(),
+                            customerEmail: email,
+                            customerName: name,
+                            clericName: booking.cleric,
+                            topic: booking.topic
+                        };
+                        RemindersService.scheduleReminder(booking.id, 'BEFORE_24H', reminderData);
+                        RemindersService.scheduleReminder(booking.id, 'BEFORE_1H', reminderData);
+                        console.log('✓ Reminders scheduled');
+                    }
 
                     // Clear pending checkout
                     localStorage.removeItem(PENDING_CHECKOUT_KEY);
