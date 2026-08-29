@@ -4,11 +4,27 @@
 # WHY THIS EXISTS
 # ---------------
 # This repository publishes to GitHub Pages, so anything reaching the remote
-# becomes readable by anyone. The repo also holds material that must never be
-# public: docs/scope-v1.md (real people, business model, monetization), Hafiz's
-# category workbook, the whole catalogue under library/data/, and the internal
-# audit reports. Local `main` is permanently loaded with exactly that material,
-# one tired `git push origin main` from publication.
+# becomes readable by anyone. The guard exists so that WHAT gets published is a
+# deliberate choice made in a commit, not an accident of `git push`.
+#
+# IT IS NOT A SECRECY GUARD. Zahir ruled on 2026-08-27: "there is no private
+# sensitive material" in this repo. docs/scope-v1.md, Hafiz's category workbook
+# and the whole library/ catalogue are published deliberately and are on the
+# allowlist below. Earlier versions of this header claimed they must never be
+# public. That claim was wrong and is removed.
+#
+# WHAT IT IS STILL STRICT ABOUT, and must stay strict about:
+#   - admin-setup.html, which currently hardcodes a plaintext admin password.
+#   - anything key-shaped, credential-shaped, or newly added without thought.
+# A file is published only by being added to PUBLIC_ALLOWLIST on purpose.
+#
+# WHY THE ALLOWLIST WAS REALIGNED (2026-08-28, Baba Ji-General)
+# Twelve files were already live on origin/main and NOT on the allowlist, so
+# every legitimate push touching them was blocked with a message claiming they
+# were secret. The predictable human response to a control that cries wolf is
+# `git push --no-verify`, which switches the guard off entirely - including for
+# admin-setup.html, the one file here that genuinely matters. A control people
+# routinely bypass is worse than no control, because it manufactures confidence.
 #
 # HISTORY — READ THIS BEFORE "SIMPLIFYING" ANYTHING BELOW
 # -------------------------------------------------------
@@ -60,6 +76,18 @@ services-availability.js
 services-database.js
 services-email-db.js
 DATABASE-MIGRATION.md
+.gitignore
+CHANGELOG.md
+TESTING.md
+INTEGRATION-STATUS.md
+docs/scope-v1.md
+library/catalog-extraction-notes.md
+library/categories-for-hafiz.xlsx
+library/data/BUILD-REPORT.md
+library/data/categories.json
+library/data/texts.json
+library/tests/test_abjad.py
+library/tools/abjad.py
 tools/pre-push-guard.sh'
 
 fail() {
