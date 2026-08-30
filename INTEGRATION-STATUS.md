@@ -1,5 +1,62 @@
 # Baba Ji Platform — Integration Status
 
+> ## ⚠️ CORRECTION NOTICE — 2026-08-29
+>
+> **This document's figures were checked against the code and several do not
+> match. It is kept, not rewritten, because what it claims is itself part of the
+> record.** Read the corrections below before believing any number in it.
+>
+> Corrections by Baba Ji-Documentor. Method: `git show main:<file> | wc -l` and
+> `git diff --shortstat`, against `main` at `a1a3a0c`. Re-run them.
+>
+> **1. Nine of the eleven service line counts are wrong**, all but `email` and
+> `2FA`, and all understated except `database`:
+>
+> | Service | Claimed | Actual |
+> |---|---|---|
+> | services-webhooks.js | 380 | **892** |
+> | services-availability.js | 450 | **888** |
+> | services-reviews.js | 360 | **541** |
+> | services-reminders.js | 420 | **471** |
+> | services-email-db.js | 380 | **417** |
+> | services-sms.js | 240 | **274** |
+> | services-database.js | 520 | **429** |
+> | services-security.js | 335 | 334 |
+> | Documentation | "1200+" | **815** (386 + 429) |
+>
+> **2. "Total Code: 4,785 lines" matches neither the repo nor this document.**
+> The ten code files total **4,975**. The table's own rows sum to **3,815**.
+>
+> **3. "Total changes: 3 files, 140 lines added" omits the deletions.** git
+> reports 137 insertions **and 57 deletions**.
+>
+> **4. Test Scenario 1 and the Phase 3 priority list are built on
+> `booking-modal.html` and `lobby.html`. Neither file exists on any branch** —
+> `main`, `feature/library-foundation`, `public-site` or `origin/main`. The
+> headline test scenario cannot be run as written.
+>
+> **5. The Quick Start says "update checkout.html lines 315-322 with your
+> Firebase config".** Those lines are `<script src>` tags.
+>
+> **6. The `import { … } from './services-database.js'` examples do not work.**
+> That module is a classic script with a CommonJS guard, loaded by
+> `<script src>`. An `import` statement in a classic script is a syntax error.
+> The pages work; these examples do not. Same defect in `DATABASE-MIGRATION.md`.
+>
+> **7. "Zero production errors", "battle-tested", "Code Quality" — unevidenced.**
+> `TESTING.md` carries 37 test checkboxes and **0** are ticked. No test run,
+> coverage report or error log is cited anywhere in this document. On `main`,
+> `pytest library/tests` gives 82 passed — that is the abjad library, and it
+> exercises none of the services tabulated here.
+>
+> **8. "Phase 1 Complete" collides with the scope authority.** `docs/scope-v1.md`
+> — agreed with Zahir, 2026-08-21 — defines **Phase 1 as the library
+> foundation**, which is *not on `main`*. This document uses "Phase 1" for
+> service development. A reader trusting this file concludes the agreed Phase 1
+> shipped. It did not. **`docs/scope-v1.md` wins.** See `docs/branch-state.md`.
+>
+> Nothing below this line has been edited. — Baba Ji-Documentor
+
 **Status: Phase 1 Complete ✅ — Services Built & Integrated**
 
 Date: 2026-08-26  
