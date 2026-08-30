@@ -2,9 +2,11 @@
  * Email Service with Database Integration
  * Uses database adapter for audit logging and persistence
  *
- * Usage:
- * import { getDatabase } from './services-database.js'
- * import { sendEmail } from './services-email-db.js'
+ * Usage: this file is loaded as a plain script, NOT as an ES module.
+ *   <script src="services-database.js"></script>
+ *   <script src="services-email-db.js"></script>
+ * sendEmail() is then a global. The `import {...} from` form shown here
+ * previously does not work in any page in this repo and was never used.
  *
  * // Database logs all emails automatically
  * await sendEmail('customer@example.com', 'paymentConfirmation', {...})
@@ -18,17 +20,29 @@ try {
   db = null;
 }
 
+// `process` does not exist in a browser, and checkout.html loads this file with a
+// plain <script src>. An unguarded process.env read here throws ReferenceError at
+// load time, which leaves the EMAIL_CONFIG const permanently in its temporal dead
+// zone - so sendEmail() still exists (function declarations hoist) but every call
+// to it rejects with "Cannot access 'EMAIL_CONFIG' before initialization".
+// Guarded exactly the way the getDatabase lookup above is.
+const ENV = (typeof process !== 'undefined' && process.env) ? process.env : {};
+
 const EMAIL_CONFIG = {
-  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || null,
-  MAILGUN_API_KEY: process.env.MAILGUN_API_KEY || null,
-  MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN || null,
+  SENDGRID_API_KEY: ENV.SENDGRID_API_KEY || null,
+  MAILGUN_API_KEY: ENV.MAILGUN_API_KEY || null,
+  MAILGUN_DOMAIN: ENV.MAILGUN_DOMAIN || null,
   GMAIL_ACCOUNT: 'support@babaji.com',
   FROM_EMAIL: 'noreply@babaji.com',
   FROM_NAME: 'Baba Ji',
 };
 
+// Templates take ONE object and destructure it. They previously declared
+// positional parameters - (payment, booking, customer) - while all three call
+// sites invoke them as template(data) with a single object, so every template
+// but the first parameter received undefined and threw on first property access.
 const EMAIL_TEMPLATES = {
-  bookingConfirmation: (booking, cleric, customer) => ({
+  bookingConfirmation: ({ booking, cleric, customer }) => ({
     subject: '✓ Booking Confirmed — Baba Ji',
     html: `
       <h2>Booking Confirmed</h2>
@@ -51,7 +65,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  paymentConfirmation: (payment, booking, customer) => ({
+  paymentConfirmation: ({ payment, booking, customer }) => ({
     subject: '💳 Payment Received — Baba Ji',
     html: `
       <h2>Payment Confirmed</h2>
@@ -73,7 +87,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  clericApproval: (cleric) => ({
+  clericApproval: ({ cleric }) => ({
     subject: '🎉 Your Baba Ji Account is Approved!',
     html: `
       <h2>Welcome to Baba Ji</h2>
@@ -99,7 +113,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  bookingReminder: (booking, cleric, customer) => ({
+  bookingReminder: ({ booking, cleric, customer }) => ({
     subject: '⏰ Reminder: Your Session Tomorrow with ' + cleric.name,
     html: `
       <h2>Session Reminder</h2>
@@ -118,7 +132,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  refundNotification: (payment, customer) => ({
+  refundNotification: ({ payment, customer }) => ({
     subject: '💰 Refund Processed — Baba Ji',
     html: `
       <h2>Refund Processed</h2>
@@ -136,7 +150,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  sessionComplete: (booking, cleric, customer) => ({
+  sessionComplete: ({ booking, cleric, customer }) => ({
     subject: '✨ Session Complete — Leave a Review',
     html: `
       <h2>How was your session?</h2>
