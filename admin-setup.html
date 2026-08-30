@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baba Ji Admin Setup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+            color: #2c2c2c;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .setup-container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0d8d0;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #856404;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a3a52;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d8d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #2c2c2c;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #c85a3a;
+            box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+        }
+
+        button {
+            width: 100%;
+            background: #c85a3a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #a84628;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 3px solid #28a745;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            color: #155724;
+            display: none;
+        }
+
+        .success.show {
+            display: block;
+        }
+
+        .info {
+            background: #f9f7f5;
+            border-left: 3px solid #c85a3a;
+            padding: 12px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="logo">🔐 Baba Ji Admin</div>
+        <div class="subtitle">Security Setup</div>
+
+        <div class="warning">
+            ⚠️ This page configures your admin password. Keep it secure and never share it.
+        </div>
+
+        <div class="success" id="successMsg">✓ Admin password configured successfully!</div>
+
+        <form id="setupForm">
+            <div class="form-group">
+                <label for="password">Set Admin Password</label>
+                <input type="password" id="password" name="password" placeholder="Strong password (min 12 characters)" required minlength="12">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required minlength="12">
+            </div>
+
+            <button type="submit">Save Password</button>
+
+            <div class="info">
+                Password is stored locally in your browser's secure storage. After setup, you can access the admin panel at <strong>admin-login.html</strong>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const CONFIG_KEY = 'babaJiAdminConfig';
+
+        function getConfig() {
+            try {
+                const stored = localStorage.getItem(CONFIG_KEY);
+                return stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveConfig(config) {
+            try {
+                localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+                window.BABA_JI_CONFIG = config;
+            } catch (e) {
+                console.error('Failed to save config:', e);
+            }
+        }
+
+        // Check if already configured
+        window.addEventListener('DOMContentLoaded', () => {
+            const config = getConfig();
+            if (config && config.adminPassword) {
+                document.getElementById('setupForm').style.display = 'none';
+                document.getElementById('successMsg').classList.add('show');
+                document.querySelector('.warning').innerHTML = '✓ Admin password already configured. You can now access <strong>admin-login.html</strong>';
+            } else {
+                // No default credential is ever set here. A hardcoded default is a
+                // published credential the moment this file reaches the public site,
+                // and this repo publishes to GitHub Pages. Setup is deliberate: the
+                // form stays visible until a human chooses a password.
+                document.getElementById('setupForm').style.display = '';
+                document.querySelector('.warning').innerHTML = 'No admin password is set yet. Choose one below — it is stored only in this browser.';
+            }
+        });
+
+        document.getElementById('setupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            if (password.length < 12) {
+                alert('Password must be at least 12 characters.');
+                return;
+            }
+
+            saveConfig({ adminPassword: password, configuredAt: new Date().toISOString() });
+
+            document.getElementById('setupForm').style.display = 'none';
+            document.getElementById('successMsg').classList.add('show');
+            document.querySelector('.warning').innerHTML = '✓ Admin password configured! Redirecting to login...';
+
+            setTimeout(() => {
+                window.location.href = 'admin-login.html';
+            }, 2000);
+        });
+
+        // Make config available to admin-login.html
+        window.BABA_JI_CONFIG = getConfig();
+    </script>
+</body>
+</html>

@@ -147,11 +147,11 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = 'baba-ji-2026'; // Default password - should be changed
         const SESSION_KEY = 'babaJiAdminSession';
-        const SESSION_EXPIRY = 30 * 24 * 60 * 60 * 1000; // 30 days for testing
+        const SESSION_EXPIRY = 8 * 60 * 60 * 1000; // 8 hours max for admin access
+        const RATE_LIMIT_KEY = 'babaJiAdminAttempts';
+        const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
 
-        // Try localStorage first, fall back to sessionStorage
         const storage = (() => {
             try {
                 localStorage.setItem('test', 'test');
@@ -162,7 +162,41 @@
             }
         })();
 
-        // Check if already logged in
+        // Rate limiting
+        function getAttempts() {
+            try {
+                const data = JSON.parse(storage.getItem(RATE_LIMIT_KEY) || '{}');
+                if (data.lockedUntil && Date.now() < data.lockedUntil) {
+                    return { attempts: 5, lockedUntil: data.lockedUntil, locked: true };
+                }
+                return { attempts: data.attempts || 0, locked: false };
+            } catch (e) {
+                return { attempts: 0, locked: false };
+            }
+        }
+
+        function recordFailedAttempt() {
+            try {
+                const current = getAttempts();
+                const newAttempts = current.attempts + 1;
+                storage.setItem(RATE_LIMIT_KEY, JSON.stringify({
+                    attempts: newAttempts,
+                    lockedUntil: newAttempts >= 5 ? Date.now() + LOCKOUT_DURATION : null,
+                    lastAttempt: Date.now()
+                }));
+            } catch (e) {
+                console.error('Failed to record attempt:', e);
+            }
+        }
+
+        function clearAttempts() {
+            try {
+                storage.removeItem(RATE_LIMIT_KEY);
+            } catch (e) {
+                console.error('Failed to clear attempts:', e);
+            }
+        }
+
         function checkSession() {
             try {
                 const session = storage.getItem(SESSION_KEY);
@@ -184,8 +218,28 @@
             const password = document.getElementById('password').value;
             const errorEl = document.getElementById('error');
 
-            if (password === ADMIN_PASSWORD) {
+            const { attempts, locked, lockedUntil } = getAttempts();
+
+            if (locked) {
+                const minRemaining = Math.ceil((lockedUntil - Date.now()) / 60000);
+                errorEl.textContent = `Too many failed attempts. Please try again in ${minRemaining} minute(s).`;
+                errorEl.classList.add('show');
+                document.getElementById('password').disabled = true;
+                document.querySelector('button[type="submit"]').disabled = true;
+                return;
+            }
+
+            const adminPasswordConfig = window.BABA_JI_CONFIG?.adminPassword || null;
+
+            if (!adminPasswordConfig) {
+                errorEl.textContent = 'Admin access not configured. Contact your administrator.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password === adminPasswordConfig) {
                 try {
+                    clearAttempts();
                     storage.setItem(SESSION_KEY, JSON.stringify({
                         loggedIn: true,
                         expiry: Date.now() + SESSION_EXPIRY
@@ -197,13 +251,14 @@
                     console.error('Session creation failed:', e);
                 }
             } else {
-                errorEl.textContent = 'Incorrect password. Please try again.';
+                recordFailedAttempt();
+                const { attempts: newAttempts } = getAttempts();
+                errorEl.textContent = `Incorrect password. (${newAttempts}/5 attempts)`;
                 errorEl.classList.add('show');
                 document.getElementById('password').value = '';
             }
         });
 
-        // Check session on page load
         checkSession();
     </script>
 </body>

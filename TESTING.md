@@ -28,7 +28,7 @@ This is a complete cleric marketplace platform with:
 ### 2. Test Credentials
 
 **Admin Access:**
-- Password: `baba-ji-2026`
+- Password: whatever you set on `admin-setup.html`. There is no default and no published password.
 - Session: 30 days (testing mode)
 
 **Test Cleric Account:**
@@ -63,7 +63,7 @@ This is a complete cleric marketplace platform with:
 
 ### Step 2: Admin Approves Cleric
 1. Go to [Admin Login](admin-login.html)
-2. Enter password: `baba-ji-2026`
+2. Enter the password you set on `admin-setup.html`
 3. Navigate to [Cleric Manager](cleric-manager.html)
 4. Click "Approve" on the pending cleric
 
