@@ -1,0 +1,1244 @@
+{
+  "schema_version": 1,
+  "generated_note": "Arabic for the 99 Names (catalogue N01–N99). Verified by two independent sources per scope-v1.md decision 3 (no unverified Arabic may receive an abjad number). SOURCE 1 is the canonical digital list from api.aladhan.com; its `name` field is what is stored here, verbatim — no Arabic was typed by hand. SOURCE 2 is the rendered page images of 99-Name-of-ALLAH.pdf (pypdfium2, scale 4.0, pages index 0–12), read visually because that PDF's text layer extracts in reversed display order. Cross-check rule: the two sources' consonantal skeletons were compared after passing every character through the project's own abjad engine (is_ignorable + NORMALIZE), so the comparison is exactly what the engine sees. All 99 matched, and all 99 abjad totals are identical whichever source's spelling is used. Abjad totals computed with library/tools/abjad.py (unmodified). This file adds data only; no existing file was modified.",
+  "generated": "2026-08-21",
+  "sources": [
+    {
+      "id": "source_1_api",
+      "kind": "canonical digital list",
+      "endpoint": "http://api.aladhan.com/v1/asmaAlHusna",
+      "auth": "none (free)",
+      "returns": "99 records: name (Arabic), transliteration, number, en.meaning",
+      "raw_cache": "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\C--Users-User-Desktop-Myra\\d5c4470e-00ff-4c41-ad3c-18143a70f8e4\\scratchpad\\src1_aladhan.json",
+      "note": "http://api.alquran.cloud/v1/asmaalhusna was tried first as instructed and returned HTTP 404 Not Found; api.aladhan.com is the endpoint that worked."
+    },
+    {
+      "id": "source_2_pdf_images",
+      "kind": "rendered page images, read visually",
+      "file": "C:\\Users\\User\\Downloads\\99-Name-of-ALLAH.pdf",
+      "method": "pypdfium2 render at scale 4.0, cropped to the '#' / 'Name' / 'Transliteration' columns, then read by the agent. The PDF text layer was NOT used — it extracts in reversed display order.",
+      "page_map": {
+        "0": "1-7",
+        "1": "8-14",
+        "2": "15-21",
+        "3": "22-30",
+        "4": "31-37",
+        "5": "38-43",
+        "6": "44-50",
+        "7": "51-59",
+        "8": "60-68",
+        "9": "69-76",
+        "10": "77-85",
+        "11": "86-95",
+        "12": "96-99"
+      },
+      "transcript_cache": "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\C--Users-User-Desktop-Myra\\d5c4470e-00ff-4c41-ad3c-18143a70f8e4\\scratchpad\\src2_image_reading.json"
+    },
+    {
+      "id": "source_3_stored_transliteration",
+      "kind": "corroborating check (not a text source)",
+      "file": "C:\\Users\\User\\Desktop\\Myra\\abjad-qr\\library\\data\\texts.json",
+      "note": "The transliteration already stored for each N-id extracted cleanly from the PDF and was used as a third check that number→name alignment is correct."
+    }
+  ],
+  "verification_summary": {
+    "total": 99,
+    "api_vs_image_match": 99,
+    "api_vs_image_differ": 0,
+    "image_unreadable": 0,
+    "needs_review": 0,
+    "character_for_character_identical": 82,
+    "identical_after_diacritic_and_variant_folding": 99,
+    "abjad_total_identical_from_either_source": 99
+  },
+  "items": [
+    {
+      "id": "N01",
+      "arabic": "الرَّحْمَنُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RAHMAAN",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 329,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N02",
+      "arabic": "الرَّحِيمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RAHEEM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 289,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N03",
+      "arabic": "الْمَلِكُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MALIK",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 121,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N04",
+      "arabic": "الْقُدُّوسُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-QUDDUS",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 201,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N05",
+      "arabic": "السَّلاَمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AS-SALAM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 162,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N06",
+      "arabic": "الْمُؤْمِنُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MU’MIN",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 167,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N07",
+      "arabic": "الْمُهَيْمِنُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUHAYMIN",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 176,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N08",
+      "arabic": "الْعَزِيزُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-AZEEZ",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 125,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N09",
+      "arabic": "الْجَبَّارُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-JABBAR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 237,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N10",
+      "arabic": "الْمُتَكَبِّرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUTAKABBIR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 693,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N11",
+      "arabic": "الْخَالِقُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-KHAALIQ",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 762,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N12",
+      "arabic": "الْبَارِئُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BAARI’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 244,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N13",
+      "arabic": "الْمُصَوِّرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUSAWWIR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 367,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N14",
+      "arabic": "الْغَفَّارُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-GHAFFAR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1312,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N15",
+      "arabic": "الْقَهَّارُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-QAHHAR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 337,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N16",
+      "arabic": "الْوَهَّابُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAHHAAB",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 45,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N17",
+      "arabic": "الرَّزَّاقُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RAZZAAQ",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 339,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N18",
+      "arabic": "الْفَتَّاحُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-FATTAAH",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 520,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N19",
+      "arabic": "اَلْعَلِيْمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-‘ALEEM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 181,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N20",
+      "arabic": "الْقَابِضُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-QAABID",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 934,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N21",
+      "arabic": "الْبَاسِطُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BAASIT",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 103,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N22",
+      "arabic": "الْخَافِضُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-KHAAFIDH",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1512,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N23",
+      "arabic": "الرَّافِعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RAAFI’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 382,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N24",
+      "arabic": "الْمُعِزُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MU’IZZ",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 148,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N25",
+      "arabic": "المُذِلُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUZIL",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 801,
+      "needs_review": false,
+      "notes": "Letter-identical. The two sources differ only in harakat (vowel/sukun marks), which the abjad engine ignores; both spellings compute to 801."
+    },
+    {
+      "id": "N26",
+      "arabic": "السَّمِيعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AS-SAMEE’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 211,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N27",
+      "arabic": "الْبَصِيرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BASEER",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 333,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N28",
+      "arabic": "الْحَكَمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAKAM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 99,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N29",
+      "arabic": "الْعَدْلُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-‘ADL",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 135,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N30",
+      "arabic": "اللَّطِيفُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-LATEEF",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 160,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N31",
+      "arabic": "الْخَبِيرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-KHABEER",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 843,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N32",
+      "arabic": "الْحَلِيمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HALEEM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 119,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N33",
+      "arabic": "الْعَظِيمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-‘ATHEEM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1051,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N34",
+      "arabic": "الْغَفُورُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-GHAFOOR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1317,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N35",
+      "arabic": "الشَّكُورُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "ASH-SHAKOOR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 557,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N36",
+      "arabic": "الْعَلِيُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-‘ALEE",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 141,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 141)."
+    },
+    {
+      "id": "N37",
+      "arabic": "الْكَبِيرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-KABEER",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 263,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N38",
+      "arabic": "الْحَفِيظُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAFEEDH",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1029,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N39",
+      "arabic": "المُقيِت",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUQEET",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 581,
+      "needs_review": false,
+      "notes": "Letter-identical. The two sources differ only in harakat (vowel/sukun marks), which the abjad engine ignores; both spellings compute to 581."
+    },
+    {
+      "id": "N40",
+      "arabic": "الْحسِيبُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HASEEB",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 111,
+      "needs_review": false,
+      "notes": "Letter-identical. The two sources differ only in harakat (vowel/sukun marks), which the abjad engine ignores; both spellings compute to 111."
+    },
+    {
+      "id": "N41",
+      "arabic": "الْجَلِيلُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-JALEEL",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 104,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N42",
+      "arabic": "الْكَرِيمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-KAREEM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 301,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N43",
+      "arabic": "الرَّقِيبُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RAQEEB",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 343,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N44",
+      "arabic": "الْمُجِيبُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUJEEB",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 86,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N45",
+      "arabic": "الْوَاسِعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAASI’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 168,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N46",
+      "arabic": "الْحَكِيمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAKEEM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 109,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N47",
+      "arabic": "الْوَدُودُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WADOOD",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 51,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N48",
+      "arabic": "الْمَجِيدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MAJEED",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 88,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N49",
+      "arabic": "الْبَاعِثُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BA’ITH",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 604,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N50",
+      "arabic": "الشَّهِيدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "ASH-SHAHEED",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 350,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N51",
+      "arabic": "الْحَقُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAQQ",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 139,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N52",
+      "arabic": "الْوَكِيلُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAKEEL",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 97,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N53",
+      "arabic": "الْقَوِيُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-QAWIYY",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 147,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 147)."
+    },
+    {
+      "id": "N54",
+      "arabic": "الْمَتِينُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MATEEN",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 531,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N55",
+      "arabic": "الْوَلِيُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WALIYY",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 77,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 77)."
+    },
+    {
+      "id": "N56",
+      "arabic": "الْحَمِيدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAMEED",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 93,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N57",
+      "arabic": "الْمُحْصِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUHSEE",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 179,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 179)."
+    },
+    {
+      "id": "N58",
+      "arabic": "الْمُبْدِئُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUBDI",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 87,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N59",
+      "arabic": "الْمُعِيدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MU’ID",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 155,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N60",
+      "arabic": "الْمُحْيِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUHYEE",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 99,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 99)."
+    },
+    {
+      "id": "N61",
+      "arabic": "اَلْمُمِيتُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUMEET",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 521,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N62",
+      "arabic": "الْحَيُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAYY",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 49,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 49)."
+    },
+    {
+      "id": "N63",
+      "arabic": "الْقَيُّومُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-QAYYOOM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 187,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N64",
+      "arabic": "الْوَاجِدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAAJID",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 45,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N65",
+      "arabic": "الْمَاجِدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MAAJID",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 79,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N66",
+      "arabic": "الْواحِدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAAHID",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 50,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N67",
+      "arabic": "اَلاَحَدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-AHAD",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 44,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N68",
+      "arabic": "الصَّمَدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AS-SAMAD",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 165,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N69",
+      "arabic": "الْقَادِرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-QADEER",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 336,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character. FLAG (source-internal, not a source disagreement): both Arabic sources read الْقَادِرُ (Al-Qaadir), but the PDF's own transliteration column and texts.json say 'AL-QADEER'. The PDF is internally inconsistent; the Arabic itself is unambiguous and agreed by both sources."
+    },
+    {
+      "id": "N70",
+      "arabic": "الْمُقْتَدِرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUQTADIR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 775,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N71",
+      "arabic": "الْمُقَدِّمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUQADDIM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 215,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N72",
+      "arabic": "الْمُؤَخِّرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MU’AKHKHIR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 877,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N73",
+      "arabic": "الأوَّلُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-AWWAL",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 68,
+      "needs_review": false,
+      "notes": "Letter-identical. The two sources differ only in harakat (vowel/sukun marks), which the abjad engine ignores; both spellings compute to 68."
+    },
+    {
+      "id": "N74",
+      "arabic": "الآخِرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-AAKHIR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 832,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N75",
+      "arabic": "الظَّاهِرُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AZ-DHAAHIR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1137,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N76",
+      "arabic": "الْبَاطِنُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BAATIN",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 93,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N77",
+      "arabic": "الْوَالِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAALI",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 78,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 78)."
+    },
+    {
+      "id": "N78",
+      "arabic": "الْمُتَعَالِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUTA’ALI",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 582,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 582)."
+    },
+    {
+      "id": "N79",
+      "arabic": "الْبَرُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BARR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 233,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N80",
+      "arabic": "التَّوَابُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AT-TAWWAB",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 440,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N81",
+      "arabic": "الْمُنْتَقِمُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUNTAQIM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 661,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N82",
+      "arabic": "العَفُوُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-‘AFUWW",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 187,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N83",
+      "arabic": "الرَّؤُوفُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RA’OOF",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 323,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N84",
+      "arabic": "مَالِكُ الْمُلْكِ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "MAALIK-UL-MULK",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 212,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N85",
+      "arabic": "ذُوالْجَلاَلِ وَالإكْرَامِ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "DHUL-JALAALI WAL-IKRAAM",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1100,
+      "needs_review": false,
+      "notes": "Letter-identical. The two sources differ only in harakat (vowel/sukun marks), which the abjad engine ignores; both spellings compute to 1100."
+    },
+    {
+      "id": "N86",
+      "arabic": "الْمُقْسِطُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUQSIT",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 240,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N87",
+      "arabic": "الْجَامِعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-JAAMI’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 145,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N88",
+      "arabic": "الْغَنِيُّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-GHANIYY",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1091,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 1091)."
+    },
+    {
+      "id": "N89",
+      "arabic": "الْمُغْنِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MUGHNI",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1131,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 1131). API transliteration reads 'Al Mughi' (apparent typo for Al-Mughni); the Arabic الْمُغْنِي agrees with the image."
+    },
+    {
+      "id": "N90",
+      "arabic": "اَلْمَانِعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-MANI’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 192,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N91",
+      "arabic": "الضَّارَّ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AD-DHARR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 1032,
+      "needs_review": false,
+      "notes": "Letter-identical. The two sources differ only in harakat (vowel/sukun marks), which the abjad engine ignores; both spellings compute to 1032."
+    },
+    {
+      "id": "N92",
+      "arabic": "النَّافِعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AN-NAFI’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 232,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N93",
+      "arabic": "النُّورُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AN-NUR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 287,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N94",
+      "arabic": "الْهَادِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-HAADI",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 51,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N95",
+      "arabic": "الْبَدِيعُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BADEE’",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 117,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N96",
+      "arabic": "اَلْبَاقِي",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-BAAQI",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 144,
+      "needs_review": false,
+      "notes": "Letter-identical. Orthographic variant only: API writes final yeh (ي), the PDF page image writes alif maqsura (ى). The abjad engine's own NORMALIZE map folds ى → ي, so the total is unaffected (verified: both spellings compute to 144)."
+    },
+    {
+      "id": "N97",
+      "arabic": "الْوَارِثُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AL-WAARITH",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 738,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N98",
+      "arabic": "الرَّشِيدُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AR-RASHEED",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 545,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    },
+    {
+      "id": "N99",
+      "arabic": "الصَّبُورُ",
+      "arabic_source": "api.aladhan.com/v1/asmaAlHusna (stored verbatim); independently confirmed letter-for-letter against the rendered PDF page image",
+      "transliteration_expected": "AS-SABOOR",
+      "cross_check": {
+        "api_vs_image": "match"
+      },
+      "abjad_total": 329,
+      "needs_review": false,
+      "notes": "API text and PDF page image agree character-for-character."
+    }
+  ]
+}

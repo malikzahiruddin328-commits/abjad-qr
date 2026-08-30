@@ -1,0 +1,1282 @@
+{
+  "schema_version": 1,
+  "generated": "2026-08-21",
+  "generator": "Baba Ji ruqyah data-model pass, from rendered page images of the source PDF",
+  "source": {
+    "title": "RUQYAH - A Remedy for Illnesses, Evil Eye, Magic and Jinn from the Qur'an and Sunnah",
+    "publisher": "Ummah Welfare Trust (UWT), uwt.org",
+    "file": "C:\\Users\\User\\Downloads\\Ruqyah-Booklet.pdf",
+    "pages": 12,
+    "read_method": "pypdfium2 render at scale 2.2-7.0, pages read as images. The Arabic is set in _PDMS_Saleem_QuranFont and does not extract as text, but is fully legible when rendered."
+  },
+  "binding_rules_applied": [
+    "scope-v1 decision 3: no unverified Arabic may ever receive an abjad number. Every Arabic string in this file was read off a page image, not fetched from a canonical database, so EVERY abjad_total here is null and every needs_review is true.",
+    "No existing file was modified. texts.json defects are reported under catalogue_defects_found, not patched."
+  ],
+  "engine_facts_verified": {
+    "engine": "library/tools/abjad.py (unmodified)",
+    "stored_totals_reproduce": "Q01-Q09 recomputed from their stored Arabic; all nine match texts.json exactly.",
+    "chain_total_is_well_defined": "Verified: the sum of member totals equals the total of the concatenated text. Q01+Q02+Q03+Q04+Q05+Q06 = 67563 computed both ways. So a chain's abjad total can be produced either by summing steps or by concatenating and computing once; the two cannot diverge.",
+    "diacritics_ignored": "is_ignorable() drops U+064B-065F, U+0670, U+06D6-06ED and standalone hamza U+0621. Only the consonant skeleton contributes. Consequence: a transcription error in a VOWEL MARK cannot change an abjad total; only a wrong, missing or extra LETTER can. This narrows what Hafiz has to check, but does not remove the need to check."
+  },
+  "structure_finding": {
+    "preset_chain_reading": "LARGELY CONFIRMED, WITH ONE STRUCTURAL CORRECTION.",
+    "confirmed": "The booklet is not a bag of individual texts. p.4 and p.5 are explicitly NUMBERED, ORDERED lists (10 and 13 items), and p.3 instructs the reciter to recite 'the Ruqyah (see p.4 and p.5)' as one unit, 3 or 7 times. A prescribed sequence is exactly what this booklet publishes.",
+    "correction": "The booklet does NOT organise into N independent affliction-to-sequence chains. It publishes ONE base sequence plus CONDITIONAL ADD-ON BLOCKS, each gated by a printed heading ('One can add the following if affected by magic', 'When praying on others, add the following'). The affliction sections (p.6 evil eye, p.8 magic and jinn) are mostly PROSE ADVICE and NON-TEXTUAL remedies, not text lists. Modelling them as flat independent chains would duplicate the base 18 steps five times over and hide the gating logic.",
+    "model_adopted": "base + add-ons, with a materialised presets layer on top so the cleric still gets one-click loading.",
+    "second_correction": "Not every step is talisman material. p.8 prescribes reciting the whole of Surah al-Baqarah, and pp.8-9 prescribe sidr baths, senna, cupping, olive oil, honey, black seed and zamzam. Steps therefore carry a talisman_suitable flag; a chain is not the same thing as a talisman payload."
+  },
+  "open_questions_for_hafiz": [
+    {
+      "id": "RQ-OQ-1",
+      "question": "When a chain step carries a repetition count (7x, 3x, 100x), should that step's abjad total be MULTIPLIED by the count, or should the count be carried alongside the total and never folded into it?",
+      "status": "NOT DECIDED BY THIS PASS. Flagged for the scholar, as instructed.",
+      "case_for_multiplying": [
+        "The count is printed as part of the prescription, not as commentary. '(7x)' sits inside the item, on the same line as the text.",
+        "If the talisman is a written record of a prescribed ACT, and the act is seven recitations, then the number representing the act is arguably seven times the number representing one recitation.",
+        "Numerological practice around amulets often works in multiples and grids, so a multiplied value may be the value a practitioner actually expects to see."
+      ],
+      "case_against_multiplying": [
+        "Abjad is a property of the TEXT (its letters). Reciting a verse twice does not add letters to it.",
+        "The counts in this booklet attach to the ORAL act, not the text. p.3 applies '3 or 7' to the entire ruqyah, so multiplying would scale every step by a factor the cleric picks at recitation time.",
+        "The counts are not stable. p.3 says 'at least 3 or 7'; p.11 says 'at least 7 times if possible'. A talisman number that moves with the reciter's discretion is not a property of the text.",
+        "Direct evidence inside this single booklet: RB-P05-01 carries NO count on p.5 but '3x evening' on p.12; Q04/Q05/Q06 carry no count in the ruqyah chain but '3x morning & evening' on p.12. The same text would produce two different totals depending on which page it was loaded from.",
+        "scope-v1 decision 5 says the QR plus the abjad values ARE the talisman. Folding in a count introduces a second, non-textual variable into the thing that IS the talisman."
+      ],
+      "recommended_data_shape_regardless_of_the_ruling": "Store abjad_total and repeat_count as SEPARATE fields and decide the presentation at render time. That keeps both rulings buildable without a data migration: if Hafiz rules multiply, the renderer multiplies; if not, it displays '1788 x7'. Do not bake a multiplied number into stored data ahead of the ruling."
+    },
+    {
+      "id": "RQ-OQ-2",
+      "question": "The A'UDHU -> U'IDHUKA substitution (p.5, applies to Sunnah items 1-5 when reciting over another person) changes the Arabic, and therefore changes the abjad total. Should these be five extra stored items with their own totals, or a runtime transformation?",
+      "why_it_matters": "A runtime string transformation applied to stored canonical Arabic is exactly what decision 3 forbids. If the substituted forms are wanted, Hafiz must supply the substituted wording per item, as verified text.",
+      "evidence_this_is_real": "Q11 (p.7) is the DUAL form of RB-P05-05 and the booklet prints it out in full as its own text - so the booklet itself treats a substituted form as a separate printed text, not as a transformation."
+    },
+    {
+      "id": "RQ-OQ-3",
+      "question": "Q13 / RQ-C06: the booklet names 'Surah al-Mulk and al-Rahman' with no verse bounds, inside a list otherwise made of verse references. Whole surah (67 and 55), or a subset?",
+      "status": "The page image does NOT resolve this. See item_updates Q13. Nothing was fetched."
+    },
+    {
+      "id": "RQ-OQ-4",
+      "question": "Does the ta'awwudh (RB-P04-00) belong in the talisman, or is it an opening of the oral act only?",
+      "why_it_matters": "It is printed above item 1 with no number, which reads as a preamble rather than a chain member. Including it changes every base-chain total."
+    },
+    {
+      "id": "RQ-OQ-5",
+      "question": "Should a chain's abjad value be a single total for the whole chain, or a per-step list?",
+      "engine_note": "Mathematically it does not matter - verified that the sum of parts equals the total of the concatenation. This is a presentation and religious question, not a technical one."
+    }
+  ],
+  "catalogue_defects_found": [
+    {
+      "severity": "high",
+      "target": "texts.json Q10",
+      "defect": "Q10 collapses 13 distinct numbered duas from p.5 into one row. The catalogue is under-granular by 12 items, and no single Arabic string or abjad total can ever be correct for it.",
+      "fix": "Replace with RB-P05-01 .. RB-P05-13 (14 rows, item 6 split into 6A/6B)."
+    },
+    {
+      "severity": "high",
+      "target": "texts.json - missing items",
+      "defect": "Booklet p.4 item 1 (Hasbiyallah..., Abu Dawud, 7x) and the unnumbered ta'awwudh printed above it are absent from the catalogue entirely. Q01-Q09 map to booklet items 2-10 only.",
+      "fix": "Add RB-P04-00 and RB-P04-01."
+    },
+    {
+      "severity": "medium",
+      "target": "texts.json Q01",
+      "defect": "Title reads 'Surah al-Fatihah (7x) - ruqyah'. The booklet prints NO count on al-Fatihah; the '(7x)' belongs to booklet item 1 (Hasbiyallah), which the catalogue does not contain. The count was attached to the wrong item.",
+      "fix": "Drop '(7x)' from the Q01 title once RB-P04-01 exists."
+    },
+    {
+      "severity": "low",
+      "target": "texts.json Q13 quran_ref",
+      "defect": "Stored as '2:164; 3:18; 7:54; 23:118; 37:1-10; 59:24; 72:3'. The booklet prints '2:164, 3:18, 7:54, 23:118, 72:3, 37:1-10, 59:24' - 72:3 comes fifth, not last.",
+      "fix": "Restore the printed order, or drop ordering claims if the list is treated as a set."
+    },
+    {
+      "severity": "info",
+      "target": "scope-v1 open question 3",
+      "defect": "States that Q13 'names Surah al-Mulk and ar-Rahman with no verse bounds'. Confirmed accurate against the page image - the text layer was not misleading here.",
+      "fix": "none - recording the verification"
+    }
+  ],
+  "chains": [
+    {
+      "chain_id": "RQ-C01",
+      "name_en": "Core Ruqyah (Qur'an + Sunnah)",
+      "chain_type": "base",
+      "derivation": "explicit_in_source",
+      "affliction_tags": [
+        "general",
+        "physical_illness",
+        "pain",
+        "evil_eye",
+        "magic",
+        "jinn"
+      ],
+      "source_pages": [
+        "p.3 (method)",
+        "p.4",
+        "p.5"
+      ],
+      "chain_repeat_rule": "p.3: 'Recite the Ruqyah (see p.4 and p.5) loudly, clearly and with concentration, at least 3 or 7 times.' This applies to the WHOLE chain, is a range not a fixed value, and is left to the cleric's discretion.",
+      "combines_with": [
+        "RQ-C02",
+        "RQ-C03",
+        "RQ-C05",
+        "RQ-C06"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "source_id": "RB-P04-00",
+          "quran_ref": null,
+          "label_en": "Ta'awwudh (seeking refuge) - unnumbered opening line",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "Printed above item 1 with no number and no count. It opens the recitation but the booklet does not enumerate it.",
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": "(unnumbered)",
+          "section": "quran"
+        },
+        {
+          "step": 2,
+          "source_id": "RB-P04-01",
+          "quran_ref": null,
+          "label_en": "Hasbiyallahu la ilaha illa huwa... (Abu Dawud)",
+          "repeat_count": 7,
+          "repeat_count_source": "printed '(7x)' beside the item",
+          "talisman_suitable": true,
+          "note": "Wording matches the second half of Quran 9:129, but the booklet cites it as a hadith (Abu Dawud), not as an ayah. Do NOT fetch 9:129 as its canonical text - the ayah contains additional words.",
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 1,
+          "section": "quran"
+        },
+        {
+          "step": 3,
+          "source_id": "Q01",
+          "quran_ref": "1:1-7",
+          "label_en": "Surah al-Fatihah (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "The booklet prints NO repetition count on al-Fatihah. texts.json title 'Surah al-Fatihah (7x)' is wrong - the 7x belongs to booklet item 1.",
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 2,
+          "section": "quran"
+        },
+        {
+          "step": 4,
+          "source_id": "Q02",
+          "quran_ref": "2:255",
+          "label_en": "Ayah al-Kursi (Hakim)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 3,
+          "section": "quran"
+        },
+        {
+          "step": 5,
+          "source_id": "Q03",
+          "quran_ref": "2:284-286",
+          "label_en": "Last verses of al-Baqarah (Tirmidhi)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 4,
+          "section": "quran"
+        },
+        {
+          "step": 6,
+          "source_id": "Q04",
+          "quran_ref": "112",
+          "label_en": "Surah al-Ikhlas",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 5,
+          "section": "quran"
+        },
+        {
+          "step": 7,
+          "source_id": "Q05",
+          "quran_ref": "113",
+          "label_en": "Surah al-Falaq",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 6,
+          "section": "quran"
+        },
+        {
+          "step": 8,
+          "source_id": "Q06",
+          "quran_ref": "114",
+          "label_en": "Surah an-Nas (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 7,
+          "section": "quran"
+        },
+        {
+          "step": 9,
+          "source_id": "RB-P05-01",
+          "quran_ref": null,
+          "label_en": "A'udhu bi-kalimatillahit-tammat min sharri ma khalaq (Muslim)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "When reciting over another person, substitute A'UDHU with U'IDHUKA (booklet rule, applies to items 1-5).",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 1,
+          "section": "sunnah"
+        },
+        {
+          "step": 10,
+          "source_id": "RB-P05-02",
+          "quran_ref": null,
+          "label_en": "A'udhu bi-kalimatillahit-tammat allati la yujawizuhunna... (Ahmad)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "A'UDHU -> U'IDHUKA substitution applies.",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 2,
+          "section": "sunnah"
+        },
+        {
+          "step": 11,
+          "source_id": "RB-P05-03",
+          "quran_ref": null,
+          "label_en": "A'udhu bi-wajhillahil-'Azim... (Muwatta')",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "A'UDHU -> U'IDHUKA substitution applies.",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 3,
+          "section": "sunnah"
+        },
+        {
+          "step": 12,
+          "source_id": "RB-P05-04",
+          "quran_ref": null,
+          "label_en": "A'udhu bi-kalimatillahit-tammat min ghadabihi wa 'iqabih (Ahmad)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "A'UDHU -> U'IDHUKA substitution applies.",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 4,
+          "section": "sunnah"
+        },
+        {
+          "step": 13,
+          "source_id": "RB-P05-05",
+          "quran_ref": null,
+          "label_en": "A'udhu bi-kalimatillahit-tammah min kulli shaytanin wa hammah (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "A'UDHU -> U'IDHUKA substitution applies. The dual form of this same dua is the children's dua on p.7 (= Q11).",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 5,
+          "section": "sunnah"
+        },
+        {
+          "step": 14,
+          "source_id": "RB-P05-06A",
+          "quran_ref": null,
+          "label_en": "Bismillah",
+          "repeat_count": 3,
+          "repeat_count_source": "printed '(3x)' inside the item",
+          "talisman_suitable": true,
+          "note": "Booklet instruction above the item: 'put your hand on the part of your body where you feel pain and say'. The item is printed as TWO parts with DIFFERENT counts.",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": "6 (part A)",
+          "section": "sunnah"
+        },
+        {
+          "step": 15,
+          "source_id": "RB-P05-06B",
+          "quran_ref": null,
+          "label_en": "A'udhu billahi wa qudratihi min sharri ma ajidu wa uhadhir (Muslim)",
+          "repeat_count": 7,
+          "repeat_count_source": "printed '(7x)' after the item",
+          "talisman_suitable": true,
+          "note": "Second half of booklet item 6; carries its own count of 7.",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": "6 (part B)",
+          "section": "sunnah"
+        },
+        {
+          "step": 16,
+          "source_id": "RB-P05-07",
+          "quran_ref": null,
+          "label_en": "Allahumma inni as'aluka ta'jila 'afiyatik... (Hakim)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 7,
+          "section": "sunnah"
+        },
+        {
+          "step": 17,
+          "source_id": "RB-P05-08",
+          "quran_ref": null,
+          "label_en": "Allahumma Rabban-nas, adhhibil-ba's... (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 8,
+          "section": "sunnah"
+        },
+        {
+          "step": 18,
+          "source_id": "RB-P05-09",
+          "quran_ref": null,
+          "label_en": "Rabbunallahul-ladhi fis-sama'... (Abu Dawud)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 9,
+          "section": "sunnah"
+        }
+      ]
+    },
+    {
+      "chain_id": "RQ-C02",
+      "name_en": "Add-on: Affected by Magic",
+      "chain_type": "add_on",
+      "derivation": "explicit_in_source",
+      "affliction_tags": [
+        "magic",
+        "sihr"
+      ],
+      "source_pages": [
+        "p.4",
+        "p.8"
+      ],
+      "chain_repeat_rule": "Inherits the base chain's 3-or-7 whole-chain rule. No per-item counts printed.",
+      "combines_with": [
+        "RQ-C01"
+      ],
+      "gate_text": "p.4 heading: 'One can add the following if affected by magic:'",
+      "steps": [
+        {
+          "step": 1,
+          "source_id": "Q07",
+          "quran_ref": "7:117-119",
+          "label_en": "Verses against magic - al-A'raf",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 8,
+          "section": "quran"
+        },
+        {
+          "step": 2,
+          "source_id": "Q08",
+          "quran_ref": "10:81-82",
+          "label_en": "Verses against magic - Yunus",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 9,
+          "section": "quran"
+        },
+        {
+          "step": 3,
+          "source_id": "Q09",
+          "quran_ref": "20:69",
+          "label_en": "Verse against magic - Ta-Ha",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "Booklet footnote: 'Ibn Abi Hatim narrated from Layth bin Abi Sulaym that these verses are a cure by the will of Allah.'",
+          "book_page": "p.4 - RUQYAH FROM THE QUR'AN",
+          "book_item": 10,
+          "section": "quran"
+        },
+        {
+          "step": 4,
+          "source_id": null,
+          "quran_ref": "2",
+          "label_en": "Recite Surah al-Baqarah in full",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": false,
+          "note": "RECITATION THERAPY, NOT TALISMAN TEXT. p.8 prescribes reading the whole of Surah al-Baqarah alongside the ruqyah ayat (Muslim). 286 ayahs - not a candidate for abjad/QR encoding.",
+          "book_page": "p.8 - MAGIC & JINN",
+          "book_item": "Additional Treatment bullet 2",
+          "section": "quran"
+        }
+      ]
+    },
+    {
+      "chain_id": "RQ-C03",
+      "name_en": "Add-on: Reciting Over Another Person",
+      "chain_type": "add_on",
+      "derivation": "explicit_in_source",
+      "affliction_tags": [
+        "general",
+        "reciting_for_others"
+      ],
+      "source_pages": [
+        "p.5"
+      ],
+      "chain_repeat_rule": "Item 12 carries 7x. Otherwise inherits the whole-chain rule.",
+      "combines_with": [
+        "RQ-C01"
+      ],
+      "gate_text": "p.5 heading: 'When praying on others, add the following:' plus the substitution rule printed under item 5.",
+      "steps": [
+        {
+          "step": 1,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "Substitution rule: replace A'UDHU with U'IDHUKA in Sunnah items 1-5 of the base chain",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": false,
+          "note": "MODIFIER, NOT A TEXT. Changes the stored Arabic of RB-P05-01..05, which changes their abjad total. Needs Hafiz to supply the substituted wording per item before any number is issued.",
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": "rule under item 5",
+          "section": "sunnah"
+        },
+        {
+          "step": 2,
+          "source_id": "RB-P05-10",
+          "quran_ref": null,
+          "label_en": "Bismillahi arqik min kulli shay'in yu'dhik... (Muslim)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 10,
+          "section": "sunnah"
+        },
+        {
+          "step": 3,
+          "source_id": "RB-P05-11",
+          "quran_ref": null,
+          "label_en": "Bismillahi turbatu ardina bi-riqati ba'dina... (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 11,
+          "section": "sunnah"
+        },
+        {
+          "step": 4,
+          "source_id": "RB-P05-12",
+          "quran_ref": null,
+          "label_en": "As'alullahal-'Azim Rabbal-'Arshil-'Azim an yashfiyak (Tirmidhi)",
+          "repeat_count": 7,
+          "repeat_count_source": "printed '(7x)' beside the item",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 12,
+          "section": "sunnah"
+        },
+        {
+          "step": 5,
+          "source_id": "RB-P05-13",
+          "quran_ref": null,
+          "label_en": "La ba'sa tahurun in sha'Allah (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.5 - RUQYAH FROM THE SUNNAH",
+          "book_item": 13,
+          "section": "sunnah"
+        }
+      ]
+    },
+    {
+      "chain_id": "RQ-C04",
+      "name_en": "Protection for Children",
+      "chain_type": "standalone",
+      "derivation": "explicit_in_source",
+      "affliction_tags": [
+        "evil_eye",
+        "children",
+        "protection"
+      ],
+      "source_pages": [
+        "p.7"
+      ],
+      "chain_repeat_rule": "No counts printed. p.7 says parents 'should always recite' these and blow on the children.",
+      "combines_with": [],
+      "gate_text": "p.7 heading: 'Seeking Protection for Children'",
+      "steps": [
+        {
+          "step": 1,
+          "source_id": "Q02",
+          "quran_ref": "2:255",
+          "label_en": "Ayah al-Kursi",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.7 - Seeking Protection for Children",
+          "book_item": "prose",
+          "section": "quran"
+        },
+        {
+          "step": 2,
+          "source_id": "Q04",
+          "quran_ref": "112",
+          "label_en": "Surah al-Ikhlas",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.7 - Seeking Protection for Children",
+          "book_item": "prose",
+          "section": "quran"
+        },
+        {
+          "step": 3,
+          "source_id": "Q05",
+          "quran_ref": "113",
+          "label_en": "Surah al-Falaq",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.7 - Seeking Protection for Children",
+          "book_item": "prose",
+          "section": "quran"
+        },
+        {
+          "step": 4,
+          "source_id": "Q06",
+          "quran_ref": "114",
+          "label_en": "Surah an-Nas",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.7 - Seeking Protection for Children",
+          "book_item": "prose",
+          "section": "quran"
+        },
+        {
+          "step": 5,
+          "source_id": "Q11",
+          "quran_ref": null,
+          "label_en": "U'idhukuma bi-kalimatillahit-tammah... (Bukhari)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "The Prophet's words for Hasan and Husayn. Dual form ('you two') of base-chain item RB-P05-05.",
+          "book_page": "p.7 - Seeking Protection for Children",
+          "book_item": "prose",
+          "section": "sunnah"
+        }
+      ]
+    },
+    {
+      "chain_id": "RQ-C05",
+      "name_en": "Add-on: Person Struck by the Evil Eye",
+      "chain_type": "add_on",
+      "derivation": "composed_from_source",
+      "affliction_tags": [
+        "evil_eye",
+        "envy"
+      ],
+      "source_pages": [
+        "p.6",
+        "p.7"
+      ],
+      "chain_repeat_rule": "No count printed on the dua. p.7 adds a non-textual prescription: ruqyah on water (especially the last 3 surahs) and bathe daily for 10-20 days.",
+      "combines_with": [
+        "RQ-C01"
+      ],
+      "gate_text": "p.6 boxed dua: 'The Messenger of Allah supplicated with the following words for his companion who was afflicted with the evil eye'. The booklet does not print this as a numbered chain step; pairing it with the base chain is this model's composition, not the booklet's layout.",
+      "steps": [
+        {
+          "step": 1,
+          "source_id": "Q12",
+          "quran_ref": null,
+          "label_en": "Allahumma adhhib 'anhu harraha wa bardaha wa wasabaha (Ahmad)",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": true,
+          "note": "Printed in the highlighted box at the foot of p.6 as the words the Prophet used for a companion afflicted with the evil eye.",
+          "book_page": "p.6 - ENVY & EVIL EYE",
+          "book_item": "boxed dua",
+          "section": "sunnah"
+        }
+      ]
+    },
+    {
+      "chain_id": "RQ-C06",
+      "name_en": "Add-on: Intensifier - Verses of Allah's Greatness (7x)",
+      "chain_type": "add_on",
+      "derivation": "explicit_in_source",
+      "affliction_tags": [
+        "magic",
+        "jinn",
+        "evil_eye",
+        "strong_reaction"
+      ],
+      "source_pages": [
+        "p.11"
+      ],
+      "chain_repeat_rule": "p.11: 'If certain ayat elicit greater symptoms, then these should be repeated at least 7 times if possible.' A DIAGNOSTIC trigger - applied only when the patient reacts, so the count is reactive, not fixed.",
+      "combines_with": [
+        "RQ-C01",
+        "RQ-C02"
+      ],
+      "gate_text": "p.11 Q&A: 'Are there specific ayat in the Qur'an that have more impact?'",
+      "steps": [
+        {
+          "step": 1,
+          "source_id": null,
+          "quran_ref": "2:164",
+          "label_en": "Verses of Allah's greatness - al-Baqarah 164",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11: 'repeated at least 7 times if possible'",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 2,
+          "source_id": null,
+          "quran_ref": "3:18",
+          "label_en": "Al 'Imran 18",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 3,
+          "source_id": null,
+          "quran_ref": "7:54",
+          "label_en": "Al-A'raf 54",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 4,
+          "source_id": null,
+          "quran_ref": "23:118",
+          "label_en": "Al-Mu'minun 118",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 5,
+          "source_id": null,
+          "quran_ref": "72:3",
+          "label_en": "Al-Jinn 3",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 6,
+          "source_id": null,
+          "quran_ref": "37:1-10",
+          "label_en": "As-Saffat 1-10",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 7,
+          "source_id": null,
+          "quran_ref": "59:24",
+          "label_en": "Al-Hashr 24",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": null,
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 8,
+          "source_id": null,
+          "quran_ref": "67",
+          "label_en": "Surah al-Mulk",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": "BOUNDS QUESTION: the booklet names 'Surah al-Mulk' with no verse numbers, in a list otherwise made of verse refs. On the page it reads as the WHOLE surah, but that is an inference, not a printed bound. Hafiz must confirm before fetching.",
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        },
+        {
+          "step": 9,
+          "source_id": null,
+          "quran_ref": "55",
+          "label_en": "Surah ar-Rahman",
+          "repeat_count": 7,
+          "repeat_count_source": "p.11",
+          "talisman_suitable": true,
+          "note": "BOUNDS QUESTION: same as al-Mulk - named with no verse numbers.",
+          "book_page": "p.11 - Q&A",
+          "book_item": "prose list",
+          "section": "quran"
+        }
+      ]
+    },
+    {
+      "chain_id": "RQ-C07",
+      "name_en": "Daily Protection (Prevention)",
+      "chain_type": "standalone",
+      "derivation": "explicit_in_source",
+      "affliction_tags": [
+        "prevention",
+        "daily_protection",
+        "evil_eye",
+        "jinn"
+      ],
+      "source_pages": [
+        "p.12"
+      ],
+      "chain_repeat_rule": "EVERY card carries its own count and time-of-day (100x, 10x, 7x, 3x). This is a fundamentally different repetition regime from the ruqyah chain.",
+      "combines_with": [],
+      "gate_text": "p.12 heading: 'PREVENTION IS BETTER THAN CURE'. The page itself points elsewhere: 'REFER TO UWT'S FREE DAILY ADHKAR BOOK FOR MORE ADHKAR & VIRTUES'.",
+      "scope_warning": "OUT OF Q-CATALOGUE SCOPE. These overlap the Daily Adhkar source book (the D-items). Recorded for completeness; do NOT create duplicate Q-items for them without checking the D-catalogue first.",
+      "steps": [
+        {
+          "step": 1,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "Say Bismillah before undressing / entering the lavatory",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": false,
+          "note": "Instruction, not a talisman text (Tabarani).",
+          "book_page": "p.12",
+          "book_item": "card 1",
+          "section": "sunnah"
+        },
+        {
+          "step": 2,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "Mention the Name of Allah when entering the house and eating",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": false,
+          "note": "Instruction, not a talisman text (Muslim).",
+          "book_page": "p.12",
+          "book_item": "card 2",
+          "section": "sunnah"
+        },
+        {
+          "step": 3,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "Pray Fajr in congregation",
+          "repeat_count": null,
+          "repeat_count_source": null,
+          "talisman_suitable": false,
+          "note": "Action, not a text (Tabarani).",
+          "book_page": "p.12",
+          "book_item": "card 3",
+          "section": "sunnah"
+        },
+        {
+          "step": 4,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "Bismillahi tawakkaltu 'alallah, wa la hawla wa la quwwata illa billah - when leaving the house",
+          "repeat_count": null,
+          "repeat_count_source": "no count printed",
+          "talisman_suitable": true,
+          "note": "Abu Dawud. Overlaps the Daily Adhkar catalogue (D-items).",
+          "book_page": "p.12",
+          "book_item": "card 4",
+          "section": "sunnah"
+        },
+        {
+          "step": 5,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "La ilaha illallahu wahdahu la sharika lah... - 100x in the day",
+          "repeat_count": 100,
+          "repeat_count_source": "printed '100x in the day'",
+          "talisman_suitable": true,
+          "note": "Bukhari. Overlaps the Daily Adhkar catalogue.",
+          "book_page": "p.12",
+          "book_item": "card 5",
+          "section": "sunnah"
+        },
+        {
+          "step": 6,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd, yuhyi wa yumit... - 10x after Fajr & Maghrib",
+          "repeat_count": 10,
+          "repeat_count_source": "printed '10x after Fajr & Maghrib'",
+          "talisman_suitable": true,
+          "note": "Ahmad. Overlaps the Daily Adhkar catalogue.",
+          "book_page": "p.12",
+          "book_item": "card 6",
+          "section": "sunnah"
+        },
+        {
+          "step": 7,
+          "source_id": "Q02",
+          "quran_ref": "2:255",
+          "label_en": "Ayah al-Kursi - morning, evening & before sleeping",
+          "repeat_count": null,
+          "repeat_count_source": "no count printed",
+          "talisman_suitable": true,
+          "note": "Bukhari & Tabarani.",
+          "book_page": "p.12",
+          "book_item": "card 7",
+          "section": "quran"
+        },
+        {
+          "step": 8,
+          "source_id": null,
+          "quran_ref": "112; 113; 114",
+          "label_en": "The last 3 surahs - 3x morning & evening",
+          "repeat_count": 3,
+          "repeat_count_source": "printed '3x morning & evening'",
+          "talisman_suitable": true,
+          "note": "Tirmidhi. Same texts as Q04/Q05/Q06 but a DIFFERENT count from the ruqyah chain.",
+          "book_page": "p.12",
+          "book_item": "card 8",
+          "section": "quran"
+        },
+        {
+          "step": 9,
+          "source_id": null,
+          "quran_ref": null,
+          "label_en": "Bismillahilladhi la yadurru ma'asmihi shay'un... - 3x morning & evening",
+          "repeat_count": 3,
+          "repeat_count_source": "printed '3x morning & evening'",
+          "talisman_suitable": true,
+          "note": "Tirmidhi. Overlaps the Daily Adhkar catalogue.",
+          "book_page": "p.12",
+          "book_item": "card 9",
+          "section": "sunnah"
+        },
+        {
+          "step": 10,
+          "source_id": "RB-P05-01",
+          "quran_ref": null,
+          "label_en": "A'udhu bi-kalimatillahit-tammati min sharri ma khalaq - 3x evening",
+          "repeat_count": 3,
+          "repeat_count_source": "printed '3x evening'",
+          "talisman_suitable": true,
+          "note": "Nasa'i. SAME TEXT as base-chain step 9, which carries NO count. Direct evidence that counts are context-bound, not text-bound.",
+          "book_page": "p.12",
+          "book_item": "card 10",
+          "section": "sunnah"
+        },
+        {
+          "step": 11,
+          "source_id": "RB-P04-01",
+          "quran_ref": null,
+          "label_en": "Hasbiyallahu la ilaha illa huwa... - 7x morning & evening",
+          "repeat_count": 7,
+          "repeat_count_source": "printed '7x morning & evening'",
+          "talisman_suitable": true,
+          "note": "Abu Dawud. Same text as base-chain step 2, which also carries 7x - consistent here.",
+          "book_page": "p.12",
+          "book_item": "card 11",
+          "section": "sunnah"
+        },
+        {
+          "step": 12,
+          "source_id": null,
+          "quran_ref": "2:285-286",
+          "label_en": "The last 2 verses of Surah al-Baqarah - before sleeping",
+          "repeat_count": null,
+          "repeat_count_source": "no count printed",
+          "talisman_suitable": true,
+          "note": "Bukhari. NOTE: p.12 says 2:285-286 (two verses); the ruqyah chain item Q03 is 2:284-286 (three verses).",
+          "book_page": "p.12",
+          "book_item": "card 12",
+          "section": "quran"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "preset_id": "PR-01",
+      "name_en": "General ruqyah (self)",
+      "load": [
+        "RQ-C01"
+      ],
+      "note": null
+    },
+    {
+      "preset_id": "PR-02",
+      "name_en": "Magic (sihr)",
+      "load": [
+        "RQ-C01",
+        "RQ-C02"
+      ],
+      "note": null
+    },
+    {
+      "preset_id": "PR-03",
+      "name_en": "Evil eye (afflicted person)",
+      "load": [
+        "RQ-C01",
+        "RQ-C05"
+      ],
+      "note": null
+    },
+    {
+      "preset_id": "PR-04",
+      "name_en": "Jinn",
+      "load": [
+        "RQ-C01"
+      ],
+      "note": "The booklet prescribes NO text for jinn beyond the base chain. p.8 only re-emphasises Ayah al-Kursi and al-Falaq/an-Nas (already base steps 4, 7 and 8) and adds the non-textual adhan-in-the-ear remedy. Do not invent extra steps."
+    },
+    {
+      "preset_id": "PR-05",
+      "name_en": "Physical illness / pain (self)",
+      "load": [
+        "RQ-C01"
+      ],
+      "note": "Base steps 14-18 (Sunnah items 6-9) ARE the illness and pain duas; steps 14-15 carry the hand-on-pain instruction. No separate chain exists in the source."
+    },
+    {
+      "preset_id": "PR-06",
+      "name_en": "Reciting over another person",
+      "load": [
+        "RQ-C01",
+        "RQ-C03"
+      ],
+      "note": "Also apply the A'UDHU -> U'IDHUKA substitution to base steps 9-13. See open question RQ-OQ-2."
+    },
+    {
+      "preset_id": "PR-07",
+      "name_en": "Children - protection",
+      "load": [
+        "RQ-C04"
+      ],
+      "note": null
+    },
+    {
+      "preset_id": "PR-08",
+      "name_en": "Strong reaction during ruqyah",
+      "load": [
+        "RQ-C01",
+        "RQ-C06"
+      ],
+      "note": null
+    },
+    {
+      "preset_id": "PR-09",
+      "name_en": "Daily prevention",
+      "load": [
+        "RQ-C07"
+      ],
+      "note": "Check the Daily Adhkar (D) catalogue before surfacing this - heavy overlap."
+    }
+  ],
+  "item_updates": [
+    {
+      "id": "Q10",
+      "arabic": null,
+      "arabic_source": null,
+      "abjad_total": null,
+      "needs_review": true,
+      "notes": "NOT RESOLVABLE AS ONE ITEM. Q10 collapses the whole of booklet p.5 ('RUQYAH FROM THE SUNNAH') into a single row, but p.5 prints THIRTEEN separately numbered duas with five different hadith attributions and three different repetition counts. A single Arabic string and a single abjad total for Q10 could never be correct. Resolution: replace Q10 with the 14 granular items RB-P05-01 .. RB-P05-13 (item 6 splits into 6A/6B) listed in proposed_new_items, each with its own Arabic read off the page image. Q10 itself should become a container/heading row or be retired."
+    },
+    {
+      "id": "Q11",
+      "arabic": "أُعِيْذُكُمَا بِكَلِمَاتِ اللهِ التَّامَّةِ ، مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ ، وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.7 'Seeking Protection for Children'; hadith attributed in the source to Bukhari. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "abjad_total": null,
+      "needs_review": true,
+      "notes": "RESOLVED (text read off the page image; the Arabic is fully legible when rendered). abjad_total deliberately left null: scope-v1 decision 3 forbids an abjad number on unverified Arabic, and a page-image reading is not a canonical-source fetch. Note this is the DUAL form ('u'idhukuma', 'I seek refuge for you two') of the singular dua printed as p.5 item 5 (RB-P05-05) - the two differ by exactly one word, so they must stay separate items with separate totals."
+    },
+    {
+      "id": "Q12",
+      "arabic": "اَللّٰهُمَّ أَذْهِبْ عَنْهُ حَرَّهَا وَبَرْدَهَا وَوَصَبَهَا.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.6, boxed dua at the foot of the page; hadith attributed in the source to Ahmad. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "abjad_total": null,
+      "needs_review": true,
+      "notes": "RESOLVED (text read off the page image). abjad_total left null pending Hafiz confirmation, per scope-v1 decision 3. The booklet prints no repetition count for this dua."
+    },
+    {
+      "id": "Q13",
+      "arabic": null,
+      "arabic_source": null,
+      "abjad_total": null,
+      "needs_review": true,
+      "notes": "STILL UNRESOLVED, AND THE PAGE IMAGE DOES NOT FIX IT. p.11 prints, verbatim: 'One can also add other verses which mention the Greatness and the Oneness of Allah such as 2:164, 3:18, 7:54, 23:118, 72:3, 37:1-10, 59:24, Surah al-Mulk and al-Rahman.' Findings: (a) the seven numeric refs ARE unambiguous and could be fetched today; (b) the printed ORDER is 2:164, 3:18, 7:54, 23:118, 72:3, 37:1-10, 59:24 - texts.json has 37:1-10 and 59:24 before 72:3, a reordering not present in the source; (c) al-Mulk and ar-Rahman are named as SURAHS, not verse ranges, inside a list otherwise made of verse refs - reading the page, whole-surah (67 and 55) is the natural sense, but the booklet prints no bound, so this stays an inference and must not be fetched on our own authority; (d) the words 'such as' make the list explicitly non-exhaustive. Q13 is a COLLECTION, not a text: it should become chain RQ-C06 (9 steps) rather than a single catalogue row with one Arabic string."
+    }
+  ],
+  "proposed_new_items": [
+    {
+      "id": "RB-P04-00",
+      "proposed_title_en": "Ta'awwudh that opens the ruqyah",
+      "arabic": "أَعُوْذُ بِاللهِ السَّمِيْعِ الْعَلِيْمِ مِنَ الشَّيْطَانِ الرَّجِيْمِ ، مِنْ هَمْزِهِ وَنَفْخِهِ وَنَفْثِهِ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.4 item (unnumbered); hadith attributed in the source to n/a (ta'awwudh formula). Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "n/a (ta'awwudh formula)",
+      "book_page": "p.4",
+      "book_item": "(unnumbered)",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "MISSING FROM THE CATALOGUE ENTIRELY. Printed above item 1 as the opening of the whole Qur'anic ruqyah. No number, no count. See open question RQ-OQ-4."
+    },
+    {
+      "id": "RB-P04-01",
+      "proposed_title_en": "Hasbiyallahu la ilaha illa huwa (7x)",
+      "arabic": "حَسْبِيَ اللهُ لَا إِلٰهَ إِلَّا هُوَ ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيْمِ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.4 item 1; hadith attributed in the source to Abu Dawud. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Abu Dawud",
+      "book_page": "p.4",
+      "book_item": "1",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "MISSING FROM THE CATALOGUE ENTIRELY. This is booklet item 1 and it is the item that carries the printed '(7x)'. texts.json currently attaches '(7x)' to Q01 (al-Fatihah, which is booklet item 2) instead - a mis-attribution. Wording matches the second half of Quran 9:129, but the booklet cites Abu Dawud, so do NOT fetch 9:129 as its text."
+    },
+    {
+      "id": "RB-P05-01",
+      "proposed_title_en": "A'udhu bi-kalimatillahit-tammat min sharri ma khalaq",
+      "arabic": "أَعُوْذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 1; hadith attributed in the source to Muslim. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Muslim",
+      "book_page": "p.5",
+      "book_item": "1",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Substitution rule applies when reciting for others. Also appears on p.12 with a 3x evening count."
+    },
+    {
+      "id": "RB-P05-02",
+      "proposed_title_en": "A'udhu bi-kalimatillahit-tammat allati la yujawizuhunna barrun wa la fajir",
+      "arabic": "أَعُوْذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ الَّتِيْ لَا يُجَاوِزُهُنَّ بَرٌّ وَلَا فَاجِرٌ مِنْ شَرِّ مَا خَلَقَ وَبَرَأَ وَذَرَأَ ، وَمِنْ شَرِّ مَا يَنْزِلُ مِنَ السَّمَاءِ وَمِنْ شَرِّ مَا يَعْرُجُ فِيْهَا ، وَمِنْ شَرِّ مَا ذَرَأَ فِي الْأَرْضِ وَمِنْ شَرِّ مَا يَخْرُجُ مِنْهَا ، وَمِنْ شَرِّ فِتَنِ اللَّيْلِ وَالنَّهَارِ ، وَمِنْ شَرِّ كُلِّ طَارِقٍ إِلَّا طَارِقًا يَطْرُقُ بِخَيْرٍ ، يَا رَحْمٰنُ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 2; hadith attributed in the source to Ahmad. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Ahmad",
+      "book_page": "p.5",
+      "book_item": "2",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Longest dua on the page - highest transcription risk, check this one first."
+    },
+    {
+      "id": "RB-P05-03",
+      "proposed_title_en": "A'udhu bi-wajhillahil-'Azim",
+      "arabic": "أَعُوْذُ بِوَجْهِ اللهِ الْعَظِيْمِ ، الَّذِيْ لَيْسَ شَيْءٌ أَعْظَمَ مِنْهُ وَبِكَلِمَاتِ اللهِ التَّامَّاتِ الَّتِيْ لَا يُجَاوِزُهُنَّ بَرٌّ وَلَا فَاجِرٌ ، وَبِأَسْمَاءِ اللهِ الْحُسْنٰى كُلِّهَا مَا عَلِمْتُ مِنْهَا وَمَا لَمْ أَعْلَمْ ، مِنْ شَرِّ مَا خَلَقَ وَبَرَأَ وَذَرَأَ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 3; hadith attributed in the source to Muwatta'. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Muwatta'",
+      "book_page": "p.5",
+      "book_item": "3",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10."
+    },
+    {
+      "id": "RB-P05-04",
+      "proposed_title_en": "A'udhu bi-kalimatillahit-tammat min ghadabihi wa 'iqabih",
+      "arabic": "أَعُوْذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ غَضَبِهِ وَعِقَابِهِ ، وَشَرِّ عِبَادِهِ ، وَمِنْ هَمَزَاتِ الشَّيَاطِيْنِ وَأَنْ يَحْضُرُوْنِ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 4; hadith attributed in the source to Ahmad. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Ahmad",
+      "book_page": "p.5",
+      "book_item": "4",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10."
+    },
+    {
+      "id": "RB-P05-05",
+      "proposed_title_en": "A'udhu bi-kalimatillahit-tammah min kulli shaytanin wa hammah",
+      "arabic": "أَعُوْذُ بِكَلِمَاتِ اللهِ التَّامَّةِ ، مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ ، وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 5; hadith attributed in the source to Bukhari. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Bukhari",
+      "book_page": "p.5",
+      "book_item": "5",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Singular form; Q11 (p.7) is the dual form of the same dua."
+    },
+    {
+      "id": "RB-P05-06A",
+      "proposed_title_en": "Bismillah (3x)",
+      "arabic": "بِسْمِ اللهِ",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 6 (part A); hadith attributed in the source to Muslim. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Muslim",
+      "book_page": "p.5",
+      "book_item": "6 (part A)",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Printed with '(3x)'. Booklet item 6 is a two-part item with two different counts, so it is split here."
+    },
+    {
+      "id": "RB-P05-06B",
+      "proposed_title_en": "A'udhu billahi wa qudratihi min sharri ma ajidu wa uhadhir (7x)",
+      "arabic": "أَعُوْذُ بِاللهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 6 (part B); hadith attributed in the source to Muslim. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Muslim",
+      "book_page": "p.5",
+      "book_item": "6 (part B)",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Printed with '(7x)'. Said with the hand placed on the painful part of the body."
+    },
+    {
+      "id": "RB-P05-07",
+      "proposed_title_en": "Allahumma inni as'aluka ta'jila 'afiyatik",
+      "arabic": "اَللّٰهُمَّ إِنِّيْ أَسْأَلُكَ تَعْجِيْلَ عَافِيَتِكَ ، وَصَبْرًا عَلٰى بَلِيَّتِكَ ، وَخُرُوْجًا مِنَ الدُّنْيَا إِلٰى رَحْمَتِكَ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 7; hadith attributed in the source to Hakim. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Hakim",
+      "book_page": "p.5",
+      "book_item": "7",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10."
+    },
+    {
+      "id": "RB-P05-08",
+      "proposed_title_en": "Allahumma Rabban-nas adhhibil-ba's",
+      "arabic": "اَللّٰهُمَّ رَبَّ النَّاسِ ، أَذْهِبِ الْبَأْسَ ، اِشْفِ أَنْتَ الشَّافِيْ ، لَا شِفَاءَ إِلَّا شِفَاؤُكَ ، شِفَاءً لَا يُغَادِرُ سَقَمًا.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 8; hadith attributed in the source to Bukhari. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Bukhari",
+      "book_page": "p.5",
+      "book_item": "8",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10."
+    },
+    {
+      "id": "RB-P05-09",
+      "proposed_title_en": "Rabbunallahul-ladhi fis-sama'",
+      "arabic": "رَبُّنَا اللهُ الَّذِيْ فِي السَّمَاءِ تَقَدَّسَ اسْمُكَ ، أَمْرُكَ فِي السَّمَاءِ وَالْأَرْضِ ، كَمَا رَحْمَتُكَ فِي السَّمَاءِ فَاجْعَلْ رَحْمَتَكَ فِي الْأَرْضِ ، وَاغْفِرْ لَنَا حُوْبَنَا وَخَطَايَانَا أَنْتَ رَبُّ الطَّيِّبِيْنَ ، فَأَنْزِلْ رَحْمَةً مِنْ رَحْمَتِكَ وَشِفَاءً مِنْ شِفَائِكَ عَلٰى هٰذَا الْوَجَعِ فَيَبْرَأَ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 9; hadith attributed in the source to Abu Dawud. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Abu Dawud",
+      "book_page": "p.5",
+      "book_item": "9",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Long dua - second-highest transcription risk."
+    },
+    {
+      "id": "RB-P05-10",
+      "proposed_title_en": "Bismillahi arqik min kulli shay'in yu'dhik",
+      "arabic": "بِسْمِ اللهِ أَرْقِيْكَ مِنْ كُلِّ شَيْءٍ يُؤْذِيْكَ ، مِنْ شَرِّ كُلِّ نَفْسٍ أَوْ عَيْنٍ حَاسِدٍ ، اَللهُ يَشْفِيْكَ ، بِسْمِ اللهِ أَرْقِيْكَ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 10; hadith attributed in the source to Muslim. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Muslim",
+      "book_page": "p.5",
+      "book_item": "10",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Gated behind 'When praying on others, add the following'."
+    },
+    {
+      "id": "RB-P05-11",
+      "proposed_title_en": "Bismillahi turbatu ardina",
+      "arabic": "بِسْمِ اللهِ تُرْبَةُ أَرْضِنَا بِرِيْقَةِ بَعْضِنَا ، يُشْفٰى سَقِيْمُنَا بِإِذْنِ رَبِّنَا.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 11; hadith attributed in the source to Bukhari. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Bukhari",
+      "book_page": "p.5",
+      "book_item": "11",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Gated behind 'When praying on others'."
+    },
+    {
+      "id": "RB-P05-12",
+      "proposed_title_en": "As'alullahal-'Azim Rabbal-'Arshil-'Azim an yashfiyak (7x)",
+      "arabic": "أَسْأَلُ اللهَ الْعَظِيْمَ ، رَبَّ الْعَرْشِ الْعَظِيْمِ ، أَنْ يَشْفِيَكَ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 12; hadith attributed in the source to Tirmidhi. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Tirmidhi",
+      "book_page": "p.5",
+      "book_item": "12",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Printed with '(7x)'. Gated behind 'When praying on others'."
+    },
+    {
+      "id": "RB-P05-13",
+      "proposed_title_en": "La ba'sa tahurun in sha'Allah",
+      "arabic": "لَا بَأْسَ طَهُوْرٌ ، إِنْ شَاءَ اللهُ.",
+      "arabic_source": "Ruqyah Booklet (UWT) p.5 item 13; hadith attributed in the source to Bukhari. Ruqyah Booklet (UWT) rendered page image, read by machine 2026-08-21. NOT a canonical-database fetch. Vowel marks approximate; consonant skeleton is what the abjad engine reads. Requires Hafiz side-by-side confirmation before any abjad number is issued (scope-v1 decision 3).",
+      "hadith_attribution_in_source": "Bukhari",
+      "book_page": "p.5",
+      "book_item": "13",
+      "abjad_total": null,
+      "arabic_status": "transcribed_from_page_image",
+      "needs_review": true,
+      "notes": "Was inside placeholder Q10. Gated behind 'When praying on others'. Shortest text in the booklet."
+    }
+  ],
+  "schema_deviation_note": "The brief specified {schema_version, chains, item_updates}. Two keys were added: 'proposed_new_items' (16 texts the booklet prints that the Q-catalogue does not contain at all - they could not be expressed as updates to existing ids without misrepresenting them as edits) and 'presets' (the one-click affliction layer the product needs, which the base+add-on model requires). All originally specified keys are present and unchanged in shape."
+}

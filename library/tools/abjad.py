@@ -22,6 +22,8 @@ Porting notes (behavior-exact, verified against the JS source):
   * Iteration is per code point in both (JS for..of, Python str iteration).
 """
 
+import unicodedata
+
 # --- Eastern (Mashriqi) Abjad values --- (exact copy of const ABJAD)
 ABJAD = {
     "ا": 1, "ب": 2, "ج": 3, "د": 4, "ه": 5, "و": 6, "ز": 7, "ح": 8, "ط": 9, "ي": 10,
@@ -55,6 +57,70 @@ NORMALIZE = {
 }
 
 
+# --- Arabic Presentation Forms ---
+# U+FB50-FDFF and U+FE70-FEFF are single code points standing for one or more
+# real letters (contextual forms and ligatures). Unicode's compatibility
+# decomposition (NFKC) expands them to the letters they represent.
+#
+# Why this must exist: without it these characters score 0 - and worse than 0,
+# because NORMALIZE happens to contain a handful of presentation forms already,
+# so affected text got PARTIAL credit. The basmala pasted in presentation forms
+# scored 66 instead of 786: a plausible wrong number rather than an obvious
+# zero. Found by the Mirror audit 2026-08-21 after a first, far narrower fix
+# covered only 9 of the 683 affected code points.
+#
+# HONORIFIC FORMULAS ARE DELIBERATELY NOT EXPANDED. U+FDFA (ﷺ) and U+FDFB (ﷻ)
+# are complete honorific formulas a writer adds, not letters of the text being
+# scored; expanding them under NFKC would give them 447 and 102 respectively
+# and silently pre-empt a scholarly ruling. Whether they carry a value is open
+# question 4 with Hafiz - when he rules, THIS SET is the only thing that
+# changes.
+# Every honorific formula in the presentation blocks, listed DELIBERATELY.
+# NFKC happens not to decompose most of these, so before this list they scored 0
+# by accident rather than by policy - meaning a future change to the ruling
+# would silently have missed them. Now the policy is in one place: when the
+# scholar rules on open question 4, this set is the only thing that changes.
+HONORIFICS_NO_VALUE = {
+    "ﷺ", "ﷻ",                                    # U+FDFA, U+FDFB
+    "﵀", "﵏",                                    # rahimahu Allah, rahimahum Allah
+    "﵁", "﵂", "﵃", "﵄", "﵅",                # radi Allahu anh / anhaa / anhum / anhumaa / anhunna
+    "﵆", "﵌",                                    # sallallahu alayhi wa-aalih (+ wa-sallam)
+    "﵇", "﵈", "﵉", "﵊", "﵍",                # alayhi / alayhim / alayhimaa / alayhi as-salaatu / alayhaa as-salaam
+    "﵋",                                          # quddisa sirrah
+    "﵎",                                          # tabaaraka wa-taaalaa
+    "﷏",                                          # salaamuhu alaynaa
+    "﷾", "﷿",                                    # subhaanahu wa taaalaa, azza wa jall
+}
+
+# Presentation-form code points NFKC does NOT decompose but which DO stand for
+# real text. Found by the RM gate 2026-08-21: pasting ﷽ scored 0 while typing
+# the same words scored 786. Two ways of writing the same thing must give the
+# same number - that is true whichever way the scholar rules on where a basmala
+# belongs, so it is a defect rather than a question.
+EXPLICIT_EXPANSIONS = {
+    "﷽": "بسم الله الرحمن الرحيم",              # U+FDFD, the full basmala = 786
+}
+
+
+def _is_presentation_form(cp):
+    return (0xFB50 <= cp <= 0xFDFF) or (0xFE70 <= cp <= 0xFEFF)
+
+
+def expand_ligatures(text):
+    """Exact port of expandLigatures() in index.html."""
+    out = []
+    for ch in text:
+        if ch in HONORIFICS_NO_VALUE:
+            out.append(ch)
+        elif ch in EXPLICIT_EXPANSIONS:
+            out.append(EXPLICIT_EXPANSIONS[ch])
+        elif _is_presentation_form(ord(ch)):
+            out.append(unicodedata.normalize("NFKC", ch))
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 def is_ignorable(ch):
     """Exact port of isIgnorable(ch): diacritics, tatweel, joiners, hamza."""
     c = ord(ch)
@@ -71,10 +137,16 @@ def is_ignorable(ch):
         return True
     if 0x200B <= c <= 0x200F:        # zero-width / bidi marks
         return True
+    if c == 0xFEFF:                  # zero-width no-break space / BOM - invisible,
+        return True                  # and really present in row Q01's stored text
     if c == 0x0621:                  # standalone hamza (not counted)
         return True
-    if c == 0xFE70:                  # JS: `c===0xFE70 && c<=0xFE74` — matches only U+FE70
-        return True
+    if 0xFE70 <= c <= 0xFE74:        # presentation-form diacritics.
+        return True                  # index.html had `c===0xFE70 && c<=0xFE74` here - a
+                                     # real typo that matched only U+FE70. The port used
+                                     # to reproduce it deliberately (behaviour-identical
+                                     # beat correct-but-divergent); both were fixed
+                                     # together 2026-08-21 so they still agree.
     return False
 
 
@@ -99,7 +171,7 @@ def compute_abjad(text):
                                       # (non-abjad, shown faint in the UI)
       }
     """
-    words = [w for w in text.split() if len(w)]
+    words = [w for w in expand_ligatures(text).split() if len(w)]
     result = {"words": [], "letters": [], "grand": 0, "ignored": []}
     for w in words:
         word_obj = {"raw": w, "letters": [], "sum": 0}

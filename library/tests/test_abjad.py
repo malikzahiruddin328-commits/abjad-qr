@@ -165,32 +165,40 @@ def test_empty_string_has_no_words():
 # --------------------------------------------------------------------------
 # KNOWN PRE-EXISTING BUG -- this test DOCUMENTS current behaviour on purpose.
 # --------------------------------------------------------------------------
-# index.html's isIgnorable() contains:
+# index.html's isIgnorable() used to contain:
 #     if(c===0xFE70 && c<=0xFE74) return true;
-# A range check (`c>=0xFE70 && c<=0xFE74`) was clearly intended, so U+FE71..
-# U+FE74 (Arabic diacritic presentation forms) are NOT ignored. abjad.py is a
-# faithful port and reproduces this exactly -- do NOT "fix" the port alone.
+# `===` where a range `>=` was clearly intended, so U+FE71..U+FE74 (Arabic
+# diacritic presentation forms) were not ignored. The port reproduced it
+# deliberately, and THIS TEST PINNED THE BUG so the two could not drift.
 #
-# Impact is cosmetic only: those code points carry no abjad value, so totals
-# are unaffected; they merely render as faint "ignored" chips instead of being
-# skipped silently.
-#
-# When index.html is fixed, fix abjad.py to match and update this test. It is
-# meant to trip then, deliberately, so the two implementations cannot drift.
+# It did its job: on 2026-08-21 the port was fixed first and this test tripped
+# immediately, forcing both sides to be corrected together. It now pins the
+# FIXED behaviour instead. The impact was always cosmetic - those code points
+# carry no abjad value either way - which is why it was safe to leave standing
+# while the far more serious presentation-form scoring defect was dealt with.
 
-def test_documents_known_fe70_range_bug():
-    assert abjad.is_ignorable(chr(0xFE70)) is True       # matched by `c===0xFE70`
-    for cp in range(0xFE71, 0xFE75):                     # intended, but not matched
-        assert abjad.is_ignorable(chr(cp)) is False, (
-            "U+%04X now ignorable -- if index.html's isIgnorable range bug was "
-            "fixed, update abjad.py and this test together." % cp)
+def test_fe70_range_now_ignored_in_both_implementations():
+    for cp in range(0xFE70, 0xFE75):
+        assert abjad.is_ignorable(chr(cp)) is True, (
+            "U+%04X should be ignorable -- if index.html still has the `===` "
+            "typo, fix both sides together, never one alone." % cp)
 
 
-def test_fe70_range_bug_does_not_affect_totals():
-    """The whole point: the bug is cosmetic, never numeric."""
+def test_fe70_range_never_affected_totals():
+    """It was cosmetic before the fix and remains numerically inert after it."""
     presentation_forms = "".join(chr(cp) for cp in range(0xFE70, 0xFE75))
     assert total(presentation_forms) == 0
     assert total("محمد" + presentation_forms) == total("محمد")
+
+
+def test_index_html_no_longer_carries_the_typo():
+    """Guards the page itself, not just the port."""
+    import os, re
+    p = os.path.join(os.path.dirname(__file__), "..", "..", "index.html")
+    src = open(p, encoding="utf-8").read()
+    assert "c===0xFE70" not in src.replace(" ", ""), "the `===` typo is back in index.html"
+    assert re.search(r"c\s*>=\s*0xFE70\s*&&\s*c\s*<=\s*0xFE74", src), \
+        "index.html should test the FE70-FE74 range, not a single code point"
 
 
 # --------------------------------------------------------------------------

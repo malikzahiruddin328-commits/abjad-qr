@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "generated": "2026-08-21",
+  "source_document": "The Key to a Successful Day (Muslim Research & Development Foundation, 2010) — the-key-to-a-successful-day.pdf, 34 pages",
+  "method_note": "The booklet's Arabic is in a private font encoding and extracts as (cid:NNN) garbage, so no text was taken from PDF text extraction. Every page was RENDERED to an image with pypdfium2 (pdf[i].render(scale=6), and scale=14 crops for close reading of individual lines) and the Arabic was read directly off the rendered image. No Arabic in this file was typed from memory or reconstructed from the transliteration. VERIFICATION: each passage was checked, letter by letter, against the transliteration and English translation printed on the same page and against the translation/transliteration already stored for that D-id in texts.json; the result is recorded per item in translation_consistency. Where the printed Arabic and the stored translation disagree, the item is marked \"unclear\", needs_review=true, and abjad_total is left null per scope-v1 decision 3 (no unverified Arabic receives an abjad number). Repetition rubrics printed in parentheses next to a dhikr — (ثَلَاثاً) 'three times', (ثَلَاثاً وَثَلَاثِينَ) 'thirty-three times' — are instructions, not part of the dhikr, and are not stored; this is noted per item. abjad_total is produced by library/tools/abjad.py compute_abjad(text)[\"grand\"], unmodified. SCOPE: covers only the D-items whose arabic_status in texts.json is pending_verification. D06, D07, D09 and D10 already carry canonical Quran text and are deliberately absent from this file. This file does not modify texts.json; it is an input for a later, separate merge step.",
+  "items": [
+    {
+      "id": "D01",
+      "arabic": "أَسْتَغْفِرُ اللَّهَ",
+      "arabic_source": "page image p.3",
+      "source_item_number": "1",
+      "translation_consistency": "consistent",
+      "abjad_total": 1807,
+      "needs_review": false,
+      "notes": "Printed with the repetition rubric (ثَلَاثاً) after it; the rubric means 'three times' and is not part of the dhikr, so it is not stored."
+    },
+    {
+      "id": "D02",
+      "arabic": "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ",
+      "arabic_source": "page image p.3",
+      "source_item_number": "2",
+      "translation_consistency": "consistent",
+      "abjad_total": 3126,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D03",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+      "arabic_source": "page image p.4",
+      "source_item_number": "3",
+      "translation_consistency": "consistent",
+      "abjad_total": 4655,
+      "needs_review": false,
+      "notes": "The catalogue transliteration for D03 is abridged with an ellipsis; the stored Arabic is the full printed text, which the page's own full transliteration and English both cover."
+    },
+    {
+      "id": "D04",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، لَا إِلَهَ إِلَّا اللَّهُ، وَلَا نَعْبُدُ إِلَّا إِيَّاهُ، لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلَّا اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الْكَافِرُونَ",
+      "arabic_source": "page image p.5",
+      "source_item_number": "4",
+      "translation_consistency": "consistent",
+      "abjad_total": 6320,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D05",
+      "arabic": "سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ أَكْبَرُ",
+      "arabic_source": "page image p.6",
+      "source_item_number": "5",
+      "translation_consistency": "unclear",
+      "abjad_total": null,
+      "needs_review": true,
+      "notes": "SOURCE CONFLICT — the catalogue row describes 33x Subhanallah + 33x Alhamdulillah + 34x Allahu Akbar. The booklet (p.6, item 5) prints ONE combined phrase with the rubric (ثَلَاثاً وَثَلَاثِينَ) and the line 'Repeat it 33 times, the total is 99 after which the 100th phrase is:' followed by لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. The Arabic above is read cleanly off the page image, but it is a different counting scheme from the one the catalogue records, so no abjad number is assigned until Hafiz rules which form D05 is. The catalogue's earlier note that this page was 'garbled' was an extraction artefact only — the rendered page is fully legible."
+    },
+    {
+      "id": "D08",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "arabic_source": "page image p.10",
+      "source_item_number": "8",
+      "translation_consistency": "consistent",
+      "abjad_total": 2369,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D11",
+      "arabic": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ، وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
+      "arabic_source": "page image p.16",
+      "source_item_number": "3",
+      "translation_consistency": "consistent",
+      "abjad_total": 13392,
+      "needs_review": false,
+      "notes": "Morning form as printed. The booklet colour-codes the two words that change for the evening (أَمْسَيْنَا / وَأَمْسَى instead of أَصْبَحْنَا / وَأَصْبَحَ); the evening variant is not stored as a separate row."
+    },
+    {
+      "id": "D12",
+      "arabic": "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ",
+      "arabic_source": "page image p.18",
+      "source_item_number": "4",
+      "translation_consistency": "consistent",
+      "abjad_total": 1745,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D13",
+      "arabic": "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ",
+      "arabic_source": "page image p.18",
+      "source_item_number": "5",
+      "translation_consistency": "consistent",
+      "abjad_total": 1529,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D14",
+      "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+      "arabic_source": "page image p.19",
+      "source_item_number": "6",
+      "translation_consistency": "consistent",
+      "abjad_total": 11717,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D15",
+      "arabic": "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ",
+      "arabic_source": "page image p.20",
+      "source_item_number": "7",
+      "translation_consistency": "consistent",
+      "abjad_total": 5748,
+      "needs_review": false,
+      "notes": "Morning form. The page footnote gives the evening opening اللَّهُمَّ إِنِّي أَمْسَيْتُ in place of اللَّهُمَّ إِنِّي أَصْبَحْتُ."
+    },
+    {
+      "id": "D16",
+      "arabic": "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ",
+      "arabic_source": "page image p.21",
+      "source_item_number": "8",
+      "translation_consistency": "consistent",
+      "abjad_total": 3036,
+      "needs_review": false,
+      "notes": "Morning form. The page footnote gives the evening opening اللَّهُمَّ مَا أَمْسَى in place of اللَّهُمَّ مَا أَصْبَحَ."
+    },
+    {
+      "id": "D17",
+      "arabic": "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ، وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ",
+      "arabic_source": "page image p.22",
+      "source_item_number": "9",
+      "translation_consistency": "consistent",
+      "abjad_total": 6674,
+      "needs_review": false,
+      "notes": "Set in a different Arabic face from the rest of the booklet. In the source the words أعوذ and بك are printed with no word space (أَعُوذُبِكَ), twice; stored here with the normal space. The abjad engine sums per letter, so the grand total is identical either way — verified. The two (ثَلَاثاً) repetition rubrics are not stored."
+    },
+    {
+      "id": "D18",
+      "arabic": "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+      "arabic_source": "page image p.23",
+      "source_item_number": "10",
+      "translation_consistency": "consistent",
+      "abjad_total": 3098,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D19",
+      "arabic": "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي",
+      "arabic_source": "page image p.23",
+      "source_item_number": "11",
+      "translation_consistency": "unclear",
+      "abjad_total": null,
+      "needs_review": true,
+      "notes": "SOURCE CONFLICT — the printed Arabic block opens with an extra clause اللَّهُمَّ عَافِنِي فِي بَدَنِي that appears in NEITHER the booklet's own transliteration for item 11 NOR its English translation, and which is set in the same substitute Arabic face used for item 9 (D17) — strongly suggesting a typesetting carry-over from item 9. The rest of the block matches the transliteration word for word. Stored faithfully as printed, but no abjad number is assigned until Hafiz rules whether that opening clause belongs to D19. Arabic runs across two pages: it begins on p.23 and continues at the top of p.24."
+    },
+    {
+      "id": "D20",
+      "arabic": "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ",
+      "arabic_source": "page image p.25",
+      "source_item_number": "12",
+      "translation_consistency": "consistent",
+      "abjad_total": 9852,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D21",
+      "arabic": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+      "arabic_source": "page image p.26",
+      "source_item_number": "13",
+      "translation_consistency": "consistent",
+      "abjad_total": 4266,
+      "needs_review": false,
+      "notes": "The (ثَلَاثاً) repetition rubric is not stored."
+    },
+    {
+      "id": "D22",
+      "arabic": "رَضِيتُ بِاللَّهِ رَبّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيّاً",
+      "arabic_source": "page image p.26",
+      "source_item_number": "14",
+      "translation_consistency": "consistent",
+      "abjad_total": 2527,
+      "needs_review": false,
+      "notes": "The printed text includes the salutation صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ inside the dhikr; it is kept because it is part of the printed passage, and it does affect the abjad total. The (ثَلَاثاً) repetition rubric is not stored."
+    },
+    {
+      "id": "D23",
+      "arabic": "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ",
+      "arabic_source": "page image p.27",
+      "source_item_number": "15",
+      "translation_consistency": "consistent",
+      "abjad_total": 4634,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D24",
+      "arabic": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ فَتْحَهُ وَنَصْرَهُ وَنُورَهُ وَبَرَكَتَهُ وَهُدَاهُ وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ",
+      "arabic_source": "page image p.27",
+      "source_item_number": "16 a",
+      "translation_consistency": "consistent",
+      "abjad_total": 6685,
+      "needs_review": true,
+      "notes": "The catalogue row bundles TWO texts: 16 a (morning) and 16 b (evening). Stored `arabic` is 16 a, read off p.27 (continues at the top of p.28) and matching its own transliteration and English exactly; abjad_total is 16 a's. The evening text 16 b, read off p.28, is: أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ فَتْحَهَا وَنَصْرَهَا وَنُورَهَا وَبَرَكَتَهَا وَهُدَاهَا وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهَا وَشَرِّ مَا بَعْدَهَا. needs_review is set because the owner must decide whether D24 should be split into two rows before a talisman is produced from it."
+    },
+    {
+      "id": "D25",
+      "arabic": "أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ، حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ الْمُشْرِكِينَ",
+      "arabic_source": "page image p.29",
+      "source_item_number": "17",
+      "translation_consistency": "consistent",
+      "abjad_total": 4208,
+      "needs_review": false,
+      "notes": "Morning form; the page footnote gives أَمْسَيْنَا for the evening. Arabic runs from p.29 into the transliteration on p.30. The printed text includes the salutation صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ, which is counted in the abjad total."
+    },
+    {
+      "id": "D26",
+      "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+      "arabic_source": "page image p.30",
+      "source_item_number": "18",
+      "translation_consistency": "consistent",
+      "abjad_total": 252,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D27",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "arabic_source": "page image p.30",
+      "source_item_number": "19",
+      "translation_consistency": "consistent",
+      "abjad_total": 1865,
+      "needs_review": false,
+      "notes": "Arabic printed at the foot of p.30; its item number and transliteration sit at the top of p.31."
+    },
+    {
+      "id": "D28",
+      "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ",
+      "arabic_source": "page image p.31",
+      "source_item_number": "20",
+      "translation_consistency": "consistent",
+      "abjad_total": 3461,
+      "needs_review": false,
+      "notes": "The (ثَلَاثاً) repetition rubric is not stored."
+    },
+    {
+      "id": "D29",
+      "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نَافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلاً مُتَقَبَّلاً",
+      "arabic_source": "page image p.32",
+      "source_item_number": "21",
+      "translation_consistency": "consistent",
+      "abjad_total": 1678,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D30",
+      "arabic": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+      "arabic_source": "page image p.32",
+      "source_item_number": "22",
+      "translation_consistency": "consistent",
+      "abjad_total": 2268,
+      "needs_review": false,
+      "notes": null
+    },
+    {
+      "id": "D31",
+      "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+      "arabic_source": "page image p.32",
+      "source_item_number": "23",
+      "translation_consistency": "consistent",
+      "abjad_total": 3570,
+      "needs_review": false,
+      "notes": null
+    }
+  ]
+}
