@@ -11,11 +11,18 @@ Eastern (Mashriqi) abjad values. Base 28 letters:
   ابجد هوز حطي كلمن سعفص قرشت ثخذ ضظغ
 
 Porting notes (behavior-exact, verified against the JS source):
-  * The JS line `if(c===0xFE70 && c<=0xFE74) return true;` only ever matches
-    U+FE70 (the `===` makes the second condition redundant); the author likely
-    intended the range U+FE70-FE74. This port reproduces the ACTUAL behavior
-    (only U+FE70 ignorable), not the presumed intent. Flagged in
-    library/data/BUILD-REPORT.md.
+  * U+FE70-FE74 (Arabic diacritic presentation forms) are ignorable in BOTH
+    implementations, and this port agrees with index.html.
+    HISTORY, because this note used to say the opposite: index.html once read
+    `if(c===0xFE70 && c<=0xFE74)`, where the `===` made the second condition
+    dead so only U+FE70 was ignored. The page was fixed to `c>=0xFE70` but this
+    port was not, and this docstring went on claiming it "reproduces the ACTUAL
+    behavior" for days after that stopped being true - while the test suite kept
+    passing, because it only ever asserted about the port. Caught by
+    Baba Ji-Mirror 2026-08-29; port and page reconciled. test_abjad.py now
+    additionally asserts the `===` typo has not returned to index.html, so this
+    pair cannot drift apart silently again. Totals were never affected: none of
+    the five code points carries an abjad value.
   * JS `text.split(/\\s+/)` vs Python `str.split()`: identical for all Arabic
     text; the only divergence is U+FEFF (word separator in JS, kept-but-ignored
     char in Python). Grand totals are unaffected.

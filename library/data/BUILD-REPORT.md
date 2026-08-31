@@ -107,23 +107,34 @@ The `quran-uthmani` edition returns the opening Bismillah as part of ayah 1 of e
 
 **U+FEFF in Q01.** The API's text for 1:1 begins with a U+FEFF zero-width no-break space. It is stored as delivered and carries no abjad value. (`abjad.py` documents the one JS/Python divergence here: JS treats U+FEFF as a word separator, Python keeps it as a valueless character. Grand totals are identical either way.)
 
-## 7. Known pre-existing bug: the U+FE70 range check
+## 7. The U+FE70 range check — FIXED 2026-08-29, and how it nearly stayed broken
 
-`index.html`'s `isIgnorable()` contains:
+**This section previously described a live bug. It is fixed. The history is kept because the way it nearly persisted is the useful part.**
+
+`index.html`'s `isIgnorable()` once read:
 
 ```js
-if(c===0xFE70 && c<=0xFE74) return true;
+if(c===0xFE70 && c<=0xFE74) return true;   // the `===` makes the range dead
 ```
 
-A range check (`c>=0xFE70 && c<=0xFE74`) was clearly intended. As written the `===` makes the second condition dead, so **U+FE71–U+FE74 (Arabic diacritic presentation forms) are not ignored**.
+A range check was intended. As written, only U+FE70 was ignored; **U+FE71–U+FE74 (Arabic diacritic presentation forms) were not**. `abjad.py` deliberately reproduced that, so the port would stay behaviour-exact with the page.
 
-- **Not fixed, on purpose.** `library/tools/abjad.py` is a faithful port of the live tool; making the port disagree with `index.html` would be worse than the bug. The port reproduces the actual behaviour and flags it in its module docstring.
-- **Impact is cosmetic only.** Those code points carry no abjad value, so no total is wrong. They merely render as faint "ignored" chips instead of being skipped silently.
-- **It is pinned by a test.** `test_documents_known_fe70_range_bug` asserts U+FE70 *is* ignorable and U+FE71–74 are *not*, with a comment saying it documents a known bug. `test_fe70_range_bug_does_not_affect_totals` proves the numeric claim. When `index.html` is fixed, `abjad.py` and that test must be updated in the same change — the test is meant to trip then, deliberately, so the two implementations cannot drift apart silently.
+**What went wrong.** `index.html` was fixed to `c>=0xFE70 && c<=0xFE74`. **The port was not**, and neither was its docstring, which went on claiming it reproduced the page's actual behaviour. The test suite stayed green throughout — because `test_documents_known_fe70_range_bug` only ever asserted about the *port*. A test written to **document** the page's behaviour had quietly become a test that **enforced** the port's divergence from it, and it could never fail. Found by Baba Ji-Mirror, 2026-08-29.
+
+**Current state, verified:**
+
+- `index.html:358` — `if(c>=0xFE70 && c<=0xFE74) return true;`
+- `library/tools/abjad.py` — ignores the full range; `is_ignorable` returns `True` for all of U+FE70–FE74.
+- `test_abjad.py:180` `test_fe70_range_now_ignored_in_both_implementations` replaces the old bug-documenting test.
+- `test_abjad.py:199` additionally asserts the `===` typo has **not** returned to `index.html`, so the page and the port cannot drift apart silently again.
+
+**Impact was cosmetic throughout, confirmed by measurement rather than assumption.** None of the five code points appears in the abjad value table, so `compute_abjad()` returns the same total with or without them. What differed during the divergence was the letter-by-letter strip: the page dropped U+FE71–74 silently while the port still rendered them as valueless chips.
 
 ## 8. Test results
 
-`pytest library/tests/test_abjad.py -q` → **82 passed, 0 failed** (13.0s).
+`pytest library/tests -q` → **166 passed, 2 skipped** (11.4s), measured 2026-08-31 at `main` `630bd25`.
+
+This figure was **82 passed** when this report was written, because only `test_abjad.py` was on `main`. Phase 1 was restored to `main` in `0d4ac19` (2026-08-30), bringing the identity, ligature and merge suites with it.
 
 Engine tests
 - بسم الله الرحمن الرحيم = **786**.

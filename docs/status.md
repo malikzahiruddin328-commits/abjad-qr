@@ -185,11 +185,14 @@ un-selectable "pending" in the demo. **None of them is a bug — each is decisio
   (line 40) outranks the `dir` attribute, so the computed direction never
   changes — only the alignment moves. Present since the first commit
   (`5baf78a`); recorded in `CHANGELOG.md`, unfixed.
-- **`abjad.py` reproduces an `index.html` bug on purpose.**
-  `if(c===0xFE70 && c<=0xFE74)` only ever matches U+FE70; the range was almost
-  certainly intended. Behaviour-identical was chosen over correct-but-divergent.
-  `test_abjad.py` pins it and says to fix both sides together. Whoever fixes it
-  must re-check whether any stored total changes.
+- ~~**`abjad.py` reproduces an `index.html` bug on purpose.**~~ **RESOLVED
+  2026-08-29.** The `c===0xFE70` typo was fixed in `index.html` but not in the
+  port, and the green test suite hid the resulting divergence for days because
+  it only asserted about the port. Both sides now ignore the full U+FE70–FE74
+  range, and `test_abjad.py:199` asserts the typo has not returned to
+  `index.html`. No stored total changed — none of the five code points carries
+  an abjad value. Found by Baba Ji-Mirror; detail in
+  `library/data/BUILD-REPORT.md` §7.
 - **`demo-99-names.html` embeds a hand-made snapshot of the catalogue and no
   tool regenerates it.** Verified in sync at `fb5ec44` — all 183 ids, Arabic
   strings and totals match `texts-v2.json` exactly — but nothing *enforces*

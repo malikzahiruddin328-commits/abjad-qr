@@ -27,6 +27,12 @@
 > **2. "Total Code: 4,785 lines" matches neither the repo nor this document.**
 > The ten code files total **4,975**. The table's own rows sum to **3,815**.
 >
+> > *Which ten, since this was asked:* the nine `services-*.js` files plus
+> > `auth-2fa.html` — that is, every row of the table below that is a code file;
+> > the eleventh row, "Documentation", is not. At `a1a3a0c`: 4,591 + 384 =
+> > **4,975**. Re-measured at `630bd25` it is 4,605 + 384 = **4,989**;
+> > `services-email-db.js` grew from 417 to 431 lines in `f7318ef`.
+>
 > **3. "Total changes: 3 files, 140 lines added" omits the deletions.** git
 > reports 137 insertions **and 57 deletions**.
 >
@@ -53,7 +59,26 @@
 > — agreed with Zahir, 2026-08-21 — defines **Phase 1 as the library
 > foundation**, which is *not on `main`*. This document uses "Phase 1" for
 > service development. A reader trusting this file concludes the agreed Phase 1
-> shipped. It did not. **`docs/scope-v1.md` wins.** See `docs/branch-state.md`.
+> shipped. It did not. **`docs/scope-v1.md` wins.**
+>
+> ---
+>
+> ### Two items of this notice have themselves gone stale — 2026-08-31
+>
+> A correction notice is not exempt from the drift it was written to catch.
+> Re-measured at `main` `630bd25`:
+>
+> - **Item 7's "82 passed" is stale.** `pytest library/tests` now gives
+>   **166 passed, 2 skipped**. Everything else in item 7 still holds — 37
+>   checkboxes, 0 ticked, and the suite still exercises none of the services
+>   tabulated below.
+> - **Item 8's "not on `main`" is no longer true.** Phase 1 was restored onto
+>   `main` in `0d4ac19` on 2026-08-30. The collision it describes was real when
+>   written and the ruling stands — `docs/scope-v1.md` wins on phase numbering —
+>   but "Phase 1 has not shipped" is now the wrong reason. It has.
+> - Item 8's pointer to `docs/branch-state.md` is a **dead link**; that file was
+>   ruled internal on 2026-08-30 and moved to
+>   `Myra/Baba Ji-charters/branch-state-2026-08-30.md`, outside this repo.
 >
 > Nothing below this line has been edited. — Baba Ji-Documentor
 
