@@ -50,45 +50,81 @@
 #   Add it to PUBLIC_ALLOWLIST, deliberately, in its own commit.
 #   Do not reach for --no-verify.
 
+#
+# 2026-08-30: allowlist regenerated to match main exactly after the Phase 1 library
+# restore, the credential removal and the checkout-email fix. Three internal
+# documents were REMOVED FROM main's HISTORY rather than allowlisted, and now live
+# at Myra/Baba Ji-charters/ outside this repo: the Documentor charter, the Mirror
+# charter and docs/branch-state.md, plus library/data/MIRROR-AUDIT-2026-08-21.md.
+# The rule applied: a document about the DATA or the PRODUCT may be published
+# (the provenance reports are, deliberately - scope-v1 decision 3 makes text
+# provenance part of the deliverable). A document about OUR SESSIONS may not.
+# admin-setup.html IS now allowlisted - reversing its earlier exclusion, which
+# existed only because it hardcoded and auto-provisioned a password. That block is
+# deleted, so the file is ordinary app code and the exclusion no longer applies.
+
 set -eu
 
 # Newline-separated so a path containing spaces cannot split into two tokens.
-PUBLIC_ALLOWLIST='index.html
-demo-99-names.html
-baba-ji-lobby-mockups.html
-admin.html
-admin-login.html
-cleric-login.html
-cleric-dashboard.html
-checkout.html
-events.json
-auth-2fa.html
-cleric-manager.html
-webhook-simulator.html
+PUBLIC_ALLOWLIST='.gitignore
+CHANGELOG.md
+CLAUDE.md
+DATABASE-MIGRATION.md
+INTEGRATION-STATUS.md
 INTEGRATION.md
-services-email.js
-services-sms.js
-services-security.js
-services-reviews.js
-services-reminders.js
-services-webhooks.js
+TESTING.md
+admin-login.html
+admin-setup.html
+admin.html
+auth-2fa.html
+baba-ji-lobby-mockups.html
+checkout.html
+cleric-dashboard.html
+cleric-login.html
+cleric-manager.html
+demo-99-names.html
+docs/scope-v1.md
+docs/status.md
+events.json
+index.html
+library/catalog-extraction-notes.md
+library/categories-for-hafiz.xlsx
+library/data/99NAMES-REPORT.md
+library/data/99names-arabic.json
+library/data/ADHKAR-REPORT.md
+library/data/BUILD-REPORT.md
+library/data/IDENTITY-REPORT.md
+library/data/INTEGRATION-REPORT.md
+library/data/MERGE-REPORT.md
+library/data/PROPOSED-CATALOGUE-CHANGES.md
+library/data/RQC06-REPORT.md
+library/data/RUQYAH-REPORT.md
+library/data/adhkar-arabic.json
+library/data/categories.json
+library/data/library.json
+library/data/rqc06-arabic.json
+library/data/ruqyah-chains.json
+library/data/texts-v2.json
+library/data/texts.json
+library/tests/test_abjad.py
+library/tests/test_identity.py
+library/tests/test_ligatures.py
+library/tests/test_merge.py
+library/tools/abjad.py
+library/tools/build_library.py
+library/tools/identity.py
+library/tools/merge_arabic.py
 services-availability.js
 services-database.js
 services-email-db.js
-DATABASE-MIGRATION.md
-.gitignore
-CHANGELOG.md
-TESTING.md
-INTEGRATION-STATUS.md
-docs/scope-v1.md
-library/catalog-extraction-notes.md
-library/categories-for-hafiz.xlsx
-library/data/BUILD-REPORT.md
-library/data/categories.json
-library/data/texts.json
-library/tests/test_abjad.py
-library/tools/abjad.py
-tools/pre-push-guard.sh'
+services-email.js
+services-reminders.js
+services-reviews.js
+services-security.js
+services-sms.js
+services-webhooks.js
+tools/pre-push-guard.sh
+webhook-simulator.html'
 
 fail() {
     printf '\n*** PUSH BLOCKED by tools/pre-push-guard.sh ***\n\n%s\n\n' "$1" >&2
