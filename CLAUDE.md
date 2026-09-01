@@ -74,8 +74,11 @@ public release, not a save.
 
 `tools/pre-push-guard.sh` enforces this: a file reaches the remote only by being
 added to its **59-entry** `PUBLIC_ALLOWLIST` on purpose. Install it as
-`.git/hooks/pre-push` — **git hooks are not versioned, so a fresh clone or a new
-worktree has no guard at all until you copy it in.**
+`.git/hooks/pre-push` — **git hooks are not versioned, so a fresh `git clone`
+has no guard at all until you copy it in.** A `git worktree` is NOT a fresh
+clone: hooks resolve to `$GIT_COMMON_DIR/hooks`, shared across every worktree
+of this repo, so installing the hook once covers all of them. Verified across
+all four session worktrees under `Baba Ji-worktrees/`.
 
 If a push is blocked, that is the guard working. Do not reach for
 `--no-verify`; add the file to the allowlist in a commit, or do not publish it.
@@ -249,17 +252,16 @@ Named here rather than silently corrected, so the drift is visible:
   exists; `TESTING.md:31` correctly states there is no default and no published
   password.
 
-  **A second credential is still published, and it is the one everybody
-  missed:** `TESTING.md:36` and `webhook-simulator.html:188` both print
-  `password123` for the test cleric account `test@cleric.com`, and both files
-  are allowlisted and live on `origin/main` right now. Same exposure class as
-  the admin password was. Calibrate before reacting — there is no backend (§1),
-  so today it buys a stranger nothing but their own browser tab; and the login
-  gate only sets a `localStorage` flag, so it is bypassable from devtools with
-  or without a password. The real concern is a password Zahir may have reused
-  sitting on a public GitHub. **This is unfixed. Raised by Baba Ji-RM
-  2026-08-30; not a reopening of Zahir's 2026-08-27 ruling, which was about
-  private material, not credentials.**
+  **The second credential is fixed too.** `TESTING.md:36` and
+  `webhook-simulator.html:188` published `password123` for a test cleric
+  account `test@cleric.com` that never existed in the app — `cleric-login.html`
+  has no seeded account; it only checks a signup-time password hash. So the
+  string was a documentation artefact, not a working credential, but a
+  published password Zahir may have reused elsewhere is worth removing on its
+  own terms. Both files now point readers at signing up their own test
+  account instead. Raised by Baba Ji-RM 2026-08-30; not a reopening of
+  Zahir's 2026-08-27 ruling, which was about private material, not
+  credentials.
 - **`docs/scope-v1.md`** — accurate and authoritative on scope, with two small
   artifact-list slips: it lists `wireframe.html`, which exists on no ref
   (`main`, `feature/library-foundation`, `public-site`, `origin/main` — all

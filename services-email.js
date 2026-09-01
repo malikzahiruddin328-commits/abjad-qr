@@ -25,8 +25,15 @@ const EMAIL_CONFIG = {
 /**
  * Email Templates
  */
+// Templates take ONE object and destructure it. This mirrors the identical fix
+// applied to services-email-db.js on 2026-08-30 (commit adf88b2) - both files
+// declared positional parameters while every call site passes a single object.
+// This file is loaded by no page in this repo (Node-only, no live caller), so
+// nothing broke in production; fixed anyway because origin/main publishes it
+// as the reference a reader is pointed to by DATABASE-MIGRATION.md and
+// INTEGRATION.md, and a published twin should not be a known-broken example.
 const EMAIL_TEMPLATES = {
-  bookingConfirmation: (booking, cleric, customer) => ({
+  bookingConfirmation: ({ booking, cleric, customer }) => ({
     subject: '✓ Booking Confirmed — Baba Ji',
     html: `
       <h2>Booking Confirmed</h2>
@@ -49,7 +56,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  paymentConfirmation: (payment, booking, customer) => ({
+  paymentConfirmation: ({ payment, booking, customer }) => ({
     subject: '💳 Payment Received — Baba Ji',
     html: `
       <h2>Payment Confirmed</h2>
@@ -71,7 +78,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  clericApproval: (cleric) => ({
+  clericApproval: ({ cleric }) => ({
     subject: '🎉 Your Baba Ji Account is Approved!',
     html: `
       <h2>Welcome to Baba Ji</h2>
@@ -97,7 +104,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  bookingReminder: (booking, cleric, customer) => ({
+  bookingReminder: ({ booking, cleric, customer }) => ({
     subject: '⏰ Reminder: Your Session Tomorrow with ' + cleric.name,
     html: `
       <h2>Session Reminder</h2>
@@ -116,7 +123,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  refundNotification: (payment, customer) => ({
+  refundNotification: ({ payment, customer }) => ({
     subject: '💰 Refund Processed — Baba Ji',
     html: `
       <h2>Refund Processed</h2>
@@ -134,7 +141,7 @@ const EMAIL_TEMPLATES = {
     `
   }),
 
-  sessionComplete: (booking, cleric, customer) => ({
+  sessionComplete: ({ booking, cleric, customer }) => ({
     subject: '✨ Session Complete — Leave a Review',
     html: `
       <h2>How was your session?</h2>

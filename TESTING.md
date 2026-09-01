@@ -32,8 +32,9 @@ This is a complete cleric marketplace platform with:
 - Session: 30 days (testing mode)
 
 **Test Cleric Account:**
-- Email: `test@cleric.com`
-- Password: `password123`
+- Sign up your own test cleric account on `cleric-login.html` — there is no seeded
+  account and no default password. Signup writes your password's hash to
+  localStorage; nothing else can read it.
 - Specialty: Any (set during signup)
 - Hourly Rate: $50 (adjustable)
 
