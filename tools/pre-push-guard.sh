@@ -108,10 +108,12 @@ library/data/texts-v2.json
 library/data/texts.json
 library/tests/test_abjad.py
 library/tests/test_identity.py
+library/tests/test_js_parity.py
 library/tests/test_ligatures.py
 library/tests/test_merge.py
 library/tools/abjad.py
 library/tools/build_library.py
+library/tools/extract_js_engine.py
 library/tools/identity.py
 library/tools/merge_arabic.py
 services-availability.js
