@@ -195,9 +195,19 @@ scope-v1 wins — `INTEGRATION-STATUS.md` in particular uses "Phase 1" and
 
 - **Worktree or branch, never straight to `main`.** All changes go through
   **Baba Ji-RM's** gate — no "it is just a doc" exception.
-- Three sessions share this checkout. **Its branch can change under you
-  mid-task.** Measure against explicit refs (`git show main:file`), not the
-  working tree, or your numbers will silently describe a branch you did not mean.
+- As of 2026-09-01, each role has its own worktree —
+  `Baba Ji-worktrees/baba-ji-{documentor,general,mirror,rm}/`, each on its
+  own `session/baba-ji-<role>` branch. If you find yourself in the bare `abjad-qr/`
+  checkout instead, that is the shared legacy one: **measure against
+  explicit refs (`git show main:file`), not the working tree** — three
+  sessions using it concurrently is exactly what made that necessary, and a
+  branch there can still change under you mid-task.
+- **`git fetch . src:dst` refuses when `dst` is checked out in *any*
+  worktree of this repo — including the one you are standing in.** Hit this
+  merging a branch into `main` while sitting in a `main` checkout. Use
+  `git merge --ff-only <branch>` instead when the target is the branch you
+  are currently on; it is the correct tool for that case and just as safe,
+  given a clean working tree and a true fast-forward.
 - **Never push to `origin` without being asked.** See §2.
 - Formal BRD / FRS / UAT documents are produced on explicit request only.
 - When a document and the code disagree because the *code* is wrong, or the
