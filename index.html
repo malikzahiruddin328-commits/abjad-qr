@@ -166,12 +166,65 @@ Minimum version required to store current data is: `+i+`.
   .sent{color:var(--accent);font-size:.78rem;margin:0 0 0 auto}
   body[dir="rtl"] .sent{margin:0 auto 0 0}
   @media(max-width:660px){#library .r{grid-template-columns:1fr}}
+
+  /* ---- top-level app tabs (Generator / Arabic Lots) ---- */
+  .toptabs{display:flex;gap:8px;margin-bottom:20px}
+  .toptab{background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    font:inherit;font-size:.95rem;font-weight:600;padding:11px 20px;border-radius:12px;cursor:pointer;
+    display:flex;align-items:center;gap:8px;transition:border-color .15s,color .15s}
+  .toptab:hover{border-color:var(--accent);color:var(--ink)}
+  .toptab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#06231b}
+  @media(max-width:520px){.toptabs{flex-direction:column}}
+
+  /* ---- Arabic Lots panel ---- */
+  #panel-lots .lots-eyebrow{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent2);font-weight:600;display:block;margin-bottom:6px}
+  #panel-lots h1{margin:0 0 4px;font-size:1.5rem;font-weight:700;font-family:'Lora',serif;letter-spacing:1px}
+  #panel-lots .sub{margin:0 0 20px;color:var(--muted);font-size:.9rem}
+  #panel-lots .framing-toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;
+    padding:3px;gap:3px;margin-bottom:20px;background:var(--panel2)}
+  #panel-lots .framing-toggle button{background:transparent;border:0;border-radius:999px;padding:7px 16px;
+    font:inherit;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer}
+  #panel-lots .framing-toggle button[aria-pressed="true"]{background:var(--accent);color:#06231b}
+  #panel-lots .birth-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+  #panel-lots .birth-form label{display:block;color:var(--muted);font-size:.8rem;margin-bottom:6px}
+  #panel-lots .birth-form input,#panel-lots .birth-form select{width:100%;box-sizing:border-box;
+    background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;
+    padding:9px 11px;font:inherit;font-size:.9rem}
+  #panel-lots .birth-form input:focus,#panel-lots .birth-form select:focus{outline:none;border-color:var(--accent)}
+  #panel-lots .city-status{font-size:.78rem;color:var(--muted);margin-top:6px;min-height:1.2em}
+  #panel-lots .city-status.ok{color:var(--accent)}
+  #panel-lots .city-status.err{color:var(--accent2)}
+  #panel-lots .lot-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+  #panel-lots .lot-card .name{font-weight:600;color:var(--accent);font-size:.95rem}
+  #panel-lots .lot-card .arabic{font-family:'Amiri','Noto Naskh Arabic',serif;font-size:1.1rem;
+    color:var(--ink);direction:rtl}
+  #panel-lots .lot-card .deg{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent2);
+    font-size:1.3rem;margin-top:4px}
+  #panel-lots .lot-card .formula{font-size:.72rem;color:var(--muted);margin-top:2px}
+  #panel-lots .lots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;
+    margin-top:16px}
+  #panel-lots .builder-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto;gap:8px;
+    align-items:end;margin-top:14px}
+  #panel-lots .builder-op{color:var(--muted);font-weight:700;font-size:1.1rem;padding-bottom:9px;text-align:center}
+  #panel-lots .builder-result{margin-top:16px;padding:16px;background:var(--panel2);border-radius:10px;
+    border:1px solid var(--line)}
+  @media(max-width:720px){#panel-lots .builder-row{grid-template-columns:1fr}
+    #panel-lots .builder-op{display:none}}
+  #panel-lots .loading-note{color:var(--muted);font-size:.85rem;padding:20px 0;text-align:center}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="langbar" id="lb" role="group" aria-label="Language"></div>
 
+  <div class="toptabs" role="tablist" aria-label="Baba Ji tools">
+    <button class="toptab" role="tab" id="topT1" aria-selected="true" aria-controls="panel-generator" type="button">✍️ Talisman Generator</button>
+    <button class="toptab" role="tab" id="topT2" aria-selected="false" aria-controls="panel-lots" type="button">✨ Arabic Lots</button>
+  </div>
+
+  <div id="panel-generator" role="tabpanel" aria-labelledby="topT1">
   <header>
     <span class="eyebrow" id="eye"></span>
     <h1 id="h1"></h1>
@@ -277,6 +330,9 @@ Minimum version required to store current data is: `+i+`.
 
   <p class="foot" id="footCalc"></p>
   <p class="foot" id="footLib" style="margin-top:8px"></p>
+  </div>
+
+  <div id="panel-lots" role="tabpanel" aria-labelledby="topT2" hidden></div>
 </div>
 
 <script>
@@ -704,5 +760,6 @@ $("lb").addEventListener('click',function(e){var b=e.target.closest('.lg');if(b)
 /* initial paint */
 applyLang('en');
 </script>
+<script src="lots/ui.js"></script>
 </body>
 </html>

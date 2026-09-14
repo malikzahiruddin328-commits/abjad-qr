@@ -116,6 +116,11 @@ library/tools/build_library.py
 library/tools/extract_js_engine.py
 library/tools/identity.py
 library/tools/merge_arabic.py
+lots/chiron-ephemeris.json
+lots/ephemeris.js
+lots/houses.js
+lots/lots.js
+lots/ui.js
 services-availability.js
 services-database.js
 services-email-db.js
@@ -126,6 +131,8 @@ services-security.js
 services-sms.js
 services-webhooks.js
 tools/pre-push-guard.sh
+vendor/ATTRIBUTION.md
+vendor/astronomy.browser.js
 webhook-simulator.html'
 
 fail() {
