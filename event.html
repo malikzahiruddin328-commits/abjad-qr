@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Event — Baba Ji</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: linear-gradient(160deg, #f5f3f0, #faf8f6);
+        color: #2c2c2c;
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+    header {
+        background: white;
+        padding: 16px 40px;
+        border-bottom: 1px solid #e0d8d0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .logo { font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 700; color: #1a3a52; }
+    header a { color: #555; text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px; }
+    .container {
+        background: white;
+        border-radius: 8px;
+        padding: 40px;
+        border: 1px solid #e0d8d0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 24px;
+    }
+    h1 { font-family: 'Lora', serif; font-size: 1.8rem; color: #1a3a52; margin-bottom: 8px; }
+    .meta { color: #888; font-size: 0.9rem; margin-bottom: 16px; }
+    .status-pill {
+        display: inline-block; padding: 4px 12px; border-radius: 20px;
+        font-size: 0.8rem; font-weight: 600; background: #e0d8d0; color: #1a3a52; margin-bottom: 16px;
+    }
+    .status-pill.live { background: #c85a3a; color: white; }
+    .desc { color: #555; margin-bottom: 20px; }
+    .note {
+        background: #f9f7f5; border-left: 3px solid #c85a3a; padding: 14px 16px;
+        border-radius: 4px; margin-bottom: 20px; color: #555; font-size: 0.85rem;
+    }
+    label { display: block; font-weight: 600; margin-bottom: 6px; color: #1a3a52; font-size: 0.9rem; }
+    input, textarea { width: 100%; padding: 10px 12px; border: 1px solid #e0d8d0; border-radius: 6px; font-family: inherit; font-size: 0.9rem; margin-bottom: 14px; }
+    input:focus, textarea:focus { outline: none; border-color: #c85a3a; box-shadow: 0 0 0 3px rgba(200,90,58,0.1); }
+    button { background: #c85a3a; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+    button:hover { background: #a84628; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .empty { color: #888; font-style: italic; padding: 16px; text-align: center; }
+    .q-item { padding: 10px 12px; background: #f9f7f5; border-radius: 6px; margin-bottom: 8px; font-size: 0.9rem; }
+    .q-item .q-status { font-size: 0.75rem; color: #888; margin-left: 6px; }
+    .queue-pos { font-family: 'Lora', serif; font-size: 2.2rem; color: #1a3a52; text-align: center; margin: 12px 0; }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo">Baba Ji</div>
+    <a href="baba-ji-lobby-mockups.html">← Back to Lobby</a>
+</header>
+
+<div class="wrap">
+    <div class="container" id="eventInfoCard"></div>
+    <div class="container" id="actionCard" style="display:none;"></div>
+</div>
+
+<script>
+    const EVENTS_KEY = 'babaJiEvents';
+    const ATTENDEES_KEY = 'babaJiEventAttendees';
+    const QUESTIONS_KEY = 'babaJiEventQuestions';
+    const QUEUE_KEY = 'babaJiOneOnOneQueue';
+
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('id');
+    const attendeeSessionKey = `babaJiEventAttendee_${eventId}`;
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str == null ? '' : str;
+        return div.innerHTML;
+    }
+
+    function loadJSON(key) {
+        try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
+    }
+    function saveJSON(key, val) {
+        localStorage.setItem(key, JSON.stringify(val));
+    }
+    function gbp(pence) {
+        return `£${((pence || 0) / 100).toFixed(2)}`;
+    }
+    function uid() {
+        return crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    function getEvent() {
+        return loadJSON(EVENTS_KEY).find(e => e.id === eventId);
+    }
+
+    function getMyAttendee(event) {
+        const myAttendeeId = sessionStorage.getItem(attendeeSessionKey);
+        if (!myAttendeeId) return null;
+        return loadJSON(ATTENDEES_KEY).find(a => a.id === myAttendeeId && a.eventId === event.id) || null;
+    }
+
+    function joinEvent() {
+        const displayName = document.getElementById('joinName').value.trim();
+        if (!displayName) { alert('Enter your name to join.'); return; }
+        const event = getEvent();
+        const attendee = {
+            id: uid(), eventId: event.id, displayName,
+            joinedAt: new Date().toISOString(),
+            joinPaymentStatus: 'paid_placeholder' // no real payment processor wired up yet
+        };
+        const attendees = loadJSON(ATTENDEES_KEY);
+        attendees.push(attendee);
+        saveJSON(ATTENDEES_KEY, attendees);
+        sessionStorage.setItem(attendeeSessionKey, attendee.id);
+        render();
+    }
+
+    function askQuestion() {
+        const event = getEvent();
+        const me = getMyAttendee(event);
+        const text = document.getElementById('questionText').value.trim();
+        if (!text) return;
+        const questions = loadJSON(QUESTIONS_KEY);
+        questions.push({
+            id: uid(), eventId: event.id, attendeeId: me.id, displayName: me.displayName,
+            text, askedAt: new Date().toISOString(), status: 'open'
+        });
+        saveJSON(QUESTIONS_KEY, questions);
+        document.getElementById('questionText').value = '';
+        render();
+    }
+
+    function joinOneOnOneQueue() {
+        const event = getEvent();
+        const me = getMyAttendee(event);
+        const queue = loadJSON(QUEUE_KEY);
+        if (queue.some(q => q.eventId === event.id && q.attendeeId === me.id)) return; // already queued
+        queue.push({
+            id: uid(), eventId: event.id, attendeeId: me.id, displayName: me.displayName,
+            queuedAt: new Date().toISOString(), seen: false, chargedPlaceholder: false
+        });
+        saveJSON(QUEUE_KEY, queue);
+        render();
+    }
+
+    function renderJoinForm(event, feeLabel, feePence) {
+        return `
+            <label for="joinName">Your name</label>
+            <input type="text" id="joinName" placeholder="e.g. Yusuf">
+            <button onclick="joinEvent()">Pay ${gbp(feePence)} & Join (${feeLabel}, placeholder — no processor wired up)</button>
+        `;
+    }
+
+    function renderQuestionQueue(event) {
+        const questions = loadJSON(QUESTIONS_KEY).filter(q => q.eventId === event.id);
+        // Public + anonymous: show the question text and status, never who asked (per
+        // Zahir's 2026-09-14 ruling — visible to all so nobody asks a duplicate, but
+        // the asker's identity is only visible to the speaker/admin).
+        const visible = questions.filter(q => q.status !== 'skipped');
+        return `
+            <p style="font-weight:600; color:#1a3a52; margin-bottom:10px;">Questions so far (so you don't ask a duplicate)</p>
+            ${visible.length === 0 ? '<div class="empty">No questions yet — be the first to ask.</div>' :
+                visible.map(q => `<div class="q-item">${escapeHtml(q.text)}${q.status === 'answered' ? '<span class="q-status">✓ answered</span>' : '<span class="q-status">waiting</span>'}</div>`).join('')}
+            <label for="questionText" style="margin-top:16px;">Ask a question</label>
+            <textarea id="questionText" rows="2" placeholder="Type your question..."></textarea>
+            <button onclick="askQuestion()">Submit question</button>
+        `;
+    }
+
+    function renderOneOnOneQueue(event, me) {
+        const queue = loadJSON(QUEUE_KEY).filter(q => q.eventId === event.id).sort((a, b) => new Date(a.queuedAt) - new Date(b.queuedAt));
+        const mine = queue.find(q => q.attendeeId === me.id);
+        if (!mine) {
+            return `
+                <p class="desc">The talk has ended. Join the 1-on-1 queue below — the speaker has limited time and works through the queue in order. <strong>You are only charged ${gbp(event.oneOnOneFeePence)} if the speaker actually gets to you.</strong></p>
+                <button onclick="joinOneOnOneQueue()">Join 1-on-1 queue</button>
+            `;
+        }
+        if (mine.seen) {
+            return `<p class="desc">✓ You were seen for your 1-on-1. Placeholder charge of ${gbp(event.oneOnOneFeePence)} recorded — no real payment processor is wired up yet.</p>`;
+        }
+        const position = queue.filter(q => !q.seen).findIndex(q => q.id === mine.id) + 1;
+        return `
+            <p class="desc">You're in the queue. Not charged unless the speaker gets to you.</p>
+            <div class="queue-pos">#${position}</div>
+            <p class="desc" style="text-align:center;">waiting position (updates automatically)</p>
+        `;
+    }
+
+    function render() {
+        const event = getEvent();
+        const infoCard = document.getElementById('eventInfoCard');
+        const actionCard = document.getElementById('actionCard');
+
+        if (!event) {
+            infoCard.innerHTML = '<h1>Event not found</h1><p class="desc">This link may be wrong, or the event was removed.</p>';
+            actionCard.style.display = 'none';
+            return;
+        }
+
+        const status = event.status || 'scheduled';
+        infoCard.innerHTML = `
+            <span class="status-pill ${status === 'live' || status === 'one_on_one' ? 'live' : ''}">${
+                { scheduled: 'Scheduled', live: '🔴 Live now', one_on_one: '🔴 1-on-1 Q&A open', ended: 'Ended' }[status] || status
+            }</span>
+            <h1>${escapeHtml(event.title)}</h1>
+            <div class="meta">${escapeHtml(event.speakerName || event.speaker || '')} • ${escapeHtml(event.specialty || '')} • ${escapeHtml(event.location || '')}</div>
+            <div class="meta">${escapeHtml(event.date || '')} ${escapeHtml(event.time || '')}</div>
+            <p class="desc">${escapeHtml(event.description || '')}</p>
+            <div class="note">Prototype: join fee ${gbp(event.joinFeePence)}, 1-on-1 fee ${gbp(event.oneOnOneFeePence)} — both are placeholders, no real payment processor is wired up yet.</div>
+        `;
+
+        actionCard.style.display = 'block';
+        const me = getMyAttendee(event);
+
+        if (status === 'ended') {
+            actionCard.innerHTML = '<p class="desc">This event has ended. Thank you for joining.</p>';
+            return;
+        }
+
+        if (!me) {
+            actionCard.innerHTML = `<h2 style="font-family:'Lora',serif; color:#1a3a52; margin-bottom:14px;">Join this event</h2>` + renderJoinForm(event, 'join fee', event.joinFeePence);
+            return;
+        }
+
+        if (status === 'scheduled') {
+            actionCard.innerHTML = `<p class="desc">✓ You're in, ${escapeHtml(me.displayName)}. Waiting for the speaker to start — this page updates automatically.</p>`;
+        } else if (status === 'live') {
+            actionCard.innerHTML = renderQuestionQueue(event);
+        } else if (status === 'one_on_one') {
+            actionCard.innerHTML = renderOneOnOneQueue(event, me);
+        }
+    }
+
+    render();
+    // Prototype "live" feel: poll for changes another tab (speaker, or another
+    // attendee tab) made to the shared localStorage — there is no real backend
+    // push mechanism yet, per the 2026-09-14 placeholder ruling.
+    setInterval(render, 3000);
+</script>
+</body>
+</html>

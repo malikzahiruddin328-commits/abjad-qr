@@ -384,42 +384,63 @@
     <script>
         const BOOKINGS_KEY = 'babaJiBookings';
         const PENDING_CHECKOUT_KEY = 'babaJiPendingCheckout';
+        const CLERICS_KEY = 'babaJiClerics';
+        const EVENTS_KEY = 'babaJiEvents';
 
-        const scholars = [
-            { name: 'Shaikh Ahmad Al-Azhari', specialty: 'Quranic Studies', location: 'Egypt', rate: 40, avatar: '👨‍🎓' },
-            { name: 'Dr. Amina Malik', specialty: 'Family Counseling', location: 'Malaysia', rate: 50, avatar: '👩‍🏫' },
-            { name: 'Shaikh Rashid Al-Maktoum', specialty: 'Islamic Law', location: 'UK', rate: 60, avatar: '👨‍💼' },
-            { name: 'Mufti Hassan Khan', specialty: 'Youth Mentorship', location: 'Canada', rate: 45, avatar: '👨‍🏫' }
-        ];
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
 
-        const sermons = [
-            { title: 'Tafsir al-Kahf with Shaikh Abdullah', speaker: 'Shaikh Abdullah', location: 'Egypt', time: '20:00', desc: 'In-depth Quranic interpretation' },
-            { title: 'Youth Mentorship Hour', speaker: 'Dr. Amina', location: 'Malaysia', time: '19:30', desc: 'Guidance for young Muslims' },
-            { title: 'Evening Reflection', speaker: 'Shaikh Rashid', location: 'UK', time: '18:00', desc: 'Contemporary Islamic teachings' }
-        ];
+        function loadApprovedClerics() {
+            try {
+                return (JSON.parse(localStorage.getItem(CLERICS_KEY)) || []).filter(c => c.status === 'approved');
+            } catch { return []; }
+        }
+
+        function loadOpenEvents() {
+            try {
+                return (JSON.parse(localStorage.getItem(EVENTS_KEY)) || []).filter(e => (e.status || 'scheduled') !== 'ended');
+            } catch { return []; }
+        }
 
         function renderScholars() {
             const grid = document.getElementById('scholars-grid');
+            const scholars = loadApprovedClerics();
+            if (scholars.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color:#999; grid-column: 1 / -1;">No approved scholars yet.</p>';
+                return;
+            }
             grid.innerHTML = scholars.map(s => `
                 <div class="scholar-card">
-                    <div class="scholar-avatar">${s.avatar}</div>
-                    <div class="scholar-name">${s.name}</div>
-                    <div class="scholar-specialty">${s.specialty}</div>
-                    <div class="scholar-meta">📍 ${s.location}</div>
+                    <div class="scholar-avatar">👤</div>
+                    <div class="scholar-name">${escapeHtml(s.name)}</div>
+                    <div class="scholar-specialty">${escapeHtml(s.specialty || '')}</div>
+                    <div class="scholar-meta">📍 ${escapeHtml(s.location || '')}</div>
                     <div class="scholar-rate">$${s.rate}/hour</div>
-                    <button class="btn" onclick="bookSession('${s.name}', ${s.rate})">Book Session</button>
+                    <button class="btn" onclick="bookSession('${escapeHtml(s.name)}', ${s.rate})">Book Session</button>
                 </div>
             `).join('');
         }
 
+        const EVENT_STATUS_LABEL = { scheduled: 'Upcoming', live: '🔴 Live now', one_on_one: '🔴 1-on-1 open', ended: 'Ended' };
+
         function renderSermons() {
             const list = document.getElementById('sermons-list');
-            list.innerHTML = sermons.map(s => `
-                <div class="sermon-item">
-                    <div class="sermon-title">● ${s.title}</div>
-                    <div class="sermon-meta">🕌 ${s.location} • ${s.time}</div>
-                    <div class="sermon-desc">${s.desc}</div>
-                </div>
+            const events = loadOpenEvents();
+            if (events.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999;">No live events scheduled right now.</p>';
+                return;
+            }
+            list.innerHTML = events.map(e => `
+                <a href="event.html?id=${encodeURIComponent(e.id)}" style="text-decoration:none; color:inherit;">
+                    <div class="sermon-item">
+                        <div class="sermon-title">● ${escapeHtml(e.title)} <span style="font-size:11px; color:#c85a3a;">${EVENT_STATUS_LABEL[e.status || 'scheduled']}</span></div>
+                        <div class="sermon-meta">🕌 ${escapeHtml(e.speakerName || e.speaker || '')} • ${escapeHtml(e.location || '')} • ${escapeHtml(e.date || '')} ${escapeHtml(e.time || '')}</div>
+                        <div class="sermon-desc">${escapeHtml(e.description || '')}</div>
+                    </div>
+                </a>
             `).join('');
         }
 
@@ -433,6 +454,7 @@
 
         renderScholars();
         renderSermons();
+        setInterval(() => { renderScholars(); renderSermons(); }, 5000);
     </script>
 </body>
 </html>

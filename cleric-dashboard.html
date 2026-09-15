@@ -331,6 +331,12 @@
                 <h2>📊 Your Bookings</h2>
                 <div id="bookingsList"></div>
             </div>
+
+            <div class="section">
+                <h2>🎤 Your Live Events</h2>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 16px;">Prototype — no real payment processor is wired up; join and 1-on-1 fees below are placeholders.</p>
+                <div id="myEventsList"></div>
+            </div>
         </div>
     </div>
 
@@ -531,6 +537,130 @@
             `).join('');
         }
 
+        // --- Live Events (prototype: localStorage only, polled for a "live" feel) ---
+        const EVENTS_KEY = 'babaJiEvents';
+        const QUESTIONS_KEY = 'babaJiEventQuestions';
+        const QUEUE_KEY = 'babaJiOneOnOneQueue';
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
+
+        function loadJSON(key) {
+            try { return JSON.parse(storage.getItem(key)) || []; } catch { return []; }
+        }
+
+        function saveJSON(key, val) {
+            storage.setItem(key, JSON.stringify(val));
+        }
+
+        function updateEvent(eventId, patch) {
+            const events = loadJSON(EVENTS_KEY);
+            const idx = events.findIndex(e => e.id === eventId);
+            if (idx === -1) return;
+            events[idx] = { ...events[idx], ...patch };
+            saveJSON(EVENTS_KEY, events);
+        }
+
+        function startEvent(eventId) {
+            updateEvent(eventId, { status: 'live', startedAt: new Date().toISOString() });
+            displayMyEvents();
+        }
+
+        function openOneOnOne(eventId) {
+            updateEvent(eventId, { status: 'one_on_one', oneOnOneOpenedAt: new Date().toISOString() });
+            displayMyEvents();
+        }
+
+        function endEvent(eventId) {
+            updateEvent(eventId, { status: 'ended', endedAt: new Date().toISOString() });
+            displayMyEvents();
+        }
+
+        function answerQuestion(qId, newStatus) {
+            const qs = loadJSON(QUESTIONS_KEY);
+            const idx = qs.findIndex(q => q.id === qId);
+            if (idx === -1) return;
+            qs[idx].status = newStatus;
+            saveJSON(QUESTIONS_KEY, qs);
+            displayMyEvents();
+        }
+
+        function markSeen(entryId) {
+            const queue = loadJSON(QUEUE_KEY);
+            const idx = queue.findIndex(q => q.id === entryId);
+            if (idx === -1) return;
+            queue[idx].seen = true;
+            queue[idx].chargedPlaceholder = true;
+            queue[idx].seenAt = new Date().toISOString();
+            saveJSON(QUEUE_KEY, queue);
+            displayMyEvents();
+        }
+
+        function renderEventCard(event) {
+            const status = event.status || 'scheduled';
+            let body = '';
+
+            if (status === 'scheduled') {
+                body = `<button onclick="startEvent('${event.id}')">▶ Start Event</button>`;
+            } else if (status === 'live') {
+                const questions = loadJSON(QUESTIONS_KEY).filter(q => q.eventId === event.id);
+                const open = questions.filter(q => q.status === 'open');
+                body = `
+                    <p style="font-weight:600; color:#1a3a52; margin-bottom:8px;">Question queue (public, anonymous to the audience) — ${open.length} open</p>
+                    ${open.length === 0 ? '<div class="empty">No open questions yet.</div>' : open.map(q => `
+                        <div style="padding:10px; background:white; border:1px solid #e0d8d0; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                            <div><div style="font-size:0.9rem;">${escapeHtml(q.text)}</div><div style="font-size:0.75rem;color:#888;">from ${escapeHtml(q.displayName || 'attendee')}</div></div>
+                            <div style="display:flex; gap:6px;">
+                                <button onclick="answerQuestion('${q.id}','answered')" style="font-size:0.8rem; padding:6px 10px;">Answered</button>
+                                <button class="remove-btn" onclick="answerQuestion('${q.id}','skipped')">Skip</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                    <button onclick="openOneOnOne('${event.id}')" style="margin-top:12px; background:#1a3a52;">End Talk → Open 1-on-1 Queue</button>
+                `;
+            } else if (status === 'one_on_one') {
+                const queue = loadJSON(QUEUE_KEY).filter(q => q.eventId === event.id).sort((a, b) => new Date(a.queuedAt) - new Date(b.queuedAt));
+                const waiting = queue.filter(q => !q.seen);
+                const seen = queue.filter(q => q.seen);
+                body = `
+                    <p style="font-weight:600; color:#1a3a52; margin-bottom:8px;">1-on-1 queue — ${waiting.length} waiting, ${seen.length} seen (charged, placeholder)</p>
+                    ${waiting.length === 0 ? '<div class="empty">Nobody waiting right now.</div>' : waiting.map((q, i) => `
+                        <div style="padding:10px; background:white; border:1px solid #e0d8d0; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>#${i + 1} — ${escapeHtml(q.displayName || 'attendee')} <span style="color:#888; font-size:0.8rem;">queued ${new Date(q.queuedAt).toLocaleTimeString()}</span></div>
+                            <button onclick="markSeen('${q.id}')">Mark Seen (charges placeholder)</button>
+                        </div>
+                    `).join('')}
+                    <button onclick="endEvent('${event.id}')" style="margin-top:12px; background:#d32f2f;">Close Event</button>
+                `;
+            } else {
+                body = `<div class="empty">Ended — placeholder fees were only captured for attendees marked "seen."</div>`;
+            }
+
+            return `
+                <div style="padding:16px; background:#f9f7f5; border-radius:6px; border-left:3px solid #c85a3a; margin-bottom:16px;">
+                    <div style="font-weight:600; color:#1a3a52;">${escapeHtml(event.title)} <span style="font-size:0.8rem; color:#888;">(${STATUS_LABEL[status] || status})</span></div>
+                    <div style="font-size:0.85rem; color:#888; margin-bottom:12px;">${escapeHtml(event.date || '')} ${escapeHtml(event.time || '')} • ${escapeHtml(event.location || '')}</div>
+                    ${body}
+                </div>
+            `;
+        }
+
+        const STATUS_LABEL = { scheduled: 'Scheduled', live: '🔴 Live', one_on_one: '🔴 1-on-1 open', ended: 'Ended' };
+
+        function displayMyEvents() {
+            const list = document.getElementById('myEventsList');
+            if (!currentCleric) return;
+            const myEvents = loadJSON(EVENTS_KEY).filter(e => String(e.speakerClericId) === String(currentCleric.id));
+            if (myEvents.length === 0) {
+                list.innerHTML = '<div class="empty">No events assigned to you yet — an admin creates and assigns events.</div>';
+                return;
+            }
+            list.innerHTML = myEvents.map(renderEventCard).join('');
+        }
+
         function showMessage(text, type) {
             const msgEl = document.getElementById('availabilityMessage');
             msgEl.textContent = text;
@@ -547,6 +677,11 @@
                 displayProfile();
                 displayAvailability();
                 displayBookings();
+                displayMyEvents();
+                // Prototype "live" feel: poll for new questions/queue entries written by
+                // attendees on other tabs (localStorage is shared across tabs of the same
+                // browser, but there is no push mechanism without a real backend).
+                setInterval(displayMyEvents, 4000);
             } else {
                 window.location.href = 'cleric-login.html';
             }

@@ -244,8 +244,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="speaker">Speaker Name</label>
-                        <input type="text" id="speaker" name="speaker" placeholder="e.g., Shaikh Ahmad" required>
+                        <label for="speakerClericId">Speaker</label>
+                        <select id="speakerClericId" name="speakerClericId" required>
+                            <option value="">Select an approved cleric</option>
+                        </select>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">Speakers log in with their own cleric account to start the event — see <a href="cleric-manager.html" style="color: #c85a3a;">Clerics</a> for approvals.</p>
                     </div>
 
                     <div class="form-group">
@@ -268,6 +271,11 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
                         <label for="time">Time (24h format)</label>
                         <input type="time" id="time" name="time" required>
                     </div>
@@ -275,6 +283,16 @@
                     <div class="form-group">
                         <label for="description">Description</label>
                         <textarea id="description" name="description" placeholder="Brief description of the sermon/event..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="joinFeeGBP">Join fee (£) — placeholder, no payment processor wired up</label>
+                        <input type="number" id="joinFeeGBP" name="joinFeeGBP" min="0" step="0.01" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oneOnOneFeeGBP">1-on-1 fee (£) — placeholder, charged only if the speaker actually sees you</label>
+                        <input type="number" id="oneOnOneFeeGBP" name="oneOnOneFeeGBP" min="0" step="0.01" value="0" required>
                     </div>
 
                     <button type="submit">✨ Add Event</button>
@@ -350,6 +368,32 @@
 
         // Local storage for events
         const STORAGE_KEY = 'babaJiEvents';
+        const CLERICS_KEY = 'babaJiClerics';
+
+        function loadApprovedClerics() {
+            try {
+                const clerics = JSON.parse(localStorage.getItem(CLERICS_KEY)) || [];
+                return clerics.filter(c => c.status === 'approved');
+            } catch {
+                return [];
+            }
+        }
+
+        function populateSpeakerDropdown() {
+            const select = document.getElementById('speakerClericId');
+            const approved = loadApprovedClerics();
+            const options = approved.map(c => `<option value="${c.id}">${escapeHtmlGlobal(c.name)} — ${escapeHtmlGlobal(c.specialty || '')}</option>`).join('');
+            select.innerHTML = '<option value="">Select an approved cleric</option>' + options;
+            if (approved.length === 0) {
+                select.innerHTML += '<option value="" disabled>No approved clerics yet — approve one in Clerics first</option>';
+            }
+        }
+
+        function escapeHtmlGlobal(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : str;
+            return div.innerHTML;
+        }
 
         function loadEvents() {
             try {
@@ -368,6 +412,14 @@
             }
         }
 
+        const STATUS_LABEL = {
+            scheduled: 'Scheduled', live: '🔴 Live', one_on_one: '🔴 1-on-1 open', ended: 'Ended'
+        };
+
+        function gbp(pence) {
+            return `£${((pence || 0) / 100).toFixed(2)}`;
+        }
+
         function renderEvents() {
             const events = loadEvents();
             const list = document.getElementById('eventsList');
@@ -378,18 +430,17 @@
             }
 
             list.innerHTML = events.map((event, idx) => {
-                const escapeHtml = (str) => {
-                    const div = document.createElement('div');
-                    div.textContent = str;
-                    return div.innerHTML;
-                };
+                const escapeHtml = escapeHtmlGlobal;
+                const status = event.status || 'scheduled';
                 return `
                 <div class="event-item">
                     <div class="event-details">
                         <h3>${escapeHtml(event.title || '')}</h3>
-                        <p><strong>${escapeHtml(event.speaker || '')}</strong> • ${escapeHtml(event.location || '')} • ${escapeHtml(event.time || '')}</p>
-                        <p><span class="status-badge">${escapeHtml(event.specialty || '')}</span></p>
+                        <p><strong>${escapeHtml(event.speakerName || event.speaker || '')}</strong> • ${escapeHtml(event.location || '')} • ${escapeHtml(event.date || '')} ${escapeHtml(event.time || '')}</p>
+                        <p><span class="status-badge">${escapeHtml(event.specialty || '')}</span><span class="status-badge" style="background:#1a3a52;">${STATUS_LABEL[status] || status}</span></p>
                         <p>${escapeHtml(event.description || '')}</p>
+                        <p style="font-size:0.8rem;">Join: ${gbp(event.joinFeePence)} (placeholder) • 1-on-1: ${gbp(event.oneOnOneFeePence)} (placeholder, charged only if seen)</p>
+                        ${event.id ? `<p><a href="event.html?id=${encodeURIComponent(event.id)}" target="_blank" style="color:#c85a3a;">Public event page →</a></p>` : ''}
                     </div>
                     <button class="btn-remove" onclick="removeEvent(${idx})">Remove</button>
                 </div>
@@ -407,13 +458,26 @@
         document.getElementById('eventForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const speakerClericId = document.getElementById('speakerClericId').value;
+            const speaker = loadApprovedClerics().find(c => String(c.id) === String(speakerClericId));
+            if (!speaker) {
+                alert('Select an approved cleric as the speaker.');
+                return;
+            }
+
             const event = {
+                id: (crypto.randomUUID ? crypto.randomUUID() : `evt-${Date.now()}-${Math.random().toString(36).slice(2)}`),
                 title: document.getElementById('title').value,
-                speaker: document.getElementById('speaker').value,
+                speakerClericId,
+                speakerName: speaker.name,
                 specialty: document.getElementById('specialty').value,
                 location: document.getElementById('location').value,
+                date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
-                description: document.getElementById('description').value
+                description: document.getElementById('description').value,
+                joinFeePence: Math.round(parseFloat(document.getElementById('joinFeeGBP').value || '0') * 100),
+                oneOnOneFeePence: Math.round(parseFloat(document.getElementById('oneOnOneFeeGBP').value || '0') * 100),
+                status: 'scheduled'
             };
 
             const events = loadEvents();
@@ -469,12 +533,19 @@
                         const exists = mergedEvents.some(e => e.title === event.title && e.speaker === event.speaker);
                         if (!exists) {
                             mergedEvents.push({
+                                id: event.id || (crypto.randomUUID ? crypto.randomUUID() : `evt-${Date.now()}-${Math.random().toString(36).slice(2)}`),
                                 title: String(event.title).substring(0, 500),
                                 speaker: String(event.speaker).substring(0, 200),
+                                speakerClericId: event.speakerClericId || null,
+                                speakerName: event.speakerName || String(event.speaker).substring(0, 200),
                                 specialty: String(event.specialty),
                                 location: String(event.location).substring(0, 200),
+                                date: event.date || '',
                                 time: String(event.time),
-                                description: String(event.description || '').substring(0, 1000)
+                                description: String(event.description || '').substring(0, 1000),
+                                joinFeePence: event.joinFeePence || 0,
+                                oneOnOneFeePence: event.oneOnOneFeePence || 0,
+                                status: event.status || 'scheduled'
                             });
                             addedCount++;
                         }
@@ -506,6 +577,7 @@
         // Check session and initialize
         if (checkSession()) {
             addLogoutButton();
+            populateSpeakerDropdown();
             renderEvents();
         }
     </script>

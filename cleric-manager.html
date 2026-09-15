@@ -315,7 +315,7 @@
 
         function approvecleric(id) {
             const clerics = getClerics();
-            const cleric = clerics.find(c => c.id === id);
+            const cleric = clerics.find(c => String(c.id) === String(id));
             if (cleric) {
                 cleric.status = 'approved';
                 cleric.approvedAt = new Date().toISOString();
@@ -327,7 +327,7 @@
 
         function rejectCleric(id) {
             const clerics = getClerics();
-            const cleric = clerics.find(c => c.id === id);
+            const cleric = clerics.find(c => String(c.id) === String(id));
             if (cleric) {
                 cleric.status = 'rejected';
                 cleric.rejectedAt = new Date().toISOString();
@@ -426,7 +426,7 @@
 
         function viewClericDetails(id) {
             const clerics = getClerics();
-            const cleric = clerics.find(c => c.id === id);
+            const cleric = clerics.find(c => String(c.id) === String(id));
             if (cleric) {
                 alert(`Cleric: ${cleric.name}\nEmail: ${cleric.email}\nSpecialty: ${cleric.specialty}\nRate: $${cleric.rate}/hr\nStatus: ${cleric.status || 'pending'}`);
             }
