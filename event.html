@@ -184,21 +184,45 @@
         `;
     }
 
-    function renderQuestionQueue(event) {
+    // Bug fixed 2026-09-23 (Zahir: "is it flashing i.e. the vid is
+    // refreshing" - yes): render() used to rebuild this whole section,
+    // including the <iframe>, on every 3s poll tick - so the YouTube
+    // player was destroyed and recreated every 3 seconds, restarting the
+    // video each time. Split in two: the shell (video + the ask-question
+    // form) is built ONCE per event/status, tracked by liveViewEventId;
+    // only the questions list itself - the one thing that actually needs
+    // to update live - is touched on later poll ticks.
+    let liveViewEventId = null;
+
+    function renderLiveShell(event) {
+        return `
+            ${renderVideoEmbed(event)}
+            <p style="font-weight:600; color:#1a3a52; margin-bottom:10px;">Questions so far (so you don't ask a duplicate)</p>
+            <div id="liveQuestionsList"></div>
+            <label for="questionText" style="margin-top:16px;">Ask a question</label>
+            <textarea id="questionText" rows="2" placeholder="Type your question..."></textarea>
+            <button onclick="askQuestion()">Submit question</button>
+        `;
+    }
+
+    function renderLiveQuestionsList(event) {
+        const listEl = document.getElementById('liveQuestionsList');
+        if (!listEl) return;
         const questions = loadJSON(QUESTIONS_KEY).filter(q => q.eventId === event.id);
         // Public + anonymous: show the question text and status, never who asked (per
         // Zahir's 2026-09-14 ruling — visible to all so nobody asks a duplicate, but
         // the asker's identity is only visible to the speaker/admin).
         const visible = questions.filter(q => q.status !== 'skipped');
-        return `
-            ${renderVideoEmbed(event)}
-            <p style="font-weight:600; color:#1a3a52; margin-bottom:10px;">Questions so far (so you don't ask a duplicate)</p>
-            ${visible.length === 0 ? '<div class="empty">No questions yet — be the first to ask.</div>' :
-                visible.map(q => `<div class="q-item">${escapeHtml(q.text)}${q.status === 'answered' ? '<span class="q-status">✓ answered</span>' : '<span class="q-status">waiting</span>'}</div>`).join('')}
-            <label for="questionText" style="margin-top:16px;">Ask a question</label>
-            <textarea id="questionText" rows="2" placeholder="Type your question..."></textarea>
-            <button onclick="askQuestion()">Submit question</button>
-        `;
+        listEl.innerHTML = visible.length === 0 ? '<div class="empty">No questions yet — be the first to ask.</div>' :
+            visible.map(q => `<div class="q-item">${escapeHtml(q.text)}${q.status === 'answered' ? '<span class="q-status">✓ answered</span>' : '<span class="q-status">waiting</span>'}</div>`).join('');
+    }
+
+    function renderQuestionQueue(event, actionCard) {
+        if (liveViewEventId !== event.id) {
+            actionCard.innerHTML = renderLiveShell(event);
+            liveViewEventId = event.id;
+        }
+        renderLiveQuestionsList(event);
     }
 
     function renderOneOnOneQueue(event, me) {
@@ -248,20 +272,24 @@
         const me = getMyAttendee(event);
 
         if (status === 'ended') {
+            liveViewEventId = null;
             actionCard.innerHTML = '<p class="desc">This event has ended. Thank you for joining.</p>';
             return;
         }
 
         if (!me) {
+            liveViewEventId = null;
             actionCard.innerHTML = `<h2 style="font-family:'Lora',serif; color:#1a3a52; margin-bottom:14px;">Join this event</h2>` + renderJoinForm(event, 'join fee', event.joinFeePence);
             return;
         }
 
         if (status === 'scheduled') {
+            liveViewEventId = null;
             actionCard.innerHTML = `<p class="desc">✓ You're in, ${escapeHtml(me.displayName)}. Waiting for the speaker to start — this page updates automatically.</p>`;
         } else if (status === 'live') {
-            actionCard.innerHTML = renderQuestionQueue(event);
+            renderQuestionQueue(event, actionCard); // manages actionCard's DOM itself - see above
         } else if (status === 'one_on_one') {
+            liveViewEventId = null;
             actionCard.innerHTML = renderOneOnOneQueue(event, me);
         }
     }
