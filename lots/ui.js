@@ -337,4 +337,12 @@
 
   TOP_TAB_GENERATOR.addEventListener("click", () => activateTopTab("generator"));
   TOP_TAB_LOTS.addEventListener("click", () => activateTopTab("lots"));
+
+  // Deep link support (index.html?tab=lots) - added so a hub page can link
+  // straight into this tab instead of "it's on the other page, click the
+  // second tab" (Zahir, 2026-09-23: couldn't find this feature from the
+  // Live Events lobby, since it lives on this separate page).
+  if (new URLSearchParams(location.search).get("tab") === "lots") {
+    activateTopTab("lots");
+  }
 })();
