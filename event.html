@@ -241,11 +241,21 @@
         }
     }
 
+    function pollRender() {
+        // Bug fixed 2026-09-23: this used to call render() unconditionally,
+        // which replaces actionCard's whole innerHTML every 3s - including
+        // the join-name <input> while someone was actively typing into it,
+        // wiping it. Before joining there is nothing time-sensitive to
+        // refresh anyway, so only poll once an attendee record exists.
+        const event = getEvent();
+        if (event && getMyAttendee(event)) render();
+    }
+
     render();
     // Prototype "live" feel: poll for changes another tab (speaker, or another
     // attendee tab) made to the shared localStorage — there is no real backend
     // push mechanism yet, per the 2026-09-14 placeholder ruling.
-    setInterval(render, 3000);
+    setInterval(pollRender, 3000);
 </script>
 </body>
 </html>

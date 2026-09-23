@@ -361,14 +361,14 @@
 
         <div class="decorative">❖ ❖ ❖</div>
 
-        <div class="sermons-section">
+        <div class="sermons-section" id="sermons">
             <div class="section-title">Live Sermons</div>
             <div class="section-subtitle">Current Sessions</div>
 
             <div id="sermons-list"></div>
         </div>
 
-        <div class="section-title">Available Scholars</div>
+        <div class="section-title" id="scholars">Available Scholars</div>
         <div class="section-subtitle">Vetted Experts Worldwide</div>
 
         <div class="scholars-grid" id="scholars-grid"></div>
@@ -409,20 +409,31 @@
         function renderScholars() {
             const grid = document.getElementById('scholars-grid');
             const scholars = loadApprovedClerics();
+            const events = loadOpenEvents();
             if (scholars.length === 0) {
                 grid.innerHTML = '<p style="text-align:center; color:#999; grid-column: 1 / -1;">No approved scholars yet.</p>';
                 return;
             }
-            grid.innerHTML = scholars.map(s => `
+            grid.innerHTML = scholars.map(s => {
+                // "Book Session" used to be a dead stub (alert: "coming soon").
+                // Fixed 2026-09-23: booking now genuinely works through a
+                // scholar's live event page, so link there when one exists
+                // instead of pointing at functionality that was never built.
+                const theirEvent = events.find(e => String(e.speakerClericId) === String(s.id));
+                const action = theirEvent
+                    ? `<a class="btn" style="display:inline-block;text-decoration:none;" href="event.html?id=${encodeURIComponent(theirEvent.id)}">View Live Event</a>`
+                    : `<button class="btn" disabled style="opacity:.5;cursor:not-allowed;">No Live Session</button>`;
+                return `
                 <div class="scholar-card">
                     <div class="scholar-avatar">👤</div>
                     <div class="scholar-name">${escapeHtml(s.name)}</div>
                     <div class="scholar-specialty">${escapeHtml(s.specialty || '')}</div>
                     <div class="scholar-meta">📍 ${escapeHtml(s.location || '')}</div>
                     <div class="scholar-rate">$${s.rate}/hour</div>
-                    <button class="btn" onclick="bookSession('${escapeHtml(s.name)}', ${s.rate})">Book Session</button>
+                    ${action}
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         const EVENT_STATUS_LABEL = { scheduled: 'Upcoming', live: '🔴 Live now', one_on_one: '🔴 1-on-1 open', ended: 'Ended' };

@@ -230,6 +230,7 @@
         <a href="baba-ji-lobby-mockups.html" class="back-link">← Back to Lobby</a>
     </div>
 
+    <script src="admin-config.js"></script>
     <script src="demo-seed.js"></script>
     <script src="services-security.js"></script>
 
@@ -381,8 +382,18 @@
             createSession(newCleric);
         });
 
+        function tryDemoBypass() {
+            const cfg = window.BABA_JI_CONFIG;
+            if (!cfg?.demoBypass) return false;
+            const clerics = getClerics();
+            const demoCleric = clerics.find(c => c.email === 'demo.speaker@babaji.example');
+            if (!demoCleric) return false;
+            createSession(demoCleric);
+            return true;
+        }
+
         // Check if already logged in
-        checkSession();
+        if (!tryDemoBypass()) checkSession();
     </script>
 </body>
 </html>

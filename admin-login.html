@@ -198,6 +198,22 @@
             }
         }
 
+        function tryDemoBypass() {
+            const cfg = window.BABA_JI_CONFIG;
+            if (!cfg?.demoBypass || !cfg?.adminPassword) return false;
+            try {
+                storage.setItem(SESSION_KEY, JSON.stringify({
+                    loggedIn: true,
+                    expiry: Date.now() + SESSION_EXPIRY
+                }));
+                window.location.href = 'admin.html';
+                return true;
+            } catch (e) {
+                console.error('Demo bypass failed:', e);
+                return false;
+            }
+        }
+
         function checkSession() {
             try {
                 const session = storage.getItem(SESSION_KEY);
@@ -260,7 +276,7 @@
             }
         });
 
-        checkSession();
+        if (!tryDemoBypass()) checkSession();
     </script>
 </body>
 </html>

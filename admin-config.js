@@ -9,3 +9,9 @@
 // the live site - no real money or personal data is reachable through it.
 window.BABA_JI_CONFIG = window.BABA_JI_CONFIG || {};
 window.BABA_JI_CONFIG.adminPassword = "hafiz-demo-2026";
+
+// Zahir, 2026-09-23: "i asked for password bypass" / "same with" (cleric
+// login) - not just a simple password, skip the login screens entirely for
+// this demo. admin-login.html and cleric-login.html both check this flag on
+// load and, if true, log straight in with no typing required.
+window.BABA_JI_CONFIG.demoBypass = true;
