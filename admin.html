@@ -286,6 +286,12 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="videoUrl">Live stream (optional) — a YouTube link or video ID</label>
+                        <input type="text" id="videoUrl" name="videoUrl" placeholder="e.g., https://www.youtube.com/watch?v=... or just the video ID">
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">Embedded on the event page while the talk is live — matches the list-and-link streaming model (external platform, we embed/link it), not our own video hosting.</p>
+                    </div>
+
+                    <div class="form-group">
                         <label for="joinFeeGBP">Join fee (£) — placeholder, no payment processor wired up</label>
                         <input type="number" id="joinFeeGBP" name="joinFeeGBP" min="0" step="0.01" value="0" required>
                     </div>
@@ -441,6 +447,7 @@
                         <p><span class="status-badge">${escapeHtml(event.specialty || '')}</span><span class="status-badge" style="background:#1a3a52;">${STATUS_LABEL[status] || status}</span></p>
                         <p>${escapeHtml(event.description || '')}</p>
                         <p style="font-size:0.8rem;">Join: ${gbp(event.joinFeePence)} (placeholder) • 1-on-1: ${gbp(event.oneOnOneFeePence)} (placeholder, charged only if seen)</p>
+                        ${event.youtubeVideoId ? `<p style="font-size:0.8rem;">🎥 Live stream: <a href="https://www.youtube.com/watch?v=${escapeHtml(event.youtubeVideoId)}" target="_blank" style="color:#c85a3a;">youtube.com/watch?v=${escapeHtml(event.youtubeVideoId)}</a></p>` : ''}
                         ${event.id ? `<p><a href="event.html?id=${encodeURIComponent(event.id)}" target="_blank" style="color:#c85a3a;">Public event page →</a></p>` : ''}
                     </div>
                     <button class="btn-remove" onclick="removeEvent(${idx})">Remove</button>
@@ -454,6 +461,20 @@
             events.splice(idx, 1);
             saveEvents(events);
             renderEvents();
+        }
+
+        function parseYouTubeId(input) {
+            const raw = (input || '').trim();
+            if (!raw) return '';
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/live\/)([\w-]{6,})/
+            ];
+            for (const re of patterns) {
+                const m = raw.match(re);
+                if (m) return m[1];
+            }
+            // No URL shape matched - treat as a bare video ID if it looks like one.
+            return /^[\w-]{6,}$/.test(raw) ? raw : '';
         }
 
         document.getElementById('eventForm').addEventListener('submit', (e) => {
@@ -476,6 +497,7 @@
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
                 description: document.getElementById('description').value,
+                youtubeVideoId: parseYouTubeId(document.getElementById('videoUrl').value),
                 joinFeePence: Math.round(parseFloat(document.getElementById('joinFeeGBP').value || '0') * 100),
                 oneOnOneFeePence: Math.round(parseFloat(document.getElementById('oneOnOneFeeGBP').value || '0') * 100),
                 status: 'scheduled'
@@ -545,6 +567,7 @@
                                 time: String(event.time),
                                 description: String(event.description || '').substring(0, 1000),
                                 joinFeePence: event.joinFeePence || 0,
+                                youtubeVideoId: event.youtubeVideoId || '',
                                 oneOnOneFeePence: event.oneOnOneFeePence || 0,
                                 status: event.status || 'scheduled'
                             });

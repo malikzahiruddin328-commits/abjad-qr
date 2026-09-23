@@ -50,12 +50,16 @@
         location: "Online",
         date: today,
         time: "18:00",
-        description: "A demo Live Events walkthrough - question queue, then 1-on-1 booking, both mid-flow so the mechanics are visible without needing to click through them.",
+        description: "A demo Live Events walkthrough - the live talk with its question queue. Click \"Join 1-on-1 queue\" from the cleric dashboard (End Talk button) to see that stage too - the queue data is already seeded and waiting.",
+        // A real, public lecture (Zaytuna College, "Living Links: Tafsir of
+        // Surah al-Kahf") embedded via YouTube - not a downloaded/rehosted
+        // file, which would raise real copyright/ToS issues. Matches the
+        // already-ruled streaming model: external platform, embedded here.
+        youtubeVideoId: "RcGfoNVZwgA",
         joinFeePence: 500,
         oneOnOneFeePence: 2000,
-        status: "one_on_one",
+        status: "live",
         startedAt: new Date().toISOString(),
-        oneOnOneOpenedAt: new Date().toISOString(),
     }]);
 
     seedIfEmpty("babaJiEventQuestions", [{

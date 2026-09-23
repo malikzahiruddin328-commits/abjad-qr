@@ -160,6 +160,22 @@
         `;
     }
 
+    function renderVideoEmbed(event) {
+        if (!event.youtubeVideoId) return '';
+        // External-platform link-out, embedded - the streaming model already
+        // ruled (docs/scope-v1.md decision #6, extended by scope-v2): the
+        // speaker streams on YouTube, we embed/link it, we do not host video
+        // ourselves.
+        return `
+            <div style="position:relative;padding-bottom:56.25%;height:0;margin-bottom:20px;border-radius:6px;overflow:hidden;">
+                <iframe src="https://www.youtube.com/embed/${encodeURIComponent(event.youtubeVideoId)}?autoplay=0"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen title="Live stream"></iframe>
+            </div>
+        `;
+    }
+
     function renderQuestionQueue(event) {
         const questions = loadJSON(QUESTIONS_KEY).filter(q => q.eventId === event.id);
         // Public + anonymous: show the question text and status, never who asked (per
@@ -167,6 +183,7 @@
         // the asker's identity is only visible to the speaker/admin).
         const visible = questions.filter(q => q.status !== 'skipped');
         return `
+            ${renderVideoEmbed(event)}
             <p style="font-weight:600; color:#1a3a52; margin-bottom:10px;">Questions so far (so you don't ask a duplicate)</p>
             ${visible.length === 0 ? '<div class="empty">No questions yet — be the first to ask.</div>' :
                 visible.map(q => `<div class="q-item">${escapeHtml(q.text)}${q.status === 'answered' ? '<span class="q-status">✓ answered</span>' : '<span class="q-status">waiting</span>'}</div>`).join('')}
