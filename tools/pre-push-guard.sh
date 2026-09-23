@@ -85,6 +85,7 @@ cleric-manager.html
 demo-99-names.html
 docs/scope-v1.md
 docs/status.md
+event.html
 events.json
 index.html
 library/catalog-extraction-notes.md
