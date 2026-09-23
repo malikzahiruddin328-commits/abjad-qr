@@ -84,6 +84,7 @@ cleric-login.html
 cleric-manager.html
 demo-99-names.html
 docs/scope-v1.md
+docs/scope-v2-live-events.md
 docs/status.md
 event.html
 events.json

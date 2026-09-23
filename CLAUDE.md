@@ -181,15 +181,39 @@ Architecture is ruled (Baba Ji-General, 2026-08-30): **Phase 1 static is the
 only live lane; Phases 2–4 are frozen.** The cleric-accounts and booking layer
 still exists in the tree and still publishes, but no work is directed at it.
 
+**SUPERSEDED for Live Events, 2026-09-14 — see `docs/scope-v2-live-events.md`.**
+Zahir ruled to move into the next phase: a Live Events feature (speaker Q&A
+queue + paid 1-on-1 booking, admin-created events assigned to existing cleric
+accounts as speakers). The frozen-phases line above is no longer the authority
+for that one area; the freeze still describes everything *outside* Live
+Events — nothing else was unfrozen. Three same-day rulings are in
+`.claude/colony_decisions.md`, 2026-09-14: the scoping ruling, a same-day
+backend ruling (Supabase), and a same-day correction that supersedes the
+backend ruling back down to prototype altitude.
+**Status, re-measured 2026-09-23** (this line will go stale fastest of
+anything on this page — re-check `git log --oneline feature/live-events-
+prototype` rather than trusting it): **built and verified end-to-end as a
+working prototype** (`admin.html`, `cleric-dashboard.html`, new `event.html`,
+`baba-ji-lobby-mockups.html` wired to real data) against local browser
+storage only — no real payment processor, backend, or hosting, all
+placeholders, per the correction ruling. Sitting on branch
+`feature/live-events-prototype`, gate-reviewed and passed by Baba Ji-RM, not
+yet merged to `main` as of this write (held on one allowlist line, since
+fixed in a follow-up commit on the same branch). **Not pushed to
+`origin/main` even once merged locally** — that needs Zahir's explicit
+publication sign-off separately from the merge, per §2.
+
 On `main`, `library/data/texts.json` holds 183 items of which **53 (29%) carry
 canonical Arabic and an abjad total**; the remaining 130 are catalogued but
 unverified. That is by design, not a defect — scope decision 3 is *"no
 unverified text ever gets an abjad number."*
 
-**`docs/scope-v1.md` is the scope authority.** Six decisions locked with Zahir
-on 2026-08-21. Where any other document's phase numbering disagrees with it,
-scope-v1 wins — `INTEGRATION-STATUS.md` in particular uses "Phase 1" and
-"Phase 2" for something entirely different.
+**`docs/scope-v1.md` is the scope authority for decisions 1–5.** Six decisions
+locked with Zahir on 2026-08-21. Where any other document's phase numbering
+disagrees with it, scope-v1 wins — `INTEGRATION-STATUS.md` in particular uses
+"Phase 1" and "Phase 2" for something entirely different. **Decision 6 (live
+events) is superseded** by `docs/scope-v2-live-events.md` as of 2026-09-14 —
+see that decision's own row for what changed.
 
 ## 6. Working here
 
