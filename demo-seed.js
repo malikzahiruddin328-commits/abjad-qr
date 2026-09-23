@@ -24,6 +24,11 @@
     }
 
     const today = new Date().toISOString().split("T")[0];
+    function dateOffset(days) {
+        const d = new Date();
+        d.setDate(d.getDate() + days);
+        return d.toISOString().split("T")[0];
+    }
 
     seedIfEmpty("babaJiClerics", [{
         id: DEMO_CLERIC_ID,
@@ -91,6 +96,31 @@
             queuedAt: new Date().toISOString(),
             seen: false,
             chargedPlaceholder: false,
+        },
+    ]);
+
+    // UAT log 2026-09-23, item 7: "No mock data for past or upcoming events
+    // - nothing to test against" (Cleric Dashboard's "Your Bookings"
+    // section, the old one-on-one booking system predating Live Events).
+    // One past, one upcoming, so both display states are visible.
+    seedIfEmpty("babaJiBookings", [
+        {
+            id: "demo-booking-0001",
+            cleric: "Shaikh Yusuf Al-Amin",
+            date: dateOffset(-9),
+            time: "15:00",
+            duration: 30,
+            topic: "Marriage counsel follow-up",
+            rate: 50,
+        },
+        {
+            id: "demo-booking-0002",
+            cleric: "Shaikh Yusuf Al-Amin",
+            date: dateOffset(4),
+            time: "11:30",
+            duration: 45,
+            topic: "Ruqyah guidance session",
+            rate: 50,
         },
     ]);
 })();

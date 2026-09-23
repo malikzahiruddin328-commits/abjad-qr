@@ -94,6 +94,14 @@
     function gbp(pence) {
         return `£${((pence || 0) / 100).toFixed(2)}`;
     }
+    function formatTime12h(t) {
+        if (!t) return '';
+        const [h, m] = t.split(':').map(Number);
+        if (Number.isNaN(h)) return t;
+        const period = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 === 0 ? 12 : h % 12;
+        return `${h12}:${String(m || 0).padStart(2, '0')} ${period}`;
+    }
     function uid() {
         return crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     }
@@ -231,7 +239,7 @@
             }</span>
             <h1>${escapeHtml(event.title)}</h1>
             <div class="meta">${escapeHtml(event.speakerName || event.speaker || '')} • ${escapeHtml(event.specialty || '')} • ${escapeHtml(event.location || '')}</div>
-            <div class="meta">${escapeHtml(event.date || '')} ${escapeHtml(event.time || '')}</div>
+            <div class="meta">${escapeHtml(event.date || '')} ${escapeHtml(formatTime12h(event.time))}</div>
             <p class="desc">${escapeHtml(event.description || '')}</p>
             <div class="note">Prototype: join fee ${gbp(event.joinFeePence)}, 1-on-1 fee ${gbp(event.oneOnOneFeePence)} — both are placeholders, no real payment processor is wired up yet.</div>
         `;

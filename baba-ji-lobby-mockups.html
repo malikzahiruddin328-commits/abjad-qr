@@ -388,6 +388,15 @@
         const CLERICS_KEY = 'babaJiClerics';
         const EVENTS_KEY = 'babaJiEvents';
 
+        function formatTime12h(t) {
+            if (!t) return '';
+            const [h, m] = t.split(':').map(Number);
+            if (Number.isNaN(h)) return t;
+            const period = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 === 0 ? 12 : h % 12;
+            return `${h12}:${String(m || 0).padStart(2, '0')} ${period}`;
+        }
+
         function escapeHtml(str) {
             const div = document.createElement('div');
             div.textContent = str == null ? '' : str;
@@ -449,7 +458,7 @@
                 <a href="event.html?id=${encodeURIComponent(e.id)}" style="text-decoration:none; color:inherit;">
                     <div class="sermon-item">
                         <div class="sermon-title">● ${escapeHtml(e.title)} <span style="font-size:11px; color:#c85a3a;">${EVENT_STATUS_LABEL[e.status || 'scheduled']}</span></div>
-                        <div class="sermon-meta">🕌 ${escapeHtml(e.speakerName || e.speaker || '')} • ${escapeHtml(e.location || '')} • ${escapeHtml(e.date || '')} ${escapeHtml(e.time || '')}</div>
+                        <div class="sermon-meta">🕌 ${escapeHtml(e.speakerName || e.speaker || '')} • ${escapeHtml(e.location || '')} • ${escapeHtml(e.date || '')} ${escapeHtml(formatTime12h(e.time))}</div>
                         <div class="sermon-desc">${escapeHtml(e.description || '')}</div>
                     </div>
                 </a>

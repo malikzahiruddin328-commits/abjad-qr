@@ -232,7 +232,7 @@
             <p class="subtitle">Event Management & Settings</p>
 
             <div class="note">
-                <strong>Features:</strong> Password-protected access • Add/remove events • Export/import as JSON • Events persist across sessions
+                <strong>Features:</strong> Password-protected access • Add/remove events • Export/import as CSV • Events persist across sessions
             </div>
 
             <div class="section">
@@ -276,7 +276,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="time">Time (24h format)</label>
+                        <label for="time">Time</label>
                         <input type="time" id="time" name="time" required>
                     </div>
 
@@ -312,12 +312,12 @@
 
             <div class="section">
                 <h2>📊 Data Management</h2>
-                <p style="font-size: 0.9rem; color: #888; margin-bottom: 16px;">Export or import events as JSON</p>
+                <p style="font-size: 0.9rem; color: #888; margin-bottom: 16px;">Export or import events as CSV</p>
                 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <button id="exportBtn" style="background: #1a3a52;">📥 Export Events</button>
-                    <button id="importBtn" style="background: #1a3a52;">📤 Import Events</button>
+                    <button id="exportBtn" style="background: #1a3a52;">📥 Export Events (CSV)</button>
+                    <button id="importBtn" style="background: #1a3a52;">📤 Import Events (CSV)</button>
                 </div>
-                <input type="file" id="fileInput" accept=".json" style="display: none;">
+                <input type="file" id="fileInput" accept=".csv" style="display: none;">
             </div>
         </div>
     </div>
@@ -427,6 +427,18 @@
             return `£${((pence || 0) / 100).toFixed(2)}`;
         }
 
+        // UAT log 2026-09-23, item 8: "Time displayed in 24h format - users
+        // prefer AM/PM." Display-only - the underlying stored value and the
+        // native <input type="time"> pickers are untouched.
+        function formatTime12h(t) {
+            if (!t) return '';
+            const [h, m] = t.split(':').map(Number);
+            if (Number.isNaN(h)) return t;
+            const period = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 === 0 ? 12 : h % 12;
+            return `${h12}:${String(m || 0).padStart(2, '0')} ${period}`;
+        }
+
         function renderEvents() {
             const events = loadEvents();
             const list = document.getElementById('eventsList');
@@ -443,7 +455,7 @@
                 <div class="event-item">
                     <div class="event-details">
                         <h3>${escapeHtml(event.title || '')}</h3>
-                        <p><strong>${escapeHtml(event.speakerName || event.speaker || '')}</strong> • ${escapeHtml(event.location || '')} • ${escapeHtml(event.date || '')} ${escapeHtml(event.time || '')}</p>
+                        <p><strong>${escapeHtml(event.speakerName || event.speaker || '')}</strong> • ${escapeHtml(event.location || '')} • ${escapeHtml(event.date || '')} ${escapeHtml(formatTime12h(event.time))}</p>
                         <p><span class="status-badge">${escapeHtml(event.specialty || '')}</span><span class="status-badge" style="background:#1a3a52;">${STATUS_LABEL[status] || status}</span></p>
                         <p>${escapeHtml(event.description || '')}</p>
                         <p style="font-size:0.8rem;">Join: ${gbp(event.joinFeePence)} (placeholder) • 1-on-1: ${gbp(event.oneOnOneFeePence)} (placeholder, charged only if seen)</p>
@@ -511,68 +523,98 @@
             document.getElementById('eventForm').reset();
         });
 
-        // Export events as JSON
+        // CSV, not JSON - Zahir's UAT log 2026-09-23, item 9: "JSON is
+        // developer-facing; regular users don't understand it."
+        const CSV_COLUMNS = ['id', 'title', 'speakerName', 'speakerClericId', 'specialty', 'location', 'date', 'time', 'description', 'youtubeVideoId', 'joinFeePence', 'oneOnOneFeePence', 'status'];
+
+        function csvEscape(val) {
+            const s = val == null ? '' : String(val);
+            return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+        }
+
+        function eventsToCSV(events) {
+            const lines = [CSV_COLUMNS.join(',')];
+            for (const e of events) lines.push(CSV_COLUMNS.map(c => csvEscape(e[c])).join(','));
+            return lines.join('\r\n');
+        }
+
+        // A real state-machine parser, not a naive split(',') - handles quoted
+        // fields containing commas/newlines (the description column needs this).
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuotes) {
+                    if (c === '"') {
+                        if (text[i + 1] === '"') { field += '"'; i++; }
+                        else { inQuotes = false; }
+                    } else field += c;
+                } else if (c === '"') { inQuotes = true; }
+                else if (c === ',') { row.push(field); field = ''; }
+                else if (c === '\r') { /* skip - \n closes the row */ }
+                else if (c === '\n') { row.push(field); field = ''; rows.push(row); row = []; }
+                else field += c;
+            }
+            if (field !== '' || row.length > 0) { row.push(field); rows.push(row); }
+            return rows;
+        }
+
         function exportEvents() {
             const events = loadEvents();
-            const dataStr = JSON.stringify({ events, lastUpdated: new Date().toISOString(), version: '1.0' }, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const dataBlob = new Blob([eventsToCSV(events)], { type: 'text/csv' });
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `baba-ji-events-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = `baba-ji-events-${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
             URL.revokeObjectURL(url);
         }
 
-        // Import events from JSON
         function importEvents(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
-                    const data = JSON.parse(e.target.result);
-                    const importedEvents = Array.isArray(data.events) ? data.events : Array.isArray(data) ? data : null;
+                    const rows = parseCSV(e.target.result).filter(r => r.length > 1 || r[0] !== '');
+                    if (rows.length < 2) { alert('No data rows found in CSV.'); return; }
 
-                    if (!importedEvents) {
-                        alert('Invalid file format. Expected {events: [...]} or [...]');
-                        return;
-                    }
+                    const header = rows[0].map(h => h.trim());
+                    const idx = (name) => header.indexOf(name);
+                    const col = { title: idx('title'), speakerName: idx('speakerName'), speakerClericId: idx('speakerClericId'),
+                        specialty: idx('specialty'), location: idx('location'), date: idx('date'), time: idx('time'),
+                        description: idx('description'), youtubeVideoId: idx('youtubeVideoId'),
+                        joinFeePence: idx('joinFeePence'), oneOnOneFeePence: idx('oneOnOneFeePence'), status: idx('status'), id: idx('id') };
 
-                    // Validate each event has required fields
-                    const validatedEvents = importedEvents.filter(event => {
-                        return event && typeof event === 'object' &&
-                               event.title && event.speaker && event.specialty && event.location && event.time;
-                    });
-
-                    if (validatedEvents.length === 0) {
-                        alert('No valid events found in file. Each event must have: title, speaker, specialty, location, time');
+                    if (col.title === -1 || col.specialty === -1 || col.location === -1 || col.time === -1) {
+                        alert('Invalid CSV format. Expected columns: title, specialty, location, time (and others - see an exported file for the full set).');
                         return;
                     }
 
                     const currentEvents = loadEvents();
                     const mergedEvents = [...currentEvents];
-
                     let addedCount = 0;
-                    for (const event of validatedEvents) {
-                        const exists = mergedEvents.some(e => e.title === event.title && e.speaker === event.speaker);
-                        if (!exists) {
-                            mergedEvents.push({
-                                id: event.id || (crypto.randomUUID ? crypto.randomUUID() : `evt-${Date.now()}-${Math.random().toString(36).slice(2)}`),
-                                title: String(event.title).substring(0, 500),
-                                speaker: String(event.speaker).substring(0, 200),
-                                speakerClericId: event.speakerClericId || null,
-                                speakerName: event.speakerName || String(event.speaker).substring(0, 200),
-                                specialty: String(event.specialty),
-                                location: String(event.location).substring(0, 200),
-                                date: event.date || '',
-                                time: String(event.time),
-                                description: String(event.description || '').substring(0, 1000),
-                                joinFeePence: event.joinFeePence || 0,
-                                youtubeVideoId: event.youtubeVideoId || '',
-                                oneOnOneFeePence: event.oneOnOneFeePence || 0,
-                                status: event.status || 'scheduled'
-                            });
-                            addedCount++;
-                        }
+                    for (const r of rows.slice(1)) {
+                        const get = (key) => (col[key] > -1 ? (r[col[key]] || '') : '');
+                        const title = get('title'), speakerName = get('speakerName');
+                        if (!title || !speakerName) continue;
+                        const exists = mergedEvents.some(ev => ev.title === title && ev.speakerName === speakerName);
+                        if (exists) continue;
+                        mergedEvents.push({
+                            id: get('id') || (crypto.randomUUID ? crypto.randomUUID() : `evt-${Date.now()}-${Math.random().toString(36).slice(2)}`),
+                            title: title.substring(0, 500),
+                            speakerClericId: get('speakerClericId'),
+                            speakerName: speakerName.substring(0, 200),
+                            specialty: get('specialty'),
+                            location: get('location').substring(0, 200),
+                            date: get('date'),
+                            time: get('time'),
+                            description: get('description').substring(0, 1000),
+                            youtubeVideoId: get('youtubeVideoId'),
+                            joinFeePence: parseInt(get('joinFeePence') || '0', 10) || 0,
+                            oneOnOneFeePence: parseInt(get('oneOnOneFeePence') || '0', 10) || 0,
+                            status: get('status') || 'scheduled'
+                        });
+                        addedCount++;
                     }
 
                     saveEvents(mergedEvents);
