@@ -1,27 +1,54 @@
 // Baba Ji — Live Events demo seed.
 //
 // This app has no shared backend - every visitor's browser has its own empty
-// localStorage (CLAUDE.md section 1). Without this, a demo built and tested
-// in one browser is invisible to everyone else, Hafiz included, even though
-// the feature is real and working. This seeds a fixed demo cleric + event +
-// question + 1-on-1 queue into ANY fresh browser on first load, so the demo
-// is visible without anyone creating it by hand first.
+// localStorage (CLAUDE.md section 1). Without this, a demo walked through in
+// one browser is invisible to everyone else's, Hafiz included, even when the
+// feature is real and working. This seeds a fixed demo cleric + event +
+// question + 1-on-1 queue + bookings into any browser on first load.
 //
-// Deliberately idempotent: only seeds a key that is genuinely empty, so it
-// can never overwrite real data someone has since created.
+// VERSIONED, not just "seed if empty" - found the hard way, 2026-09-23:
+// Zahir clicked through the site before the video-embed fix shipped, which
+// seeded the OLD shape (no video, wrong status) into HIS browser's
+// localStorage. A plain "only seed an empty array" check then means no
+// future fix to this file - however many times he hard-refreshes - ever
+// reaches him again, because the array is no longer empty. A hard refresh
+// busts HTTP cache; it does nothing to localStorage.
+//
+// The fix: DEMO_SEED_VERSION. On load, if the stored version is behind the
+// script's version, every demo-tagged record (matched by its fixed id) is
+// replaced with the current one, in every collection below - not appended,
+// not skipped. Anything NOT demo-tagged (a real event an admin created, a
+// real availability slot a real cleric added) is left alone, filtered out
+// of the "records to drop" set rather than the records kept. Below the
+// current version - i.e. between two visits at the SAME version - nothing
+// here touches the data again, so a tester's own clicks (marking a queue
+// entry seen, closing the event) persist across reloads as they should.
 (function () {
+    const DEMO_SEED_VERSION = 2; // bump this whenever the seed data below changes shape
+    const VERSION_KEY = "babaJiDemoSeedVersion";
+
     const DEMO_CLERIC_ID = 9000000000001;
     const DEMO_EVENT_ID = "demo-tafsir-al-kahf-0001";
 
-    function seedIfEmpty(key, value) {
+    function storedVersion() {
+        return parseInt(localStorage.getItem(VERSION_KEY) || "0", 10) || 0;
+    }
+
+    // Removes any existing record whose id is in `demoIds`, then appends the
+    // fresh set - so re-seeding never duplicates and never touches a
+    // non-demo record that happens to share the collection.
+    function replaceDemoRecords(key, demoIds, freshRecords) {
         try {
-            const existing = localStorage.getItem(key);
-            if (existing && JSON.parse(existing).length > 0) return;
-            localStorage.setItem(key, JSON.stringify(value));
+            const idSet = new Set(demoIds.map(String));
+            const existing = JSON.parse(localStorage.getItem(key) || "[]");
+            const kept = Array.isArray(existing) ? existing.filter(r => !idSet.has(String(r.id))) : [];
+            localStorage.setItem(key, JSON.stringify([...kept, ...freshRecords]));
         } catch (e) {
             console.error(`[demo-seed] failed to seed ${key}:`, e);
         }
     }
+
+    if (storedVersion() >= DEMO_SEED_VERSION) return; // already current - do not disturb live interactive state
 
     const today = new Date().toISOString().split("T")[0];
     function dateOffset(days) {
@@ -30,7 +57,7 @@
         return d.toISOString().split("T")[0];
     }
 
-    seedIfEmpty("babaJiClerics", [{
+    replaceDemoRecords("babaJiClerics", [DEMO_CLERIC_ID], [{
         id: DEMO_CLERIC_ID,
         name: "Shaikh Yusuf Al-Amin",
         email: "demo.speaker@babaji.example",
@@ -46,7 +73,7 @@
         createdAt: new Date().toISOString(),
     }]);
 
-    seedIfEmpty("babaJiEvents", [{
+    replaceDemoRecords("babaJiEvents", [DEMO_EVENT_ID], [{
         id: DEMO_EVENT_ID,
         title: "Tafsir al-Kahf — Live Q&A",
         speakerClericId: String(DEMO_CLERIC_ID),
@@ -67,7 +94,7 @@
         startedAt: new Date().toISOString(),
     }]);
 
-    seedIfEmpty("babaJiEventQuestions", [{
+    replaceDemoRecords("babaJiEventQuestions", ["demo-question-0001"], [{
         id: "demo-question-0001",
         eventId: DEMO_EVENT_ID,
         attendeeId: "demo-attendee-0001",
@@ -77,7 +104,7 @@
         status: "answered",
     }]);
 
-    seedIfEmpty("babaJiOneOnOneQueue", [
+    replaceDemoRecords("babaJiOneOnOneQueue", ["demo-queue-0001", "demo-queue-0002"], [
         {
             id: "demo-queue-0001",
             eventId: DEMO_EVENT_ID,
@@ -103,7 +130,7 @@
     // - nothing to test against" (Cleric Dashboard's "Your Bookings"
     // section, the old one-on-one booking system predating Live Events).
     // One past, one upcoming, so both display states are visible.
-    seedIfEmpty("babaJiBookings", [
+    replaceDemoRecords("babaJiBookings", ["demo-booking-0001", "demo-booking-0002"], [
         {
             id: "demo-booking-0001",
             cleric: "Shaikh Yusuf Al-Amin",
@@ -123,4 +150,6 @@
             rate: 50,
         },
     ]);
+
+    localStorage.setItem(VERSION_KEY, String(DEMO_SEED_VERSION));
 })();
