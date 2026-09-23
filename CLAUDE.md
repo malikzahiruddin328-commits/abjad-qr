@@ -280,11 +280,23 @@ Named here rather than silently corrected, so the drift is visible:
 - **`TESTING.md`** — 37 test checkboxes, **0 ticked**, alongside prose calling
   the platform "battle-tested".
 
-  **The admin password is fixed.** `baba-ji-2026` appears nowhere in the tree
-  (commit `6e60482`); `admin-login.html:232` now reads
-  `window.BABA_JI_CONFIG?.adminPassword` and **fails closed** when no config
-  exists; `TESTING.md:31` correctly states there is no default and no published
-  password.
+  **The admin password is fixed — and then, deliberately, un-fixed for a demo.**
+  `baba-ji-2026` appears nowhere in the tree (commit `6e60482`);
+  `admin-login.html:232` reads `window.BABA_JI_CONFIG?.adminPassword` and
+  **fails closed** when no config exists. That held from 2026-08-27 until
+  2026-09-23, when Zahir asked for the Live Events prototype to be shown to
+  Hafiz "with the test data... in working order" and said the admin password
+  "will be null for testing purposes." `admin-config.js` now sets one
+  (`hafiz-demo-2026`) and is loaded by `admin-login.html`. This is a
+  **deliberate, disclosed** test credential on a feature with no real money
+  or personal data behind it — not a reopening of the 2026-08-27 finding,
+  which was about an *accidental*, undisclosed default. `TESTING.md:31` is
+  now the stale one; it still says no default exists.
+  **`demo-seed.js`**, loaded by every Live Events page, seeds a fixed demo
+  cleric/event/question/queue into any visitor's empty `localStorage` on
+  first load, idempotently — added the same day, for the same reason: this
+  app has no shared backend, so a demo built in one browser is invisible to
+  everyone else's.
 
   **The second credential is fixed too.** `TESTING.md:36` and
   `webhook-simulator.html:188` published `password123` for a test cleric

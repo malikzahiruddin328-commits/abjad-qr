@@ -28,13 +28,18 @@ This is a complete cleric marketplace platform with:
 ### 2. Test Credentials
 
 **Admin Access:**
-- Password: whatever you set on `admin-setup.html`. There is no default and no published password.
+- Password: `hafiz-demo-2026`, set in `admin-config.js` — a deliberate, disclosed
+  test credential added 2026-09-23 for the Live Events demo (see CLAUDE.md §7).
+  Before that there was no default and no published password; there still isn't
+  one for anything outside this demo.
 - Session: 30 days (testing mode)
 
 **Test Cleric Account:**
-- Sign up your own test cleric account on `cleric-login.html` — there is no seeded
-  account and no default password. Signup writes your password's hash to
-  localStorage; nothing else can read it.
+- A demo cleric ("Shaikh Yusuf Al-Amin", demo.speaker@babaji.example) is
+  seeded automatically by `demo-seed.js` on first load, password `demo1234`,
+  already approved with a demo Live Event assigned. You can also sign up your
+  own separate test cleric account on `cleric-login.html` — nothing about the
+  demo seed blocks that.
 - Specialty: Any (set during signup)
 - Hourly Rate: $50 (adjustable)
 

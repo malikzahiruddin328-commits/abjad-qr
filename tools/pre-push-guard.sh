@@ -73,6 +73,7 @@ DATABASE-MIGRATION.md
 INTEGRATION-STATUS.md
 INTEGRATION.md
 TESTING.md
+admin-config.js
 admin-login.html
 admin-setup.html
 admin.html
@@ -83,6 +84,7 @@ cleric-dashboard.html
 cleric-login.html
 cleric-manager.html
 demo-99-names.html
+demo-seed.js
 docs/scope-v1.md
 docs/scope-v2-live-events.md
 docs/status.md
