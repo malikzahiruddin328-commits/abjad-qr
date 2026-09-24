@@ -90,6 +90,7 @@
       .then(() => loadScript("lots/ephemeris.js"))
       .then(() => loadScript("lots/houses.js"))
       .then(() => loadScript("lots/lots.js"))
+      .then(() => loadScript("lots/chart-wheel.js"))
       .then(() => fetch("lots/chiron-ephemeris.json").then((r) => r.json()))
       .then((chironTable) => {
         window.BabaJiEphemeris.setChironTable(chironTable);
@@ -180,6 +181,11 @@
       </div>
 
       <div id="lotsResults" hidden>
+        <div class="card" style="margin-top:18px">
+          <h2>Chart wheel</h2>
+          <div id="lotsWheel"></div>
+        </div>
+
         <div class="card" style="margin-top:18px">
           <h2 id="curatedH2">The seven classical Lots</h2>
           <div class="lots-grid" id="lotsCuratedGrid"></div>
@@ -274,11 +280,13 @@
     }
   }
 
-  function renderResults({ ctx }) {
+  function renderResults({ eph, chart, ctx }) {
     document.getElementById("lotsResults").hidden = false;
     document.getElementById("curatedH2").textContent = ctx.isDay
       ? "The seven classical Lots (day chart)"
       : "The seven classical Lots (night chart)";
+
+    window.BabaJiChartWheel.render(document.getElementById("lotsWheel"), { eph, chart, ctx, framing });
 
     const curated = window.BabaJiLots.computeCuratedLots(ctx);
     const grid = document.getElementById("lotsCuratedGrid");
