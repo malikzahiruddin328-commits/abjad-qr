@@ -120,6 +120,7 @@ library/tools/build_library.py
 library/tools/extract_js_engine.py
 library/tools/identity.py
 library/tools/merge_arabic.py
+lots/chart-wheel.js
 lots/chiron-ephemeris.json
 lots/ephemeris.js
 lots/houses.js
